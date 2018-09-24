@@ -3,13 +3,14 @@ EXPOSE 8080
 
 WORKDIR /usr/ribac
 
-COPY /src src
 COPY /pom.xml pom.xml
+RUN /usr/local/bin/mvn-entrypoint.sh mvn verify clean --fail-never
 
-RUN mvn clean package
+COPY /src src
+RUN mvn package && rm -rf target
 
 ENTRYPOINT [                                                       \
     "java",                                                        \
     "-Djava.net.preferIPv4Stack=true",                             \
-    "-jar", "target/right-based-access-control-0.1.0-SNAPSHOT.jar" \
+    "-jar", "target/right-based-access-control.jar"                \
 ]
