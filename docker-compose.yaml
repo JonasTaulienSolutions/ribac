@@ -9,6 +9,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: 'root'
       MYSQL_DATABASE: 'ribac'
+    volumes:
+      - './ribac.sql:/docker-entrypoint-initdb.d/ribac.sql:ro'
 
   ribac:
     image: 'ribac:0.1.0-SNAPSHOT'

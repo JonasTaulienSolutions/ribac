@@ -7,7 +7,7 @@ COPY /pom.xml pom.xml
 RUN /usr/local/bin/mvn-entrypoint.sh mvn verify clean --fail-never
 
 COPY /src src
-RUN mvn package && rm -rf target
+RUN mvn package
 
 ENTRYPOINT [                                                       \
     "java",                                                        \
