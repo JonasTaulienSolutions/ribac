@@ -2,3 +2,4 @@
 .DS_STORE
 /.idea
 /target
+/.vertx
