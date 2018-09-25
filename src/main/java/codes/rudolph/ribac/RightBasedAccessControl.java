@@ -8,14 +8,18 @@ public class RightBasedAccessControl {
 
     private final Router router;
 
+
+
     @Inject
     public RightBasedAccessControl(Router router) {
         this.router = router;
     }
 
+
+
     public Router getRouter() {
         this.router.route("/test").handler(
-                ctx -> ctx.response().setStatusCode(200).end("Test ok")
+            ctx -> ctx.response().setStatusCode(200).end("Test ok")
         );
 
         return this.router;

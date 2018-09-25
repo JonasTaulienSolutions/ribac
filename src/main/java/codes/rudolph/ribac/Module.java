@@ -1,6 +1,7 @@
 package codes.rudolph.ribac;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.name.Names;
 import io.reactivex.Scheduler;
 import io.vertx.reactivex.core.RxHelper;
 import io.vertx.reactivex.core.Vertx;
@@ -8,6 +9,7 @@ import io.vertx.reactivex.core.http.HttpServer;
 import io.vertx.reactivex.ext.web.Router;
 
 public class Module extends AbstractModule {
+
     protected void configure() {
         final var vertx = Vertx.vertx();
 
@@ -17,5 +19,7 @@ public class Module extends AbstractModule {
         bind(Router.class).toProvider(() -> Router.router(vertx));
 
         bind(Scheduler.class).toInstance(RxHelper.scheduler(vertx));
+
+        bind(Integer.class).annotatedWith(Names.named("serverPort")).toInstance(8080);
     }
 }
