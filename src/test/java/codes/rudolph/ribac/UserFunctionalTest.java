@@ -34,6 +34,7 @@ class UserFunctionalTest {
 
         final var externalId = "guest";
 
+        // Create User
         final var createUserResponse = client.post("/users")
                                              .rxSendJsonObject(new JsonObject().put("externalId", externalId))
                                              .blockingGet();
@@ -47,7 +48,7 @@ class UserFunctionalTest {
         assertEquals(1, createdUserInternalId);
         assertEquals(externalId, createdUserExternalId);
 
-
+        // Fetch created user
         final var fetchCreatedUserResponse = client.get("/users/" + createdUserInternalId).rxSend().blockingGet();
         assertEquals(HttpStatus.SC_OK, fetchCreatedUserResponse.statusCode());
 
