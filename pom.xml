@@ -7,9 +7,19 @@
     <groupId>codes.rudolph</groupId>
     <artifactId>right-based-access-control</artifactId>
     <version>0.1.0-SNAPSHOT</version>
+
+    <properties>
+        <GEN_RIBAC_DB_HOST>localhost</GEN_RIBAC_DB_HOST>
+        <GEN_RIBAC_DB_EXTERNAL_PORT>3306</GEN_RIBAC_DB_EXTERNAL_PORT>
+        <GEN_RIBAC_DB_NAME>ribac</GEN_RIBAC_DB_NAME>
+        <GEN_RIBAC_DB_USER>ribac</GEN_RIBAC_DB_USER>
+        <GEN_RIBAC_DB_PASSWORD>ribac</GEN_RIBAC_DB_PASSWORD>
+    </properties>
+
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
+            <!-- Configure to compile to Java 10 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -20,6 +30,7 @@
                 </configuration>
             </plugin>
 
+            <!-- Configure how the jar should be created-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -46,9 +57,50 @@
                 </configuration>
             </plugin>
 
+            <!-- Configure to use the surefire plugin for running tests -->
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.0</version>
+            </plugin>
+
+            <!-- Configure jOOQ-->
+            <plugin>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq-codegen-maven</artifactId>
+                <version>3.11.5</version>
+
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <configuration>
+                    <jdbc>
+                        <driver>com.mysql.cj.jdbc.Driver</driver>
+                        <url>jdbc:mysql://${GEN_RIBAC_DB_HOST}:${GEN_RIBAC_DB_EXTERNAL_PORT}/${GEN_RIBAC_DB_NAME}</url>
+                        <user>${GEN_RIBAC_DB_USER}</user>
+                        <password>${GEN_RIBAC_DB_PASSWORD}</password>
+                    </jdbc>
+
+                    <!-- Generator parameters -->
+                    <generator>u
+                        <database>
+                            <name>org.jooq.meta.mysql.MySQLDatabase</name>
+                            <inputSchema>${GEN_RIBAC_DB_NAME}</inputSchema>
+                            <includes>.*</includes>
+                        </database>
+                        <target>
+                            <packageName>codes.rudolph.ribac.jooq</packageName>
+                            <directory>target/generated-sources/jooq</directory>
+                        </target>
+                        <generate>
+                            <javaTimeTypes>true</javaTimeTypes>
+                        </generate>
+                    </generator>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -101,6 +153,33 @@
             <groupId>io.vertx</groupId>
             <artifactId>vertx-web-client</artifactId>
             <version>3.5.3</version>
+        </dependency>
+
+        <!-- For code generation and communication with database -->
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq</artifactId>
+            <version>3.11.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-meta</artifactId>
+            <version>3.11.5</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-codegen</artifactId>
+            <version>3.11.5</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+            <version>1.3.2</version>
         </dependency>
     </dependencies>
 </project>
