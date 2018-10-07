@@ -2,6 +2,9 @@ package codes.rudolph.ribac;
 
 import com.google.inject.Guice;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -13,8 +16,9 @@ public class Main {
             server.start();
 
         } catch (Exception e) {
-            System.out.println("Failed to start:");
-            e.printStackTrace();
+            final var log = Logger.getLogger(Main.class.getName());
+
+            log.log(Level.SEVERE, "Failed to start:", e);
         }
     }
 }

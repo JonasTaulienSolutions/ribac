@@ -6,7 +6,25 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased] - YYYY-MM-DD
 ### Added
-(new features)
+* `POST /users`: Creates a new user
+    * Request body:
+
+        ```json
+        {
+            "externalId": "id-of-the-user-inside-my-application"
+        }
+        ```
+    * Responses:
+        * `201`: User was successfully created
+
+            ```json
+            {
+                "user": {
+                    "id": 0,
+                    "externalId": "user-xyz"
+                }
+            }
+            ```
 
 ### Changed
 (changes in existing functionality)

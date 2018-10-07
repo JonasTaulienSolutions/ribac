@@ -38,7 +38,7 @@ class UserFunctionalTest {
         final var createUserResponse = client.post("/users")
                                              .rxSendJsonObject(new JsonObject().put("externalId", externalId))
                                              .blockingGet();
-        assertEquals(HttpStatus.SC_OK, createUserResponse.statusCode());
+        assertEquals(HttpStatus.SC_CREATED, createUserResponse.statusCode());
 
         final var createUserBody = createUserResponse.bodyAsJsonObject();
         final var createdUser = createUserBody.getJsonObject("user");
@@ -89,6 +89,22 @@ class UserFunctionalTest {
 
     @Test
     @Disabled
+    void createUser_canNotCreateUserWhenNotProvidingExternalIdField() {
+
+    }
+
+
+
+    @Test
+    @Disabled
+    void createUser_canNotCreateUserWhenProvidingEmptyBody() {
+
+    }
+
+
+
+    @Test
+    @Disabled
     void deleteUser_userWasDeleted() {
 
     }
@@ -106,6 +122,22 @@ class UserFunctionalTest {
     @Test
     @Disabled
     void deleteUser_canNotDeleteWithEmptyExternalId() {
+
+    }
+
+
+
+    @Test
+    @Disabled
+    void deleteUser_canNotDeleteWhenNotProvidingExternalIdField() {
+
+    }
+
+
+
+    @Test
+    @Disabled
+    void deleteUser_canNotDeleteWhenProvidingEmptyBody() {
 
     }
 

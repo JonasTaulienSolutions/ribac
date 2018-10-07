@@ -8,6 +8,7 @@ import io.vertx.reactivex.ext.web.Router;
 import org.apache.commons.httpclient.HttpStatus;
 
 import javax.inject.Inject;
+import java.util.logging.Logger;
 
 public class Server {
 
@@ -15,9 +16,11 @@ public class Server {
 
     private final Router router;
 
-    private final Scheduler scheduler;
+    private final Scheduler eventLoop;
 
     private final RightBasedAccessControl rightBasedAccessControl;
+
+    private final Logger log;
 
     private final int port;
 
@@ -27,14 +30,16 @@ public class Server {
     public Server(
         HttpServer server,
         Router router,
-        Scheduler scheduler,
+        @Named("eventLoopScheduler") Scheduler eventLoop,
         RightBasedAccessControl rightBasedAccessControl,
+        Logger log,
         @Named("serverPort") int port
     ) {
         this.server = server;
         this.router = router;
-        this.scheduler = scheduler;
+        this.eventLoop = eventLoop;
         this.rightBasedAccessControl = rightBasedAccessControl;
+        this.log = log;
         this.port = port;
     }
 
@@ -47,7 +52,7 @@ public class Server {
                    .toFlowable()
                    .map(HttpServerRequest::pause)
                    .onBackpressureDrop(Server::respondWithServiceUnavailable)
-                   .observeOn(this.scheduler)
+                   .observeOn(this.eventLoop)
                    .map(HttpServerRequest::resume)
                    .subscribe(
                        this.router::accept,
@@ -55,7 +60,7 @@ public class Server {
                    );
 
         this.server.rxListen(this.port).subscribe(
-            (server) -> System.out.println("Server successfully started on port " + server.actualPort()),
+            (server) -> log.info("Server successfully started on port " + server.actualPort()),
             Throwable::printStackTrace
         );
     }

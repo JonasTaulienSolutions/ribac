@@ -36,5 +36,12 @@ services:
     depends_on:
       - ribac-db
     ports:
-      - ${RIBAC_PORT:?RIBAC_PORT}:8080
+      - ${RIBAC_EXTERNAL_PORT:?RIBAC_EXTERNAL_PORT}:8080
+      - ${RIBAC_EXTERNAL_DEBUG_PORT:?RIBAC_EXTERNAL_DEBUG_PORT}:5005
     restart: always
+    environment:
+      RIBAC_DB_HOST: ribac-db
+      RIBAC_DB_PORT: 3306
+      RIBAC_DB_NAME: ${RIBAC_DB_NAME:?RIBAC_DB_NAME}
+      RIBAC_DB_USER: ${RIBAC_DB_USER:?RIBAC_DB_USER}
+      RIBAC_DB_PASSWORD: ${RIBAC_DB_PASSWORD:?RIBAC_DB_PASSWORD}
