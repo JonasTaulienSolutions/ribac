@@ -5,25 +5,44 @@ import io.vertx.ext.web.client.WebClientOptions;
 import io.vertx.reactivex.core.Vertx;
 import io.vertx.reactivex.ext.web.client.WebClient;
 import org.apache.commons.httpclient.HttpStatus;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserFunctionalTest {
 
-    @BeforeEach
-    void startRibac() {
+    @BeforeAll
+    static void init() throws InterruptedException, IOException {
+        var process = Runtime.getRuntime().exec("docker-compose rm --stop --force ribac-db");
+        new BufferedReader(new InputStreamReader(process.getInputStream())).lines().forEach(System.out::println);
+        new BufferedReader(new InputStreamReader(process.getErrorStream())).lines().forEach(System.out::println);
+        process.waitFor();
+    }
 
+
+
+    @BeforeEach
+    void dbUp() throws IOException, InterruptedException {
+        var process = Runtime.getRuntime().exec("docker-compose up --detach ribac-db");
+        new BufferedReader(new InputStreamReader(process.getInputStream())).lines().forEach(System.out::println);
+        new BufferedReader(new InputStreamReader(process.getErrorStream())).lines().forEach(System.out::println);
+        process.waitFor();
+
+        Thread.sleep(10000);
     }
 
 
 
     @AfterEach
-    void stopRibac() {
-
+    void dbDown() throws IOException, InterruptedException {
+        var process = Runtime.getRuntime().exec("docker-compose rm --stop --force ribac-db");
+        new BufferedReader(new InputStreamReader(process.getInputStream())).lines().forEach(System.out::println);
+        new BufferedReader(new InputStreamReader(process.getErrorStream())).lines().forEach(System.out::println);
+        process.waitFor();
     }
 
 
@@ -34,7 +53,7 @@ class UserFunctionalTest {
 
         final var externalId = "guest";
 
-        // Create User
+        // Create user
         final var createUserResponse = client.post("/users")
                                              .rxSendJsonObject(new JsonObject().put("externalId", externalId))
                                              .blockingGet();

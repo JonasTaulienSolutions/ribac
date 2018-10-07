@@ -22,7 +22,7 @@ WORKDIR /usr/ribac
 EXPOSE 8080
 EXPOSE 5005
 
-COPY --from=maven target/right-based-access-control.jar ./
+COPY --from=maven target/right-based-access-control.jar right-based-access-control.jar
 
 ENTRYPOINT [                                                                \
     "java",                                                                 \

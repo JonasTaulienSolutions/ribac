@@ -43,6 +43,8 @@ public class Module extends AbstractModule {
                 + databasePort
                 + "/"
                 + databaseName
+                + "?autoReconnect=true"
+                + "&useSSL=false"
         );
         dataSource.setUsername(databaseUser);
         dataSource.setPassword(databasePassword);
