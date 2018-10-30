@@ -144,11 +144,11 @@
             <version>3.5.3</version>
         </dependency>
 
-        <!-- For the Router -->
+        <!-- For Open API Spec based Router -->
         <dependency>
             <groupId>io.vertx</groupId>
-            <artifactId>vertx-web</artifactId>
-            <version>3.5.3</version>
+            <artifactId>vertx-web-api-contract</artifactId>
+            <version>3.5.4</version>
         </dependency>
 
         <!-- For Dependency Injection -->
@@ -158,7 +158,7 @@
             <version>4.1.0</version>
         </dependency>
 
-        <!-- For the HttpStatus-Class -->
+        <!-- For the Http* helper classes -->
         <dependency>
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
@@ -179,7 +179,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- For functional Tests -->
         <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-web-client</artifactId>

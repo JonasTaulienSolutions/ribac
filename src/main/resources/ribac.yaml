@@ -1,0 +1,43 @@
+openapi: 3.0.2
+
+info:
+  title: ribac - RIghtBasedAccessControl
+  version: 0.1.0-SNAPSHOT
+
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /users:
+    post:
+      operationId: createUser
+      summary: Creates a new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+            example:
+              id: guest
+        required: true
+      responses:
+        201:
+          description: Successfully created a new user
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - id
+                properties:
+                  id:
+                    type: string
+              example:
+                id: guest

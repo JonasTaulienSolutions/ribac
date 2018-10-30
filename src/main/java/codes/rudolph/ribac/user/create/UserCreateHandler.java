@@ -4,6 +4,7 @@ import codes.rudolph.ribac.DbHelper;
 import com.google.inject.Inject;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.web.api.RequestParameters;
 import io.vertx.reactivex.ext.web.RoutingContext;
 import org.apache.commons.httpclient.HttpStatus;
 
@@ -24,10 +25,9 @@ public class UserCreateHandler implements Handler<RoutingContext> {
 
     @Override
     public void handle(RoutingContext ctx) {
-        final var requestBody = ctx.getBodyAsJson();
-        // TODO: Validate json has all expected fields in expected format
-        final var externalId = requestBody.getString("externalId");
-        // TODO: Validate externalId
+        final RequestParameters params = ctx.get("parsedParameters");
+        final var requestBody = params.body().getJsonObject();
+        final var externalId = requestBody.getString("id");
 
         this.dbHelper
             .execute(
@@ -43,10 +43,9 @@ public class UserCreateHandler implements Handler<RoutingContext> {
                                   .end(
                                       new JsonObject()
                                           .put(
-                                              "user",
-                                              new JsonObject()
-                                                  .put("id", createdUser.getId())
-                                                  .put("externalId", createdUser.getExternalId())
+                                              "user", new JsonObject().put(
+                                                  "id", createdUser.getExternalId()
+                                              )
                                           )
                                           .encode()
                                   ),

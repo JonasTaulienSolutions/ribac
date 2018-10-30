@@ -6,7 +6,7 @@ import io.reactivex.Scheduler;
 import io.vertx.reactivex.core.RxHelper;
 import io.vertx.reactivex.core.Vertx;
 import io.vertx.reactivex.core.http.HttpServer;
-import io.vertx.reactivex.ext.web.Router;
+import io.vertx.reactivex.ext.web.api.contract.openapi3.OpenAPI3RouterFactory;
 import org.jooq.Configuration;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DefaultConfiguration;
@@ -26,9 +26,6 @@ public class Module extends AbstractModule {
         final var vertx = Vertx.vertx();
 
         bind(HttpServer.class).toInstance(vertx.createHttpServer());
-
-        // Inject a new Router instance each time
-        bind(Router.class).toProvider(() -> Router.router(vertx));
 
         bind(Scheduler.class).annotatedWith(named("eventLoopScheduler")).toInstance(RxHelper.scheduler(vertx));
         bind(Scheduler.class).annotatedWith(named("workerPoolScheduler")).toInstance(RxHelper.blockingScheduler(vertx));
@@ -64,5 +61,9 @@ public class Module extends AbstractModule {
         jooqConfig.setDataSource(dataSource);
         jooqConfig.setSQLDialect(SQLDialect.MYSQL_8_0);
         bind(Configuration.class).toInstance(jooqConfig);
+
+        bind(OpenAPI3RouterFactory.class).toInstance(
+            OpenAPI3RouterFactory.rxCreate(vertx, "ribac.yaml").blockingGet()
+        );
     }
 }

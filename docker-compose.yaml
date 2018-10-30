@@ -45,3 +45,12 @@ services:
       RIBAC_DB_NAME: ${RIBAC_DB_NAME:?RIBAC_DB_NAME}
       RIBAC_DB_USER: ${RIBAC_DB_USER:?RIBAC_DB_USER}
       RIBAC_DB_PASSWORD: ${RIBAC_DB_PASSWORD:?RIBAC_DB_PASSWORD}
+
+  ribac-swagger:
+    image: swaggerapi/swagger-ui:v3.19.4
+    ports:
+      - ${RIBAC_SWAGGER_EXTERNAL_PORT:?RIBAC_SWAGGER_EXTERNAL_PORT}:8080
+    volumes:
+      - ./src/main/resources:/resources
+    environment:
+      SWAGGER_JSON: /resources/ribac.yaml
