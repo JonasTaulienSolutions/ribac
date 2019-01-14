@@ -27,13 +27,13 @@ public class RightBasedAccessControl {
 
 
     public Router createRouter() {
+        this.openAPI3RouterFactory.addHandlerByOperationId("createUser", this.userCreateHandler);
+
         final var options = new RouterFactoryOptions()
             .setMountNotImplementedHandler(true) //Default
             .setMountResponseContentTypeHandler(true) //Default
             .setMountValidationFailureHandler(true) //Default
             .setRequireSecurityHandlers(true);  //Default
-
-        this.openAPI3RouterFactory.addHandlerByOperationId("createUser", this.userCreateHandler);
 
         return this.openAPI3RouterFactory.setOptions(options)
                                          .getRouter();

@@ -51,13 +51,12 @@ class UserFunctionalTest {
             createUserResponse.getHeader(HttpHeaders.CONTENT_TYPE)
         );
 
-        final var createUserBody = createUserResponse.bodyAsJsonObject();
         final var expectedCreateUserBody = new JsonObject().put(
             "user", new JsonObject().put(
                 "id", id
             )
         );
-        assertEquals(expectedCreateUserBody, createUserBody);
+        assertEquals(expectedCreateUserBody, createUserResponse.bodyAsJsonObject());
     }
 
 
