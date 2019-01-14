@@ -7,10 +7,10 @@ services:
   ribac-db:
     image: mysql:8.0
     ports:
-      - ${RIBAC_DB_EXTERNAL_PORT:?RIBAC_DB_EXTERNAL_PORT}:3306
+    - ${RIBAC_DB_EXTERNAL_PORT:?RIBAC_DB_EXTERNAL_PORT}:3306
     restart: always
     networks:
-      - ribacnet
+    - ribacnet
     command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: ${RIBAC_DB_ROOT_PASSWORD:?RIBAC_DB_ROOT_PASSWORD}
@@ -18,26 +18,17 @@ services:
       MYSQL_USER: ${RIBAC_DB_USER:?RIBAC_DB_USER}
       MYSQL_PASSWORD: ${RIBAC_DB_PASSWORD:?RIBAC_DB_PASSWORD}
     volumes:
-      - ./ribac.sql:/docker-entrypoint-initdb.d/ribac.sql:ro
+    - ./ribac.sql:/docker-entrypoint-initdb.d/ribac.sql:ro
 
   ribac:
-    image: ribac:0.1.0-SNAPSHOT
-    build:
-      context: '.'
-      network: right-based-access-control_ribacnet
-      args:
-        GEN_RIBAC_DB_HOST: ribac-db
-        GEN_RIBAC_DB_EXTERNAL_PORT: ${RIBAC_DB_EXTERNAL_PORT:?RIBAC_DB_EXTERNAL_PORT}
-        GEN_RIBAC_DB_NAME: ${RIBAC_DB_NAME:?RIBAC_DB_NAME}
-        GEN_RIBAC_DB_USER: ${RIBAC_DB_USER:?RIBAC_DB_USER}
-        GEN_RIBAC_DB_PASSWORD: ${RIBAC_DB_PASSWORD:?RIBAC_DB_PASSWORD}
+    image: rudolphcodes/ribac:${RIBAC_VERSION:?RIBAC_VERSION}
     networks:
     - ribacnet
     depends_on:
-      - ribac-db
+    - ribac-db
     ports:
-      - ${RIBAC_EXTERNAL_PORT:?RIBAC_EXTERNAL_PORT}:8080
-      - ${RIBAC_EXTERNAL_DEBUG_PORT:?RIBAC_EXTERNAL_DEBUG_PORT}:5005
+    - ${RIBAC_EXTERNAL_PORT:?RIBAC_EXTERNAL_PORT}:8080
+    - ${RIBAC_EXTERNAL_DEBUG_PORT:?RIBAC_EXTERNAL_DEBUG_PORT}:5005
     restart: always
     environment:
       RIBAC_DB_HOST: ribac-db
@@ -49,8 +40,8 @@ services:
   ribac-swagger:
     image: swaggerapi/swagger-ui:v3.19.4
     ports:
-      - ${RIBAC_SWAGGER_EXTERNAL_PORT:?RIBAC_SWAGGER_EXTERNAL_PORT}:8080
+    - ${RIBAC_SWAGGER_EXTERNAL_PORT:?RIBAC_SWAGGER_EXTERNAL_PORT}:8080
     volumes:
-      - ./src/main/resources:/resources
+    - ./src/main/resources:/resources
     environment:
       SWAGGER_JSON: /resources/ribac.yaml
