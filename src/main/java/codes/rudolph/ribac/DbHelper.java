@@ -37,6 +37,7 @@ public class DbHelper {
      * @return a single containing whatever the dbGetter returns
      */
     public <R> Single<R> execute(Function<DSLContext, R> dbGetter) {
+        //TODO: Handle no connection could be established
         return Single
             .fromCallable(
                 () -> DSL.using(this.jooqConfig).transactionResult(

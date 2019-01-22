@@ -18,7 +18,7 @@ public class RibacTestHelper {
 
     public static void createRibacDb() throws IOException, InterruptedException {
         RibacTestHelper.executeShellCommand("docker-compose up --detach ribac-db");
-        Thread.sleep(10000);
+        Thread.sleep(16000);
     }
 
 

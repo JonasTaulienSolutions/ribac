@@ -4,20 +4,16 @@ import io.vertx.core.json.JsonObject;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.http.HttpHeaders;
 import org.apache.http.entity.ContentType;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserFunctionalTest {
-
-    @BeforeAll
-    static void beforeAll() throws InterruptedException, IOException {
-        RibacTestHelper.destroyRibacDb();
-    }
-
-
 
     @BeforeEach
     void beforeEach() throws IOException, InterruptedException {
@@ -45,7 +41,11 @@ class UserFunctionalTest {
                                                  "id", id
                                              ))
                                              .blockingGet();
-        assertEquals(HttpStatus.SC_CREATED, createUserResponse.statusCode());
+        assertEquals(
+            HttpStatus.SC_CREATED,
+            createUserResponse.statusCode(),
+            () -> "Unexpected status code. Response body: '" + createUserResponse.bodyAsString() + "'"
+        );
         assertEquals(
             ContentType.APPLICATION_JSON.getMimeType(),
             createUserResponse.getHeader(HttpHeaders.CONTENT_TYPE)

@@ -2,11 +2,26 @@
 export RIBAC_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
 
 ./do-build.sh \
-  && docker-compose rm --stop --force \
-  && docker-compose up --detach ribac-db \
-  && docker-compose up --detach ribac \
-  && echo "Restarted ribac and db. Starting tests in 16s..." \
-  && sleep 16s \
-  && mvn test \
+  && echo "- Stopping all services:"                          \
+  && docker-compose rm --stop --force                         \
+                                                              \
+  && echo "- Starting ribac:"                                 \
+  && docker-compose up --detach ribac                         \
+  && exec 3< <(docker-compose logs --follow ribac)            \
+                                                              \
+  && echo "- Execute tests:"                                  \
+  && mvn test -Djooq.codegen.skip=true -Dmaven.main.skip      \
 
+success=$?
+
+echo "- Stopping all services:"
 docker-compose rm --stop --force
+
+if [ ${success} -ne 0 ]; then
+    echo "- Ribac logs:"
+    cat <&3
+    echo "FAILURE! ^^^^^^^^^^ See ribac logs above ^^^^^^^^^^"
+
+else
+    echo "SUCCESS!"
+fi

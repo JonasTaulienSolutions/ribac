@@ -13,21 +13,26 @@ public class RightBasedAccessControl {
 
     private final UserCreateHandler userCreateHandler;
 
+    private final FailureHandler failureHandler;
+
 
 
     @Inject
     public RightBasedAccessControl(
         OpenAPI3RouterFactory openAPI3RouterFactory,
-        UserCreateHandler userCreateHandler
+        UserCreateHandler userCreateHandler,
+        FailureHandler failureHandler
     ) {
         this.openAPI3RouterFactory = openAPI3RouterFactory;
         this.userCreateHandler = userCreateHandler;
+        this.failureHandler = failureHandler;
     }
 
 
 
     public Router createRouter() {
         this.openAPI3RouterFactory.addHandlerByOperationId("createUser", this.userCreateHandler);
+        this.openAPI3RouterFactory.addFailureHandlerByOperationId("createUser", this.failureHandler);
 
         final var options = new RouterFactoryOptions()
             .setMountNotImplementedHandler(true) //Default
