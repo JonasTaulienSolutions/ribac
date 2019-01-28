@@ -1,4 +1,4 @@
-package codes.rudolph.ribac;
+package codes.rudolph.ribac.server;
 
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonArray;

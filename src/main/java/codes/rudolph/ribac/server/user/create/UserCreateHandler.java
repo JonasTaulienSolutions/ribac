@@ -1,12 +1,15 @@
-package codes.rudolph.ribac.user.create;
+package codes.rudolph.ribac.server.user.create;
 
-import codes.rudolph.ribac.DbHelper;
+import codes.rudolph.ribac.server.DbHelper;
 import com.google.inject.Inject;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.api.RequestParameters;
 import io.vertx.reactivex.ext.web.RoutingContext;
 import org.apache.commons.httpclient.HttpStatus;
+import org.jooq.exception.DataAccessException;
+
+import java.sql.SQLException;
 
 import static codes.rudolph.ribac.jooq.tables.RibacUser.RIBAC_USER;
 
@@ -31,7 +34,6 @@ public class UserCreateHandler implements Handler<RoutingContext> {
 
         this.dbHelper
             .execute(
-                //TODO: Catch user with given externalId already exists
                 db -> db.insertInto(RIBAC_USER)
                         .set(RIBAC_USER.EXTERNAL_ID, externalId)
                         .returning()
@@ -43,13 +45,43 @@ public class UserCreateHandler implements Handler<RoutingContext> {
                                   .end(
                                       new JsonObject()
                                           .put(
-                                              "user", new JsonObject().put(
+                                              "createdUser", new JsonObject().put(
                                                   "id", createdUser.getExternalId()
                                               )
                                           )
                                           .encode()
                                   ),
-                ctx::fail
+                failure -> {
+                    if (UserCreateHandler.isDuplicateEntry(failure)) {
+                        ctx.response()
+                           .setStatusCode(HttpStatus.SC_CONFLICT)
+                           .end(
+                               new JsonObject()
+                                   .put(
+                                       "error", new JsonObject().put(
+                                           "message", "A user already exists with the id '" + externalId + "'"
+                                       )
+                                   )
+                                   .encode()
+                           );
+
+                    } else {
+                        ctx.fail(failure);
+                    }
+                }
             );
+    }
+
+
+
+    private static boolean isDuplicateEntry(Throwable failure) {
+        /*
+         * @see https://dev.mysql.com/doc/refman/8.0/en/server-error-reference.html#error_er_dup_entry
+         */
+        final int MYSQL_DUPLICATE_ENTRY_CODE = 1062;
+
+        return (failure instanceof DataAccessException)
+            && (failure.getCause() instanceof SQLException)
+            && (((SQLException) failure.getCause()).getErrorCode() == MYSQL_DUPLICATE_ENTRY_CODE);
     }
 }

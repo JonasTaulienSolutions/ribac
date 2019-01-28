@@ -63,7 +63,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>codes.rudolph.ribac.Main</mainClass>
+                            <mainClass>codes.rudolph.ribac.server.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

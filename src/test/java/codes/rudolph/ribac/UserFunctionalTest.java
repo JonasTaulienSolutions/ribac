@@ -33,7 +33,7 @@ class UserFunctionalTest {
     void createUser_returnsCreatedUser() {
         final var client = RibacTestHelper.createHttpClient();
 
-        final var id = "guest";
+        final var id = "user123";
 
         final var createUserResponse = client.post("/users")
                                              .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
@@ -52,7 +52,7 @@ class UserFunctionalTest {
         );
 
         final var expectedCreateUserBody = new JsonObject().put(
-            "user", new JsonObject().put(
+            "createdUser", new JsonObject().put(
                 "id", id
             )
         );
@@ -62,9 +62,40 @@ class UserFunctionalTest {
 
 
     @Test
-    @Disabled
     void createUser_canNotCreateUserTwice() {
+        final var client = RibacTestHelper.createHttpClient();
 
+        final var id = "user123";
+
+        // 1. Create
+        // noinspection ResultOfMethodCallIgnored
+        client.post("/users")
+              .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+              .rxSendJsonObject(new JsonObject().put(
+                  "id", id
+              ))
+              .blockingGet();
+
+        // 2. Try to create again
+        final var createUserSecondResponse = client.post("/users")
+                                                   .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                                   .rxSendJsonObject(new JsonObject().put(
+                                                       "id", id
+                                                   ))
+                                                   .blockingGet();
+
+        assertEquals(
+            HttpStatus.SC_CONFLICT,
+            createUserSecondResponse.statusCode(),
+            () -> "Unexpected status code. Response body: '" + createUserSecondResponse.bodyAsString() + "'"
+        );
+
+        final var expectedCreateUserBody = new JsonObject().put(
+            "error", new JsonObject().put(
+                "message", "A user already exists with the id '" + id + "'"
+            )
+        );
+        assertEquals(expectedCreateUserBody, createUserSecondResponse.bodyAsJsonObject());
     }
 
 

@@ -1,4 +1,4 @@
-package codes.rudolph.ribac;
+package codes.rudolph.ribac.server;
 
 import com.google.inject.name.Named;
 import io.reactivex.Scheduler;
@@ -15,7 +15,7 @@ public class Server {
 
     private final Scheduler eventLoop;
 
-    private final RightBasedAccessControl rightBasedAccessControl;
+    private final RouterFactory routerFactory;
 
     private final Logger log;
 
@@ -27,13 +27,13 @@ public class Server {
     public Server(
         HttpServer server,
         @Named("eventLoopScheduler") Scheduler eventLoop,
-        RightBasedAccessControl rightBasedAccessControl,
+        RouterFactory routerFactory,
         Logger log,
         @Named("serverPort") int port
     ) {
         this.server = server;
         this.eventLoop = eventLoop;
-        this.rightBasedAccessControl = rightBasedAccessControl;
+        this.routerFactory = routerFactory;
         this.log = log;
         this.port = port;
     }
@@ -41,7 +41,7 @@ public class Server {
 
 
     public void start() {
-        final var router = this.rightBasedAccessControl.createRouter();
+        final var router = this.routerFactory.create();
 
         this.server.requestStream()
                    .toFlowable()

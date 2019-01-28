@@ -1,13 +1,13 @@
-package codes.rudolph.ribac;
+package codes.rudolph.ribac.server;
 
-import codes.rudolph.ribac.user.create.UserCreateHandler;
+import codes.rudolph.ribac.server.user.create.UserCreateHandler;
 import io.vertx.ext.web.api.contract.RouterFactoryOptions;
 import io.vertx.reactivex.ext.web.Router;
 import io.vertx.reactivex.ext.web.api.contract.openapi3.OpenAPI3RouterFactory;
 
 import javax.inject.Inject;
 
-public class RightBasedAccessControl {
+public class RouterFactory {
 
     private final OpenAPI3RouterFactory openAPI3RouterFactory;
 
@@ -18,7 +18,7 @@ public class RightBasedAccessControl {
 
 
     @Inject
-    public RightBasedAccessControl(
+    public RouterFactory(
         OpenAPI3RouterFactory openAPI3RouterFactory,
         UserCreateHandler userCreateHandler,
         FailureHandler failureHandler
@@ -30,7 +30,7 @@ public class RightBasedAccessControl {
 
 
 
-    public Router createRouter() {
+    public Router create() {
         this.openAPI3RouterFactory.addHandlerByOperationId("createUser", this.userCreateHandler);
         this.openAPI3RouterFactory.addFailureHandlerByOperationId("createUser", this.failureHandler);
 

@@ -1,4 +1,4 @@
-package codes.rudolph.ribac;
+package codes.rudolph.ribac.server;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
