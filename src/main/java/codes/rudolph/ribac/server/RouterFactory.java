@@ -13,7 +13,9 @@ public class RouterFactory {
 
     private final UserCreateHandler userCreateHandler;
 
-    private final FailureHandler failureHandler;
+    private final CatchAllFailureHandler catchAllFailureHandler;
+
+    private final OpenApiValidationFailureHandler validationFailureHandler;
 
 
 
@@ -21,23 +23,26 @@ public class RouterFactory {
     public RouterFactory(
         OpenAPI3RouterFactory openAPI3RouterFactory,
         UserCreateHandler userCreateHandler,
-        FailureHandler failureHandler
+        CatchAllFailureHandler catchAllFailureHandler,
+        OpenApiValidationFailureHandler validationFailureHandler
     ) {
         this.openAPI3RouterFactory = openAPI3RouterFactory;
         this.userCreateHandler = userCreateHandler;
-        this.failureHandler = failureHandler;
+        this.catchAllFailureHandler = catchAllFailureHandler;
+        this.validationFailureHandler = validationFailureHandler;
     }
 
 
 
     public Router create() {
         this.openAPI3RouterFactory.addHandlerByOperationId("createUser", this.userCreateHandler);
-        this.openAPI3RouterFactory.addFailureHandlerByOperationId("createUser", this.failureHandler);
+        this.openAPI3RouterFactory.addFailureHandlerByOperationId("createUser", this.catchAllFailureHandler);
 
         final var options = new RouterFactoryOptions()
             .setMountNotImplementedHandler(true) //Default
             .setMountResponseContentTypeHandler(true) //Default
             .setMountValidationFailureHandler(true) //Default
+            .setValidationFailureHandler(this.validationFailureHandler)
             .setRequireSecurityHandlers(true);  //Default
 
         return this.openAPI3RouterFactory.setOptions(options)

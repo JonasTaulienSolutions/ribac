@@ -9,13 +9,13 @@ import org.apache.http.HttpStatus;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class FailureHandler implements Handler<RoutingContext> {
+public class CatchAllFailureHandler implements Handler<RoutingContext> {
 
     @Override
     public void handle(RoutingContext ctx) {
         ctx.response()
            .setStatusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR)
-           .end(FailureHandler.exceptionToJson(ctx.failure()).encode());
+           .end(CatchAllFailureHandler.exceptionToJson(ctx.failure()).encode());
 
     }
 

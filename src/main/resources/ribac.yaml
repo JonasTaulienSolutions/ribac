@@ -47,6 +47,16 @@ paths:
               example:
                 createdUser:
                   id: user123
+        400:
+          description: The request body could not be validated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Error'
+              example:
+                error:
+                  message: "$.id: must be at least 1 characters long"
         409:
           description: A user already exists with the given id
           content:

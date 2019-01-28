@@ -50,13 +50,14 @@ class UserFunctionalTest {
             ContentType.APPLICATION_JSON.getMimeType(),
             createUserResponse.getHeader(HttpHeaders.CONTENT_TYPE)
         );
-
-        final var expectedCreateUserBody = new JsonObject().put(
-            "createdUser", new JsonObject().put(
-                "id", id
-            )
+        assertEquals(
+            new JsonObject().put(
+                "createdUser", new JsonObject().put(
+                    "id", id
+                )
+            ),
+            createUserResponse.bodyAsJsonObject()
         );
-        assertEquals(expectedCreateUserBody, createUserResponse.bodyAsJsonObject());
     }
 
 
@@ -89,53 +90,176 @@ class UserFunctionalTest {
             createUserSecondResponse.statusCode(),
             () -> "Unexpected status code. Response body: '" + createUserSecondResponse.bodyAsString() + "'"
         );
-
-        final var expectedCreateUserBody = new JsonObject().put(
-            "error", new JsonObject().put(
-                "message", "A user already exists with the id '" + id + "'"
-            )
+        assertEquals(
+            ContentType.APPLICATION_JSON.getMimeType(),
+            createUserSecondResponse.getHeader(HttpHeaders.CONTENT_TYPE)
         );
-        assertEquals(expectedCreateUserBody, createUserSecondResponse.bodyAsJsonObject());
+        assertEquals(
+            new JsonObject().put(
+                "error", new JsonObject().put(
+                    "message", "A user already exists with the id '" + id + "'"
+                )
+            ),
+            createUserSecondResponse.bodyAsJsonObject()
+        );
     }
 
 
 
     @Test
-    @Disabled
     void createUser_canNotCreateUserWithEmptyExternalId() {
+        final var client = RibacTestHelper.createHttpClient();
 
+        final var createUserResponse = client.post("/users")
+                                             .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                             .rxSendJsonObject(new JsonObject().put(
+                                                 "id", ""
+                                             ))
+                                             .blockingGet();
+        assertEquals(
+            HttpStatus.SC_BAD_REQUEST,
+            createUserResponse.statusCode(),
+            () -> "Unexpected status code. Response body: '" + createUserResponse.bodyAsString() + "'"
+        );
+        assertEquals(
+            ContentType.APPLICATION_JSON.getMimeType(),
+            createUserResponse.getHeader(HttpHeaders.CONTENT_TYPE)
+        );
+        assertEquals(
+            new JsonObject().put(
+                "error", new JsonObject().put(
+                    "message", "$.id: must be at least 1 characters long"
+                )
+            ),
+            createUserResponse.bodyAsJsonObject()
+        );
     }
 
 
 
     @Test
-    @Disabled
     void createUser_canNotCreateUserWithTooLongExternalId() {
+        final var client = RibacTestHelper.createHttpClient();
 
+        final var id = "" +
+            "user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345." +
+            "user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345." +
+            "user12345.user12345.user12345.user12345.user12345.12345" +
+            "6";
+
+        final var createUserResponse = client.post("/users")
+                                             .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                             .rxSendJsonObject(new JsonObject().put(
+                                                 "id", id
+                                             ))
+                                             .blockingGet();
+        assertEquals(
+            HttpStatus.SC_BAD_REQUEST,
+            createUserResponse.statusCode(),
+            () -> "Unexpected status code. Response body: '" + createUserResponse.bodyAsString() + "'"
+        );
+        assertEquals(
+            ContentType.APPLICATION_JSON.getMimeType(),
+            createUserResponse.getHeader(HttpHeaders.CONTENT_TYPE)
+        );
+        assertEquals(
+            new JsonObject().put(
+                "error", new JsonObject().put(
+                    "message", "$.id: may only be 255 characters long"
+                )
+            ),
+            createUserResponse.bodyAsJsonObject()
+        );
     }
 
 
 
     @Test
-    @Disabled
     void createUser_canNotCreateUserWithExternalIdAsNumber() {
+        final var client = RibacTestHelper.createHttpClient();
 
+        final var createUserResponse = client.post("/users")
+                                             .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                             .rxSendJsonObject(new JsonObject().put(
+                                                 "id", 12345
+                                             ))
+                                             .blockingGet();
+        assertEquals(
+            HttpStatus.SC_BAD_REQUEST,
+            createUserResponse.statusCode(),
+            () -> "Unexpected status code. Response body: '" + createUserResponse.bodyAsString() + "'"
+        );
+        assertEquals(
+            ContentType.APPLICATION_JSON.getMimeType(),
+            createUserResponse.getHeader(HttpHeaders.CONTENT_TYPE)
+        );
+        assertEquals(
+            new JsonObject().put(
+                "error", new JsonObject().put(
+                    "message", "$.id: integer found, string expected"
+                )
+            ),
+            createUserResponse.bodyAsJsonObject()
+        );
     }
 
 
 
     @Test
-    @Disabled
     void createUser_canNotCreateUserWhenNotProvidingExternalIdField() {
+        final var client = RibacTestHelper.createHttpClient();
 
+        final var createUserResponse = client.post("/users")
+                                             .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                             .rxSendJsonObject(new JsonObject())
+                                             .blockingGet();
+        assertEquals(
+            HttpStatus.SC_BAD_REQUEST,
+            createUserResponse.statusCode(),
+            () -> "Unexpected status code. Response body: '" + createUserResponse.bodyAsString() + "'"
+        );
+        assertEquals(
+            ContentType.APPLICATION_JSON.getMimeType(),
+            createUserResponse.getHeader(HttpHeaders.CONTENT_TYPE)
+        );
+        assertEquals(
+            new JsonObject().put(
+                "error", new JsonObject().put(
+                    "message", "$.id: is missing but it is required"
+                )
+            ),
+            createUserResponse.bodyAsJsonObject()
+        );
     }
 
 
 
     @Test
-    @Disabled
     void createUser_canNotCreateUserWhenProvidingEmptyBody() {
+        final var client = RibacTestHelper.createHttpClient();
 
+        final var createUserResponse = client.post("/users")
+                                             .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                             .rxSend()
+                                             .blockingGet();
+        assertEquals(
+            HttpStatus.SC_BAD_REQUEST,
+            createUserResponse.statusCode(),
+            () -> "Unexpected status code. Response body: '" + createUserResponse.bodyAsString() + "'"
+        );
+        assertEquals(
+            ContentType.APPLICATION_JSON.getMimeType(),
+            createUserResponse.getHeader(HttpHeaders.CONTENT_TYPE)
+        );
+        //TODO: OpenApiValidationFailureHandler must be altered so it does not respond with 404 in this case
+        assertEquals(
+            new JsonObject().put(
+                "error", new JsonObject().put(
+                    "message", "Empty body"
+                )
+            ),
+            createUserResponse.bodyAsJsonObject()
+        );
     }
 
 
