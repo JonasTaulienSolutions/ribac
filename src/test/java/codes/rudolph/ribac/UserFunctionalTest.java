@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -240,6 +242,7 @@ class UserFunctionalTest {
 
         final var createUserResponse = client.post("/users")
                                              .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                             .putHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType())
                                              .rxSend()
                                              .blockingGet();
         assertEquals(
@@ -255,7 +258,7 @@ class UserFunctionalTest {
         assertEquals(
             new JsonObject().put(
                 "error", new JsonObject().put(
-                    "message", "Empty body"
+                    "message", "$: string found, object expected"
                 )
             ),
             createUserResponse.bodyAsJsonObject()
@@ -265,9 +268,40 @@ class UserFunctionalTest {
 
 
     @Test
-    @Disabled
     void fetchUser_returnsRequestedUser() {
+        final var client = RibacTestHelper.createHttpClient();
 
+        final var id = "user/ 123";
+
+        client.post("/users")
+              .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+              .rxSendJsonObject(new JsonObject().put(
+                  "id", id
+              ))
+              .blockingGet();
+
+        final var fetchUserResponse = client.get("/users/" + URLEncoder.encode(id, StandardCharsets.UTF_8))
+                                            .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                            .rxSend()
+                                            .blockingGet();
+
+        assertEquals(
+            HttpStatus.SC_OK,
+            fetchUserResponse.statusCode(),
+            () -> "Unexpected status code. Response body: '" + fetchUserResponse.bodyAsString() + "'"
+        );
+        assertEquals(
+            ContentType.APPLICATION_JSON.getMimeType(),
+            fetchUserResponse.getHeader(HttpHeaders.CONTENT_TYPE)
+        );
+        assertEquals(
+            new JsonObject().put(
+                "requestedUser", new JsonObject().put(
+                    "id", id
+                )
+            ),
+            fetchUserResponse.bodyAsJsonObject()
+        );
     }
 
 

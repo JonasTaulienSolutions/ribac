@@ -1,27 +1,27 @@
-package codes.rudolph.ribac.server;
+package codes.rudolph.ribac.server.error;
 
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.web.RoutingContext;
-import io.vertx.ext.web.api.validation.ValidationException;
-import org.apache.commons.httpclient.HttpStatus;
+import io.vertx.reactivex.ext.web.RoutingContext;
 
-public class OpenApiValidationFailureHandler implements Handler<RoutingContext> {
+public class HttpErrorHandler implements Handler<RoutingContext> {
 
     @Override
     public void handle(RoutingContext ctx) {
-        if (ctx.failure() instanceof ValidationException) {
+        if (ctx.failure() instanceof HttpError) {
+            final HttpError error = (HttpError) ctx.failure();
             ctx.response()
-               .setStatusCode(HttpStatus.SC_BAD_REQUEST)
+               .setStatusCode(error.getHttpStatusCode())
                .end(
                    new JsonObject()
                        .put(
                            "error", new JsonObject().put(
-                               "message", ctx.failure().getMessage()
+                               "message", error.getMessage()
                            )
                        )
                        .encode()
                );
+
         } else {
             ctx.next();
         }

@@ -13,20 +13,20 @@ paths:
       operationId: createUser
       summary: Creates a new user
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               type: object
-              required:
-              - id
               properties:
                 id:
                   type: string
                   minLength: 1
                   maxLength: 255
+              required:
+              - id
             example:
               id: user123
-        required: true
       responses:
         201:
           description: Successfully created thes new user
@@ -34,16 +34,11 @@ paths:
             application/json:
               schema:
                 type: object
-                required:
-                - createdUser
                 properties:
                   createdUser:
-                    type: object
-                    required:
-                    - id
-                    properties:
-                      id:
-                        type: string
+                    $ref: '#/components/schemas/User'
+                required:
+                - createdUser
               example:
                 createdUser:
                   id: user123
@@ -52,7 +47,6 @@ paths:
           content:
             application/json:
               schema:
-                type: object
                 $ref: '#/components/schemas/Error'
               example:
                 error:
@@ -62,14 +56,45 @@ paths:
           content:
             application/json:
               schema:
-                type: object
                 $ref: '#/components/schemas/Error'
               example:
                 error:
                   message: "A user already exists with the id 'user123'"
+  /users/{userId}:
+    get:
+      operationId: fetchUser
+      summary: Returns the requested user
+      parameters:
+      - in: path
+        name: userId
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          maxLength: 255
+      responses:
+        200:
+          description: Successfully returned the requested user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestedUser:
+                    $ref: '#/components/schemas/User'
+                required:
+                - requestedUser
 
 components:
   schemas:
+    User:
+      type: object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+
     Error:
       type: object
       required:

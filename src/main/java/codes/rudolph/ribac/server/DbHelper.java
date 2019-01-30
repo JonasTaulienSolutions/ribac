@@ -34,7 +34,7 @@ public class DbHelper {
      *
      * @param dbGetter The action to execute inside of the transaction. Must return a result.
      * @param <R> The type of the result
-     * @return a single containing whatever the dbGetter returns
+     * @return a {@link Single} containing whatever the dbGetter returns
      */
     public <R> Single<R> execute(Function<DSLContext, R> dbGetter) {
         //TODO: Handle no connection could be established
