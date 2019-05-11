@@ -5,19 +5,20 @@ import io.reactivex.Scheduler;
 import io.vertx.reactivex.core.http.HttpServer;
 import io.vertx.reactivex.core.http.HttpServerRequest;
 import org.apache.commons.httpclient.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import java.util.logging.Logger;
 
 public class Server {
+
+    private final static Logger log = LoggerFactory.getLogger(Server.class);
 
     private final HttpServer server;
 
     private final Scheduler eventLoop;
 
     private final RouterFactory routerFactory;
-
-    private final Logger log;
 
     private final int port;
 
@@ -28,13 +29,11 @@ public class Server {
         HttpServer server,
         @Named("eventLoopScheduler") Scheduler eventLoop,
         RouterFactory routerFactory,
-        Logger log,
         @Named("serverPort") int port
     ) {
         this.server = server;
         this.eventLoop = eventLoop;
         this.routerFactory = routerFactory;
-        this.log = log;
         this.port = port;
     }
 
@@ -55,7 +54,7 @@ public class Server {
                    );
 
         this.server.rxListen(this.port).subscribe(
-            (server) -> log.info("Server successfully started on port " + server.actualPort()),
+            (server) -> log.info("Server successfully started on port {}", server.actualPort()),
             Throwable::printStackTrace
         );
     }

@@ -2,7 +2,7 @@ package codes.rudolph.ribac.server.user;
 
 import codes.rudolph.ribac.jooq.tables.records.RibacUserRecord;
 import codes.rudolph.ribac.server.DbHelper;
-import codes.rudolph.ribac.server.error.ConflictError;
+import codes.rudolph.ribac.server.error.DuplicateCreateError;
 import com.google.inject.Inject;
 import io.reactivex.Single;
 import org.jooq.exception.DataAccessException;
@@ -35,9 +35,20 @@ public class UserRepository {
             .onErrorResumeNext(
                 failure -> Single.error(
                     UserRepository.mySqlRespondedWithDuplicateEntryError(failure)
-                        ? new ConflictError("A user already exists with the id '" + externalId + "'")
+                        ? new DuplicateCreateError("A user already exists with the id '" + externalId + "'")
                         : failure
                 )
+            );
+    }
+
+
+
+    public Single<RibacUserRecord> getUser(String externalId) {
+        return this.dbHelper
+            .execute(
+                db -> db.selectFrom(RIBAC_USER)
+                        .where(RIBAC_USER.EXTERNAL_ID.eq(externalId))
+                        .fetchOne()
             );
     }
 

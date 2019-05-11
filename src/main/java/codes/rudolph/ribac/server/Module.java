@@ -3,10 +3,12 @@ package codes.rudolph.ribac.server;
 import com.google.inject.AbstractModule;
 import com.zaxxer.hikari.HikariDataSource;
 import io.reactivex.Scheduler;
+import io.vertx.core.http.HttpMethod;
 import io.vertx.reactivex.core.RxHelper;
 import io.vertx.reactivex.core.Vertx;
 import io.vertx.reactivex.core.http.HttpServer;
 import io.vertx.reactivex.ext.web.api.contract.openapi3.OpenAPI3RouterFactory;
+import io.vertx.reactivex.ext.web.handler.CorsHandler;
 import org.jooq.Configuration;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DefaultConfiguration;
@@ -64,6 +66,20 @@ public class Module extends AbstractModule {
 
         bind(OpenAPI3RouterFactory.class).toInstance(
             OpenAPI3RouterFactory.rxCreate(vertx, "ribac.yaml").blockingGet()
+        );
+
+        bind(CorsHandler.class).toInstance(
+            CorsHandler.create("*")
+                       .allowedMethod(HttpMethod.POST)
+                       .allowedMethod(HttpMethod.GET)
+                       .allowedMethod(HttpMethod.OPTIONS)
+                       .allowedMethod(HttpMethod.DELETE)
+                       .allowedMethod(HttpMethod.PATCH)
+                       .allowedMethod(HttpMethod.PUT)
+                       .allowedHeader("Access-Control-Allow-Origin")
+                       .allowedHeader("Origin")
+                       .allowedHeader("Content-Type")
+                       .allowedHeader("Accept")
         );
     }
 }

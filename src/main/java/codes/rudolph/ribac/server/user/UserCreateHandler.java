@@ -1,6 +1,6 @@
 package codes.rudolph.ribac.server.user;
 
-import codes.rudolph.ribac.server.error.ConflictError;
+import codes.rudolph.ribac.server.error.DuplicateCreateError;
 import com.google.inject.Inject;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
@@ -42,8 +42,8 @@ public class UserCreateHandler implements Handler<RoutingContext> {
                                           .encode()
                                   ),
                 failure -> ctx.fail(
-                    (failure instanceof ConflictError)
-                        ? ((ConflictError) failure).toHttpError(HttpStatus.SC_CONFLICT)
+                    (failure instanceof DuplicateCreateError)
+                        ? ((DuplicateCreateError) failure).toHttpError(HttpStatus.SC_CONFLICT)
                         : failure
                 )
             );

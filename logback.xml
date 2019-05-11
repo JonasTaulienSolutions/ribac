@@ -1,0 +1,18 @@
+<configuration scan="true" scanPeriod="30 seconds">
+    <appender name="stdout-appender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                %d{HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <logger name="io.netty" level="INFO"/>
+    <logger name="com.networknt.schema" level="INFO"/>
+    <logger name="com.zaxxer.hikari" level="INFO"/>
+    <logger name="org.jooq" level="INFO"/>
+
+    <root level="DEBUG">
+        <appender-ref ref="stdout-appender"/>
+    </root>
+</configuration>

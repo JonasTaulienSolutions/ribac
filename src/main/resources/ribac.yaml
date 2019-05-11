@@ -1,7 +1,7 @@
 openapi: 3.0.2
 
 info:
-  title: ribac - RIghtBasedAccessControl
+  title: ribac - RightBasedAccessControl
   version: 0.1.0-SNAPSHOT
 
 servers:
@@ -10,7 +10,7 @@ servers:
 paths:
   /users:
     post:
-      operationId: createUser
+      operationId: userCreate
       summary: Creates a new user
       requestBody:
         required: true
@@ -60,13 +60,16 @@ paths:
               example:
                 error:
                   message: "A user already exists with the id 'user123'"
+
+
+
   /users/{userId}:
     get:
-      operationId: fetchUser
+      operationId: userFetch
       summary: Returns the requested user
       parameters:
-      - in: path
-        name: userId
+      - name: userId
+        in: path
         required: true
         schema:
           type: string

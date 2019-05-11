@@ -1,11 +1,14 @@
 package codes.rudolph.ribac.server;
 
 import com.google.inject.Guice;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Main {
+
+    private final static Logger log = LoggerFactory.getLogger(Main.class);
+
+
 
     public static void main(String[] args) {
         try {
@@ -16,9 +19,7 @@ public class Main {
             server.start();
 
         } catch (Exception e) {
-            final var log = Logger.getLogger(Main.class.getName());
-
-            log.log(Level.SEVERE, "Failed to start:", e);
+            log.error("Failed to start ribac:", e);
         }
     }
 }
