@@ -11,14 +11,30 @@ import java.io.InputStreamReader;
 public class RibacTestHelper {
 
     public static void destroyRibacDb() throws InterruptedException, IOException {
-        RibacTestHelper.executeShellCommand("docker-compose rm --stop --force ribac-db");
+        System.out.println("- Destroying Database");
+        RibacTestHelper.executeShellCommand(new ProcessBuilder(
+            "/bin/sh",
+            "-c",
+            "db_exec 'DROP DATABASE IF EXIST ${MYSQL_DATABASE};'"
+        ));
     }
 
 
 
     public static void createRibacDb() throws IOException, InterruptedException {
-        RibacTestHelper.executeShellCommand("docker-compose up --detach ribac-db");
-        Thread.sleep(16000);
+        System.out.println("- Creating Database");
+        RibacTestHelper.executeShellCommand(new ProcessBuilder(
+            "/bin/sh",
+            "-c",
+            "db_exec 'CREATE DATABASE ${MYSQL_DATABASE};'"
+        ));
+
+        System.out.println("- Creating Tables");
+        RibacTestHelper.executeShellCommand(new ProcessBuilder(
+            "/bin/sh",
+            "-c",
+            "db_exec_script '${MYSQL_DATABASE}' '/docker-entrypoint-initdb.d/ribac.sql'"
+        ));
     }
 
 
@@ -32,10 +48,10 @@ public class RibacTestHelper {
 
 
 
-    private static void executeShellCommand(String command) throws IOException, InterruptedException {
-        var process = Runtime.getRuntime().exec(command);
-        new BufferedReader(new InputStreamReader(process.getInputStream())).lines().forEach(System.out::println);
-        new BufferedReader(new InputStreamReader(process.getErrorStream())).lines().forEach(System.err::println);
+    private static void executeShellCommand(ProcessBuilder processBuilder) throws IOException, InterruptedException {
+        var process = processBuilder.start();
+        new BufferedReader(new InputStreamReader(process.getInputStream())).lines().forEach(line -> System.out.println("| STDOUT: " + line));
+        new BufferedReader(new InputStreamReader(process.getErrorStream())).lines().forEach(line -> System.err.println("| STDERR: " + line));
         process.waitFor();
     }
 

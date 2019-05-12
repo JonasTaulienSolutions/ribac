@@ -26,5 +26,7 @@ public class ReadOrCreateRequestIdHandler implements Handler<RoutingContext> {
             : SELFGEN_REQUEST_ID_PREFIX + UUID.randomUUID().toString();
 
         ctx.put(REQUEST_ID_KEY, requestId);
+
+        ctx.next();
     }
 }

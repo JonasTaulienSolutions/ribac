@@ -11,6 +11,8 @@
     <logger name="com.networknt.schema" level="INFO"/>
     <logger name="com.zaxxer.hikari" level="INFO"/>
     <logger name="org.jooq" level="INFO"/>
+    <logger name="org.jooq.Constants" level="WARN"/>
+    <logger name="io.swagger" level="INFO"/>
 
     <root level="DEBUG">
         <appender-ref ref="stdout-appender"/>

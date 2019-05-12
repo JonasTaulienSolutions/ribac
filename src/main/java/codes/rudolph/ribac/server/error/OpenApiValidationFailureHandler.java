@@ -1,8 +1,8 @@
 package codes.rudolph.ribac.server.error;
 
 import io.vertx.core.Handler;
-import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.api.validation.ValidationException;
+import io.vertx.reactivex.ext.web.RoutingContext;
 import org.apache.commons.httpclient.HttpStatus;
 
 public class OpenApiValidationFailureHandler implements Handler<RoutingContext> {

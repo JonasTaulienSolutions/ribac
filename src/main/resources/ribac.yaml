@@ -29,7 +29,7 @@ paths:
               id: user123
       responses:
         201:
-          description: Successfully created thes new user
+          description: Successfully created the new user
           content:
             application/json:
               schema:
