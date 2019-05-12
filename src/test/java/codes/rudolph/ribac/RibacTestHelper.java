@@ -10,12 +10,38 @@ import java.io.InputStreamReader;
 
 public class RibacTestHelper {
 
+    private static final String BACKUP_FILE_NAME = "pre-test.sql";
+
+
+
+    public static void createRibacDbBackup() throws InterruptedException, IOException {
+        System.out.println("- Creating Database Backup");
+        RibacTestHelper.executeShellCommand(new ProcessBuilder(
+            "/bin/sh",
+            "-c",
+            "db_create_backup '${MYSQL_DATABASE}' '" + BACKUP_FILE_NAME + "'"
+        ));
+    }
+
+
+
+    public static void restoreRibacDbBackup() throws InterruptedException, IOException {
+        System.out.println("- Restoring Database Backup");
+        RibacTestHelper.executeShellCommand(new ProcessBuilder(
+            "/bin/sh",
+            "-c",
+            "db_restore_backup '${MYSQL_DATABASE}' '" + BACKUP_FILE_NAME + "'"
+        ));
+    }
+
+
+
     public static void destroyRibacDb() throws InterruptedException, IOException {
         System.out.println("- Destroying Database");
         RibacTestHelper.executeShellCommand(new ProcessBuilder(
             "/bin/sh",
             "-c",
-            "db_exec 'DROP DATABASE IF EXIST ${MYSQL_DATABASE};'"
+            "db_exec 'DROP DATABASE IF EXISTS ${MYSQL_DATABASE};'"
         ));
     }
 
@@ -33,7 +59,7 @@ public class RibacTestHelper {
         RibacTestHelper.executeShellCommand(new ProcessBuilder(
             "/bin/sh",
             "-c",
-            "db_exec_script '${MYSQL_DATABASE}' '/docker-entrypoint-initdb.d/ribac.sql'"
+            "db_exec_script '${MYSQL_DATABASE}' './ribac.sql'"
         ));
     }
 
@@ -50,8 +76,12 @@ public class RibacTestHelper {
 
     private static void executeShellCommand(ProcessBuilder processBuilder) throws IOException, InterruptedException {
         var process = processBuilder.start();
-        new BufferedReader(new InputStreamReader(process.getInputStream())).lines().forEach(line -> System.out.println("| STDOUT: " + line));
-        new BufferedReader(new InputStreamReader(process.getErrorStream())).lines().forEach(line -> System.err.println("| STDERR: " + line));
+        new BufferedReader(new InputStreamReader(process.getInputStream()))
+            .lines()
+            .forEach(line -> System.out.println("| STDOUT: " + line));
+        new BufferedReader(new InputStreamReader(process.getErrorStream()))
+            .lines()
+            .forEach(line -> System.err.println("| STDERR: " + line));
         process.waitFor();
     }
 

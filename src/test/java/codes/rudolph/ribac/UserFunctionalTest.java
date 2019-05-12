@@ -16,6 +16,7 @@ class UserFunctionalTest {
 
     @BeforeAll
     static void beforeAll() throws IOException, InterruptedException {
+        RibacTestHelper.createRibacDbBackup();
         RibacTestHelper.destroyRibacDb();
     }
 
@@ -31,6 +32,14 @@ class UserFunctionalTest {
     @AfterEach
     void afterEach() throws InterruptedException, IOException {
         RibacTestHelper.destroyRibacDb();
+    }
+
+
+
+    @AfterAll
+    static void afterAll() throws InterruptedException, IOException {
+        RibacTestHelper.createRibacDb();
+        RibacTestHelper.restoreRibacDbBackup();
     }
 
 

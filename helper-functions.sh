@@ -2,7 +2,8 @@
 export RIBAC_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
 
 db_exec(){
-  docker-compose exec -T ribac-db sh -c "exec mysql -uroot -hlocalhost -p\"\${MYSQL_ROOT_PASSWORD}\" -e \"${1}\""
+  command="${1}"
+  docker-compose exec -T ribac-db sh -c "exec mysql -uroot -hlocalhost -p\"\${MYSQL_ROOT_PASSWORD}\" -e \"${command}\""
 }
 export -f db_exec
 
@@ -10,9 +11,31 @@ export -f db_exec
 
 
 db_exec_script(){
-  docker-compose exec -T ribac-db sh -c "exec mysql -uroot -hlocalhost -p\"\${MYSQL_ROOT_PASSWORD}\" -D\"${1}\" < \"${2}\""
+  databaseName="${1}"
+  scriptName="${2}"
+  docker-compose exec -T ribac-db sh -c "exec mysql -uroot -hlocalhost -p\"\${MYSQL_ROOT_PASSWORD}\" -D\"${databaseName}\"" < "${scriptName}"
 }
 export -f db_exec_script
+
+
+
+
+db_create_backup(){
+  databaseName="${1}"
+  backupName="${2}"
+  docker-compose exec -T ribac-db sh -c "exec mysqldump -uroot -p\"\${MYSQL_ROOT_PASSWORD}\" \"${databaseName}\"" > "./backups/${backupName}"
+}
+export -f db_create_backup
+
+
+
+
+db_restore_backup(){
+  databaseName="${1}"
+  backupName="${2}"
+  db_exec_script "${databaseName}" "./backups/${backupName}"
+}
+export -f db_restore_backup
 
 
 
