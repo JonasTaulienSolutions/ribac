@@ -377,14 +377,6 @@ class UserFunctionalTest {
 
     @Test
     @Disabled
-    void deleteUser_canNotDeleteWhenProvidingEmptyBody() {
-
-    }
-
-
-
-    @Test
-    @Disabled
     void deleteUser_alsoDeletesEveryGroupMembership() {
 
     }
@@ -404,6 +396,4 @@ class UserFunctionalTest {
     void deleteUser_alsoDeletesEveryUserRights() {
 
     }
-
-    //TODO: Change id
 }
