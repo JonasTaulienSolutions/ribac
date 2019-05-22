@@ -12,6 +12,12 @@ paths:
     post:
       operationId: userCreate
       summary: Creates a new user
+      parameters:
+        - name: Request-Id
+          in: header
+          required: false
+          schema:
+            type: string
       requestBody:
         required: true
         content:
@@ -75,6 +81,11 @@ paths:
           type: string
           minLength: 1
           maxLength: 255
+      - name: Request-Id
+        in: header
+        required: false
+        schema:
+          type: string
       responses:
         200:
           description: Successfully returned the requested user

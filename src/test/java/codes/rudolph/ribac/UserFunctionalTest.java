@@ -293,7 +293,7 @@ class UserFunctionalTest {
               ))
               .blockingGet();
 
-        final var fetchUserResponse = client.get("/users/" + URLEncoder.encode(id, StandardCharsets.UTF_8))
+        final var fetchUserResponse = client.get("/users/" + URLEncoder.encode(id, StandardCharsets.UTF_8).replace("+", "%20"))
                                             .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
                                             .rxSend()
                                             .blockingGet();

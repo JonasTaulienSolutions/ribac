@@ -1,9 +1,4 @@
 # To Do
-* Fix test failure:
-
-   ```
-   UserFunctionalTest.fetchUser_returnsRequestedUser:301 Unexpected status code. Response body: '<html><body><h1>Resource not found</h1></body></html>' ==> expected: <200> but was: <404>
-   ```
 * Log Db-Communication
 * Log Responses
 * Write README.md
