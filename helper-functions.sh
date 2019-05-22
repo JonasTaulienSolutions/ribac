@@ -89,7 +89,7 @@ export -f ribac_stop
 
 
 swagger_start(){
-  ocker-compose up -d ribac-swagger
+  docker-compose up -d ribac-swagger
 
   # Import variables from .env-File for $RIBAC_SWAGGER_EXTERNAL_PORT
   export $(grep -v '^#' .env | xargs -0)
