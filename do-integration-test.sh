@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 source helper-functions.sh
 
-exec 3< <(docker-compose logs --follow ribac)               \
+   exec 3< <(docker-compose logs --follow ribac)               \
 && echo "- Execute tests:"                                  \
 && mvn test -Djooq.codegen.skip=true -Dmaven.main.skip      \
 

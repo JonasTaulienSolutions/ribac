@@ -1,4 +1,4 @@
-FROM openjdk:10
+FROM openjdk:12
 WORKDIR /usr/ribac
 EXPOSE 8080
 EXPOSE 5005
