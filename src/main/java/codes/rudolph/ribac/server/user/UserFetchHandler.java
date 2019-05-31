@@ -1,5 +1,6 @@
 package codes.rudolph.ribac.server.user;
 
+import codes.rudolph.ribac.server.ReadOrCreateRequestIdHandler;
 import com.google.inject.Inject;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
@@ -23,8 +24,9 @@ public class UserFetchHandler implements Handler<RoutingContext> {
     public void handle(RoutingContext ctx) {
         final var externalUserId = ctx.pathParam("userId");
 
+        final String requestId = ctx.get(ReadOrCreateRequestIdHandler.REQUEST_ID_KEY);
         this.userRepository
-            .getUser(externalUserId)
+            .getUser(externalUserId, requestId)
             .subscribe(
                 requestedUser -> ctx.response()
                                     .setStatusCode(HttpStatus.SC_OK)

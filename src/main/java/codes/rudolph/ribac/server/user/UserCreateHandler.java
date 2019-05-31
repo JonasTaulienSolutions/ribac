@@ -1,5 +1,6 @@
 package codes.rudolph.ribac.server.user;
 
+import codes.rudolph.ribac.server.ReadOrCreateRequestIdHandler;
 import codes.rudolph.ribac.server.error.DuplicateCreateError;
 import com.google.inject.Inject;
 import io.vertx.core.Handler;
@@ -27,8 +28,9 @@ public class UserCreateHandler implements Handler<RoutingContext> {
         final var requestBody = params.body().getJsonObject();
         final var externalId = requestBody.getString("id");
 
+        final String requestId = ctx.get(ReadOrCreateRequestIdHandler.REQUEST_ID_KEY);
         this.userRepository
-            .createUser(externalId)
+            .createUser(externalId, requestId)
             .subscribe(
                 createdUser -> ctx.response()
                                   .setStatusCode(HttpStatus.SC_CREATED)

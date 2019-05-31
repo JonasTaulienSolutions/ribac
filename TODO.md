@@ -1,5 +1,4 @@
 # To Do
-* Log Db-Communication
 * Log Responses
 * Write README.md
 * Finish all Tests and corresponding implementations in `UserFunctionalTest`

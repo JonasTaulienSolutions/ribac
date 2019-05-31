@@ -81,5 +81,8 @@ public class Module extends AbstractModule {
                        .allowedHeader("Content-Type")
                        .allowedHeader("Accept")
         );
+
+        bind(Logger.class).annotatedWith(named("dbLogger")).toInstance(new Logger("DB communication: ", "DB"));
+        bind(Logger.class).annotatedWith(named("systemLogger")).toInstance(new Logger("", "selfgen"));
     }
 }
