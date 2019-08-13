@@ -80,6 +80,7 @@ public class Module extends AbstractModule {
                        .allowedHeader("Origin")
                        .allowedHeader("Content-Type")
                        .allowedHeader("Accept")
+                       .allowedHeader("Request-Id")
         );
 
         bind(Logger.class).annotatedWith(named("dbLogger")).toInstance(new Logger("DB communication: ", "DB"));
