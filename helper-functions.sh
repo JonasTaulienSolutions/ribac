@@ -77,7 +77,7 @@ export -f db_start
 
 
 image_create(){
-  echo "- Create docker image:" && mvn package -Dmaven.test.skip=true
+  echo "- Create docker image:" && mvn clean package -Dmaven.test.skip=true
 }
 export -f image_create
 

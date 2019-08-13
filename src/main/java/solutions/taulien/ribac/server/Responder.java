@@ -43,8 +43,8 @@ public class Responder {
     public void respond(RoutingContext ctx, int statusCode, JsonObject body) {
         final String requestId = ctx.get(ReadOrCreateRequestIdHandler.REQUEST_ID_KEY);
 
-        this.log.end("{}", requestId, statusCode);
         this.log.responseBody(requestId, body.encode());
+        this.log.end("{}", requestId, statusCode);
 
         ctx.response()
            .setStatusCode(statusCode)

@@ -63,7 +63,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>Main</mainClass>
+                            <mainClass>solutions.taulien.ribac.server.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
@@ -117,7 +117,7 @@
                     </jdbc>
 
                     <!-- Generator parameters -->
-                    <generator>u
+                    <generator>
                         <database>
                             <name>org.jooq.meta.mysql.MySQLDatabase</name>
                             <inputSchema>${GEN_RIBAC_DB_NAME}</inputSchema>

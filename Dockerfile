@@ -7,7 +7,7 @@ EXPOSE 5005
 ADD target/lib lib/
 
 # Add the service itself
-ADD target/right-based-access-control.jar ribac.jar
+ADD target/ribac-server.jar ribac.jar
 
 # Add logback-config
 ADD logback.xml logback.xml
