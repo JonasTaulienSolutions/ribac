@@ -4,8 +4,7 @@ ribac is a micro service that...
 * ...answers questions about the rights of a user
 * ...replaces access control specific business logic
 
-Its goal is that the code to check if a user has the right to do a specific action in your system is as simple as 'Has the user with the
- id _ the right to do _?'
+Its goal is that the code to check if a user has the right to do a specific action in your system is as simple as 'Has the user _ the right to do _?'
 
 ## Usage
 ### 1. Install
@@ -102,8 +101,9 @@ administrators.giveRight(createAdministrators);
 ```
 
 ### 8. Create Right-Groups
-You probably not only want to give multiple Users a single right but also to give a single User multiple Rights.
+You probably not only want to give multiple Users a single right but also to give a single User multiple Rights.  
 That's what RightSets are for:
+
 0. Create RightSet
     ```java
     RibacRightSet viewPublishedProducts = ribac.createRightSet("View Published Products");
