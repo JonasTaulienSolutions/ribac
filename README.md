@@ -80,7 +80,7 @@ RibacUser user123 = ribac.createUser("user123");
 ```
 
 ### 4. Add Groups to ribac
-A group is a set of users. Before you can add users to a group you have to create the group:
+A Group is a set of Users. Before you can add Users to a Group you have to create the Group:
 ```java
 RibacGroup administrators = ribac.createGroup("Administrators");
 ```
@@ -108,7 +108,7 @@ ribac.giveUser("user123").right("Create Administrators");
 user123.giveRight(createAdministrators);
 ```
 
-Or you can assign a Right to a group of Users
+Or you can assign a Right to a Group of Users
 ```java
 ribac.giveGroup("Administrators").right("Create Administrators");
 // Or
