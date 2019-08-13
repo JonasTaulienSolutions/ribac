@@ -98,6 +98,24 @@ paths:
                     $ref: '#/components/schemas/User'
                 required:
                 - requestedUser
+        400:
+          description: The given `userId` is too short or to long
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error:
+                  message: "Value doesn't respect min length 1"
+        404:
+          description: There is no user with the given `userId`
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error:
+                  message: "A user with the id 'user123' does not exist"
 
 components:
   schemas:
