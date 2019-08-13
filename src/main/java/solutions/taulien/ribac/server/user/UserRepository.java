@@ -1,15 +1,17 @@
 package solutions.taulien.ribac.server.user;
 
-import solutions.taulien.ribac.jooq.tables.records.RibacUserRecord;
-import solutions.taulien.ribac.server.DbHelper;
-import solutions.taulien.ribac.server.Logger;
-import solutions.taulien.ribac.server.error.DuplicateCreateError;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import io.reactivex.Single;
 import org.jooq.exception.DataAccessException;
+import solutions.taulien.ribac.jooq.tables.records.RibacUserRecord;
+import solutions.taulien.ribac.server.DbHelper;
+import solutions.taulien.ribac.server.Logger;
+import solutions.taulien.ribac.server.error.DuplicateCreateError;
+import solutions.taulien.ribac.server.error.ResourceNotFoundError;
 
 import java.sql.SQLException;
+import java.util.Optional;
 
 import static solutions.taulien.ribac.jooq.tables.RibacUser.RIBAC_USER;
 
@@ -62,10 +64,15 @@ public class UserRepository {
         log.start("Getting User", externalRequestId);
         return this.dbHelper
                    .execute(
-                       db -> db.selectFrom(RIBAC_USER)
-                               .where(RIBAC_USER.EXTERNAL_ID.eq(externalId))
-                               .fetchOne()
+                       db -> Optional.ofNullable(
+                           db.selectFrom(RIBAC_USER)
+                             .where(RIBAC_USER.EXTERNAL_ID.eq(externalId))
+                             .fetchOne()
+                       )
                    )
+                   .map(maybeUser -> maybeUser.orElseThrow(
+                       () -> new ResourceNotFoundError("A user with the id '" + externalId + "' does not exist")
+                   ))
                    .doOnSuccess(log.endSuccessfully("Got User", externalRequestId))
                    .doOnError(log.endFailed("To get User", externalRequestId));
     }

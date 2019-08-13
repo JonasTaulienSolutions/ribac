@@ -1,6 +1,5 @@
 # To Do
 * Finish all Tests and corresponding implementations in `UserFunctionalTest`
-* ?Remove `GET /users/{userId}`?
 * Add `DELETE /users/{userId}`
 * Add `POST /groups`
 * Add `DELETE /groups/{groupName}`

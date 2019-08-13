@@ -4,8 +4,10 @@ import com.google.inject.Inject;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
 import io.vertx.reactivex.ext.web.RoutingContext;
+import org.apache.http.HttpStatus;
 import solutions.taulien.ribac.server.ReadOrCreateRequestIdHandler;
 import solutions.taulien.ribac.server.Responder;
+import solutions.taulien.ribac.server.error.ResourceNotFoundError;
 
 public class UserFetchHandler implements Handler<RoutingContext> {
 
@@ -41,7 +43,11 @@ public class UserFetchHandler implements Handler<RoutingContext> {
                                                  )
                                              )
                                      ),
-                ctx::fail
+                failure -> ctx.fail(
+                    (failure instanceof ResourceNotFoundError)
+                        ? ((ResourceNotFoundError) failure).toHttpError(HttpStatus.SC_NOT_FOUND)
+                        : failure
+                )
             );
     }
 }

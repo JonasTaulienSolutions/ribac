@@ -267,7 +267,7 @@ class UserFunctionalTest {
             ContentType.APPLICATION_JSON.getMimeType(),
             createUserResponse.getHeader(HttpHeaders.CONTENT_TYPE)
         );
-        //TODO: OpenApiValidationFailureHandler must be altered so it does not respond with 404 in this case
+
         assertEquals(
             new JsonObject().put(
                 "error", new JsonObject().put(
@@ -320,25 +320,97 @@ class UserFunctionalTest {
 
 
     @Test
-    @Disabled
     void fetchUser_canNotReturnUnknownUser() {
+        final var client = RibacTestHelper.createHttpClient();
 
+        var id = "userB";
+        final var fetchUserResponse = client.get("/users/" + id)
+                                            .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                            .rxSend()
+                                            .blockingGet();
+
+        assertEquals(
+            HttpStatus.SC_NOT_FOUND,
+            fetchUserResponse.statusCode(),
+            () -> "Unexpected status code. Response body: '" + fetchUserResponse.bodyAsString() + "'"
+        );
+        assertEquals(
+            ContentType.APPLICATION_JSON.getMimeType(),
+            fetchUserResponse.getHeader(HttpHeaders.CONTENT_TYPE)
+        );
+        assertEquals(
+            new JsonObject().put(
+                "error", new JsonObject().put(
+                    "message", "A user with the id '" + id + "' does not exist"
+                )
+            ),
+            fetchUserResponse.bodyAsJsonObject()
+        );
     }
 
 
 
     @Test
-    @Disabled
     void fetchUser_canNotReturnUserWithEmptyExternalId() {
+        final var client = RibacTestHelper.createHttpClient();
 
+        final var fetchUserResponse = client.get("/users/")
+                                            .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                            .rxSend()
+                                            .blockingGet();
+
+        assertEquals(
+            HttpStatus.SC_BAD_REQUEST,
+            fetchUserResponse.statusCode(),
+            () -> "Unexpected status code. Response body: '" + fetchUserResponse.bodyAsString() + "'"
+        );
+        assertEquals(
+            ContentType.APPLICATION_JSON.getMimeType(),
+            fetchUserResponse.getHeader(HttpHeaders.CONTENT_TYPE)
+        );
+        assertEquals(
+            new JsonObject().put(
+                "error", new JsonObject().put(
+                    "message", "Value doesn't respect min length 1"
+                )
+            ),
+            fetchUserResponse.bodyAsJsonObject()
+        );
     }
 
 
 
     @Test
-    @Disabled
     void fetchUser_canNotReturnUserWithTooLongExternalId() {
+        final var client = RibacTestHelper.createHttpClient();
 
+        final var id = "" +
+                           "user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345." +
+                           "user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345." +
+                           "user12345.user12345.user12345.user12345.user12345.12345" +
+                           "6";
+        final var fetchUserResponse = client.get("/users/" + id)
+                                            .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                            .rxSend()
+                                            .blockingGet();
+
+        assertEquals(
+            HttpStatus.SC_BAD_REQUEST,
+            fetchUserResponse.statusCode(),
+            () -> "Unexpected status code. Response body: '" + fetchUserResponse.bodyAsString() + "'"
+        );
+        assertEquals(
+            ContentType.APPLICATION_JSON.getMimeType(),
+            fetchUserResponse.getHeader(HttpHeaders.CONTENT_TYPE)
+        );
+        assertEquals(
+            new JsonObject().put(
+                "error", new JsonObject().put(
+                    "message", "Value doesn't respect max length 255"
+                )
+            ),
+            fetchUserResponse.bodyAsJsonObject()
+        );
     }
 
 
@@ -362,14 +434,6 @@ class UserFunctionalTest {
     @Test
     @Disabled
     void deleteUser_canNotDeleteWithEmptyExternalId() {
-
-    }
-
-
-
-    @Test
-    @Disabled
-    void deleteUser_canNotDeleteWhenNotProvidingExternalIdField() {
 
     }
 
