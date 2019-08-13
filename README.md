@@ -6,8 +6,7 @@ ribac is a micro service that...
 
 Its goal is that the code to check if a user has the right to do a specific action in your system is as simple as 'Has the user _ the right to do _?'
 
-## Usage
-### 1. Install
+## Installation
 0. Download the creation script for the ribac database:
     ```bash
     curl --silent https://raw.githubusercontent.com/JonasTaulienSolutions/ribac/master/ribac.sql \
@@ -52,10 +51,24 @@ Its goal is that the code to check if a user has the right to do a specific acti
           RIBAC_DB_PASSWORD: ribac-password
     ```
 
-### 2. Start
-Start ribac by executing:
-```bash
-docker-compose up --detached
+0. Start ribac
+    ```bash
+    docker-compose up --detached
+    ```
+
+## Usage
+### 1. Add ribac-client as dependency
+```xml
+<dependency>
+    <groupId>jonastauliensolutions</groupId>
+    <artifactId>ribac-client</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+</dependency>
+```
+
+### 2. Create Client
+```java
+Ribac ribac = Ribac.create("localhost", 8080);
 ```
 
 ### 3. Add Users to ribac
