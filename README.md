@@ -43,6 +43,8 @@ Its goal is that the code to check if a user has the right to do a specific acti
         restart: always
         networks:
         - ribacnet
+        depends_on:
+        - ribac-db
         environment:
           RIBAC_DB_HOST: ribac-db
           RIBAC_DB_PORT: 3306
@@ -72,7 +74,7 @@ Ribac ribac = Ribac.create("localhost", 8080);
 ```
 
 ### 3. Add Users to ribac
-To add an user to ribac, just tell it the id of the user.
+In ribac a User IS the id you gave the user in your database.
 ```java
 RibacUser user123 = ribac.createUser("user123");
 ```
