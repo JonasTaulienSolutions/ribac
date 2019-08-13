@@ -425,7 +425,7 @@ class UserFunctionalTest {
 
     @Test
     @Disabled
-    void deleteUser_canNotDeleteNotExistingUser() {
+    void deleteUser_canNotDeleteUnknownUser() {
 
     }
 
@@ -434,6 +434,14 @@ class UserFunctionalTest {
     @Test
     @Disabled
     void deleteUser_canNotDeleteWithEmptyExternalId() {
+
+    }
+
+
+
+    @Test
+    @Disabled
+    void deleteUser_canNotDeleteWithTooLongExternalId() {
 
     }
 

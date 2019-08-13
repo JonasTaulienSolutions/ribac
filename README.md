@@ -116,7 +116,7 @@ administrators.giveRight(createAdministrators);
 ```
 
 ### 8. Create Right-Groups
-You probably not only want to give multiple Users a single right but also to give a single User multiple Rights.  
+You probably not only want to give multiple Users a single Right but also to give a single User multiple Rights.  
 That's what RightSets are for:
 
 0. Create RightSet
