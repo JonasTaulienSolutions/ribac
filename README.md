@@ -74,7 +74,7 @@ Ribac ribac = Ribac.create("localhost", 8080);
 ### 3. Add Users to ribac
 To add an user to ribac, just tell it the id of the user.
 ```java
-RibacUser user123 = ribac.createUser("123");
+RibacUser user123 = ribac.createUser("user123");
 ```
 
 ### 4. Add Groups to ribac
@@ -86,7 +86,7 @@ RibacGroup administrators = ribac.createGroup("Administrators");
 ### 5. Add Users to Groups
 You can add Users to zero or as many Groups as you want:
 ```java
-ribac.addUser("123").toGroup("Administrators");
+ribac.addUser("user123").toGroup("Administrators");
 // Or
 administrators.addUser(user123);
 ```
