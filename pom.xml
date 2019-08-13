@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>codes.rudolph</groupId>
-    <artifactId>right-based-access-control</artifactId>
+    <groupId>jonastauliensolutions</groupId>
+    <artifactId>ribac</artifactId>
     <version>0.1.0-SNAPSHOT</version>
 
     <properties>
@@ -63,7 +63,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>codes.rudolph.ribac.server.Main</mainClass>
+                            <mainClass>Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
@@ -124,7 +124,7 @@
                             <includes>.*</includes>
                         </database>
                         <target>
-                            <packageName>codes.rudolph.ribac.jooq</packageName>
+                            <packageName>solutions.taulien.ribac.jooq</packageName>
                             <directory>target/generated-sources/jooq</directory>
                         </target>
                         <generate>
@@ -167,7 +167,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <repository>rudolphcodes/ribac</repository>
+                    <repository>jonastauliensolutions/ribac</repository>
                     <tag>${project.version}</tag>
                 </configuration>
             </plugin>

@@ -1,4 +1,4 @@
-package codes.rudolph.ribac;
+package solutions.taulien.ribac;
 
 import io.vertx.core.json.JsonObject;
 import org.apache.commons.httpclient.HttpStatus;

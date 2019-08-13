@@ -1,9 +1,9 @@
-package codes.rudolph.ribac.server.user;
+package solutions.taulien.ribac.server.user;
 
-import codes.rudolph.ribac.jooq.tables.records.RibacUserRecord;
-import codes.rudolph.ribac.server.DbHelper;
-import codes.rudolph.ribac.server.Logger;
-import codes.rudolph.ribac.server.error.DuplicateCreateError;
+import solutions.taulien.ribac.jooq.tables.records.RibacUserRecord;
+import solutions.taulien.ribac.server.DbHelper;
+import solutions.taulien.ribac.server.Logger;
+import solutions.taulien.ribac.server.error.DuplicateCreateError;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import io.reactivex.Single;
@@ -11,7 +11,7 @@ import org.jooq.exception.DataAccessException;
 
 import java.sql.SQLException;
 
-import static codes.rudolph.ribac.jooq.tables.RibacUser.RIBAC_USER;
+import static solutions.taulien.ribac.jooq.tables.RibacUser.RIBAC_USER;
 
 public class UserRepository {
 

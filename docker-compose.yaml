@@ -21,7 +21,7 @@ services:
     - ./ribac.sql:/docker-entrypoint-initdb.d/ribac.sql:ro
 
   ribac:
-    image: rudolphcodes/ribac:${RIBAC_VERSION:?RIBAC_VERSION}
+    image: jonastauliensolutions/ribac:${RIBAC_VERSION:?RIBAC_VERSION}
     networks:
     - ribacnet
     depends_on:

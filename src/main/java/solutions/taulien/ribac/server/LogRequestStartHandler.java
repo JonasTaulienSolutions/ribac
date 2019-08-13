@@ -1,11 +1,9 @@
-package codes.rudolph.ribac.server;
+package solutions.taulien.ribac.server;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import io.vertx.core.Handler;
 import io.vertx.reactivex.ext.web.RoutingContext;
-
-import static codes.rudolph.ribac.server.ReadOrCreateRequestIdHandler.REQUEST_ID_KEY;
 
 public class LogRequestStartHandler implements Handler<RoutingContext> {
 
@@ -24,7 +22,7 @@ public class LogRequestStartHandler implements Handler<RoutingContext> {
 
     @Override
     public void handle(RoutingContext ctx) {
-        final String requestId = ctx.get(REQUEST_ID_KEY);
+        final String requestId = ctx.get(ReadOrCreateRequestIdHandler.REQUEST_ID_KEY);
 
         final var method = ctx.request().method().toString();
         final var path = ctx.request().path();

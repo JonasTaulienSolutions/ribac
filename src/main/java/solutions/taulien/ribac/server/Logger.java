@@ -1,4 +1,4 @@
-package codes.rudolph.ribac.server;
+package solutions.taulien.ribac.server;
 
 import io.reactivex.functions.Consumer;
 import org.slf4j.LoggerFactory;

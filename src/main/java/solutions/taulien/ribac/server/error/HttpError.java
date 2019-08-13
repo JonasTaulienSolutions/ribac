@@ -1,4 +1,4 @@
-package codes.rudolph.ribac.server.error;
+package solutions.taulien.ribac.server.error;
 
 public class HttpError extends Exception {
 

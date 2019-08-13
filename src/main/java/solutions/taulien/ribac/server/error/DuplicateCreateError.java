@@ -1,4 +1,4 @@
-package codes.rudolph.ribac.server.error;
+package solutions.taulien.ribac.server.error;
 
 public class DuplicateCreateError extends RibacError {
 

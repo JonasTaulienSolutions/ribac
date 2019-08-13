@@ -1,7 +1,7 @@
-package codes.rudolph.ribac.server.user;
+package solutions.taulien.ribac.server.user;
 
-import codes.rudolph.ribac.server.ReadOrCreateRequestIdHandler;
-import codes.rudolph.ribac.server.error.DuplicateCreateError;
+import solutions.taulien.ribac.server.ReadOrCreateRequestIdHandler;
+import solutions.taulien.ribac.server.error.DuplicateCreateError;
 import com.google.inject.Inject;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;

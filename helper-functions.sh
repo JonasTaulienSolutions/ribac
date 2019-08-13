@@ -85,7 +85,7 @@ export -f image_create
 
 
 image_push(){
- IMAGE_NAME="rudolphcodes/ribac:${RIBAC_VERSION}"
+ IMAGE_NAME="jonastauliensolutions/ribac:${RIBAC_VERSION}"
 
  echo "- Push docker image ${IMAGE_NAME}:" && docker push "${IMAGE_NAME}"
 }

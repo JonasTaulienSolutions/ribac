@@ -1,4 +1,4 @@
-package codes.rudolph.ribac.server;
+package solutions.taulien.ribac.server;
 
 import com.google.inject.Guice;
 import org.slf4j.Logger;

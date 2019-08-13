@@ -1,10 +1,10 @@
-package codes.rudolph.ribac.server;
+package solutions.taulien.ribac.server;
 
-import codes.rudolph.ribac.server.error.HttpErrorHandler;
-import codes.rudolph.ribac.server.error.InternalServerErrorFailureHandler;
-import codes.rudolph.ribac.server.error.OpenApiValidationFailureHandler;
-import codes.rudolph.ribac.server.user.UserCreateHandler;
-import codes.rudolph.ribac.server.user.UserFetchHandler;
+import solutions.taulien.ribac.server.error.HttpErrorHandler;
+import solutions.taulien.ribac.server.error.InternalServerErrorFailureHandler;
+import solutions.taulien.ribac.server.error.OpenApiValidationFailureHandler;
+import solutions.taulien.ribac.server.user.UserCreateHandler;
+import solutions.taulien.ribac.server.user.UserFetchHandler;
 import io.vertx.core.Handler;
 import io.vertx.reactivex.ext.web.Router;
 import io.vertx.reactivex.ext.web.RoutingContext;

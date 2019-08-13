@@ -1,4 +1,4 @@
-package codes.rudolph.ribac;
+package solutions.taulien.ribac;
 
 import io.vertx.ext.web.client.WebClientOptions;
 import io.vertx.reactivex.core.Vertx;

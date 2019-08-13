@@ -1,4 +1,4 @@
-package codes.rudolph.ribac.server.error;
+package solutions.taulien.ribac.server.error;
 
 import io.vertx.core.Handler;
 import io.vertx.ext.web.api.validation.ValidationException;
