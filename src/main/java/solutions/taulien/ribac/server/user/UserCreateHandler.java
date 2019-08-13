@@ -1,23 +1,27 @@
 package solutions.taulien.ribac.server.user;
 
-import solutions.taulien.ribac.server.ReadOrCreateRequestIdHandler;
-import solutions.taulien.ribac.server.error.DuplicateCreateError;
 import com.google.inject.Inject;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.api.RequestParameters;
 import io.vertx.reactivex.ext.web.RoutingContext;
 import org.apache.commons.httpclient.HttpStatus;
+import solutions.taulien.ribac.server.ReadOrCreateRequestIdHandler;
+import solutions.taulien.ribac.server.Responder;
+import solutions.taulien.ribac.server.error.DuplicateCreateError;
 
 public class UserCreateHandler implements Handler<RoutingContext> {
 
     private final UserRepository userRepository;
 
+    private final Responder responder;
+
 
 
     @Inject
-    public UserCreateHandler(UserRepository userRepository) {
+    public UserCreateHandler(UserRepository userRepository, Responder responder) {
         this.userRepository = userRepository;
+        this.responder = responder;
     }
 
 
@@ -32,17 +36,16 @@ public class UserCreateHandler implements Handler<RoutingContext> {
         this.userRepository
             .createUser(externalId, requestId)
             .subscribe(
-                createdUser -> ctx.response()
-                                  .setStatusCode(HttpStatus.SC_CREATED)
-                                  .end(
-                                      new JsonObject()
-                                          .put(
-                                              "createdUser", new JsonObject().put(
-                                                  "id", createdUser.getExternalId()
-                                              )
-                                          )
-                                          .encode()
-                                  ),
+                createdUser -> this.responder
+                                   .created(
+                                       ctx,
+                                       new JsonObject()
+                                           .put(
+                                               "createdUser", new JsonObject().put(
+                                                   "id", createdUser.getExternalId()
+                                               )
+                                           )
+                                   ),
                 failure -> ctx.fail(
                     (failure instanceof DuplicateCreateError)
                         ? ((DuplicateCreateError) failure).toHttpError(HttpStatus.SC_CONFLICT)

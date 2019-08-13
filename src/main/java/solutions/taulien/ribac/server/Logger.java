@@ -53,6 +53,18 @@ public class Logger {
 
 
 
+    public void end(String message, String requestId, Object... params) {
+        log.info("[{}] {}END " + message, prependTo(params, requestId, this.logPrefix));
+    }
+
+
+
+    public void responseBody(String requestId, String responseBody) {
+        log.info("[{}] {}RESPONSE-BODY {}", requestId, this.logPrefix, prepareBodyString(responseBody));
+    }
+
+
+
     public <T> Consumer<T> endSuccessfully(String successfully, String requestId) {
         return element -> log.info("[{}] {}END SUCCESS {}", requestId, this.logPrefix, successfully);
     }

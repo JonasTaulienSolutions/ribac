@@ -1,21 +1,24 @@
 package solutions.taulien.ribac.server.user;
 
-import solutions.taulien.ribac.server.ReadOrCreateRequestIdHandler;
 import com.google.inject.Inject;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
 import io.vertx.reactivex.ext.web.RoutingContext;
-import org.apache.commons.httpclient.HttpStatus;
+import solutions.taulien.ribac.server.ReadOrCreateRequestIdHandler;
+import solutions.taulien.ribac.server.Responder;
 
 public class UserFetchHandler implements Handler<RoutingContext> {
 
     private final UserRepository userRepository;
 
+    private final Responder responder;
+
 
 
     @Inject
-    public UserFetchHandler(UserRepository userRepository) {
+    public UserFetchHandler(UserRepository userRepository, Responder responder) {
         this.userRepository = userRepository;
+        this.responder = responder;
     }
 
 
@@ -28,17 +31,16 @@ public class UserFetchHandler implements Handler<RoutingContext> {
         this.userRepository
             .getUser(externalUserId, requestId)
             .subscribe(
-                requestedUser -> ctx.response()
-                                    .setStatusCode(HttpStatus.SC_OK)
-                                    .end(
-                                        new JsonObject()
-                                            .put(
-                                                "requestedUser", new JsonObject().put(
-                                                    "id", requestedUser.getExternalId()
-                                                )
-                                            )
-                                            .encode()
-                                    ),
+                requestedUser -> this.responder
+                                     .ok(
+                                         ctx,
+                                         new JsonObject()
+                                             .put(
+                                                 "requestedUser", new JsonObject().put(
+                                                     "id", requestedUser.getExternalId()
+                                                 )
+                                             )
+                                     ),
                 ctx::fail
             );
     }

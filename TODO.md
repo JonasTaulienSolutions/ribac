@@ -1,6 +1,4 @@
 # To Do
-* Log Responses
-* Write README.md
 * Finish all Tests and corresponding implementations in `UserFunctionalTest`
 * Fix `./do-integration-test.sh` not finishing because of `3<`
 * ?Remove `GET /users/{userId}`?

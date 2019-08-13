@@ -95,7 +95,7 @@ export -f image_push
 
 
 ribac_start(){
-  echo "- Starting ribac:" && docker-compose up --detach ribac
+  echo "- Starting ribac ${RIBAC_VERSION}:" && docker-compose up --detach ribac
 }
 export -f ribac_start
 
