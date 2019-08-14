@@ -27,6 +27,12 @@ public class Responder {
 
 
 
+    public void noContent(RoutingContext ctx) {
+        this.respond(ctx, SC_NO_CONTENT);
+    }
+
+
+
     public void created(RoutingContext ctx, Object body) {
         this.respond(ctx, SC_CREATED, body);
     }
@@ -49,5 +55,18 @@ public class Responder {
         ctx.response()
            .setStatusCode(statusCode)
            .end(bodyAsString);
+    }
+
+
+
+    public void respond(RoutingContext ctx, int statusCode) {
+        final String requestId = ctx.get(ReadOrCreateRequestIdHandler.REQUEST_ID_KEY);
+
+        this.log.responseBody(requestId, "");
+        this.log.end("{}", requestId, statusCode);
+
+        ctx.response()
+           .setStatusCode(statusCode)
+           .end();
     }
 }

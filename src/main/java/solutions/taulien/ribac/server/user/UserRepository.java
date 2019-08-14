@@ -2,6 +2,7 @@ package solutions.taulien.ribac.server.user;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import io.reactivex.Completable;
 import io.reactivex.Single;
 import org.jooq.exception.DataAccessException;
 import solutions.taulien.ribac.server.DbHelper;
@@ -45,7 +46,7 @@ public class UserRepository {
                                .returning()
                                .fetchOne()
                    )
-                   .doOnSuccess(log.endSuccessfully("Created User", externalRequestId))
+                   .doOnSuccess(log.endSuccessfullyUsingConsumer("Created User", externalRequestId))
                    .doOnError(log.endFailed("To create User", externalRequestId))
                    .onErrorResumeNext(
                        failure -> Single.error(
@@ -73,8 +74,26 @@ public class UserRepository {
                    .map(maybeUser -> maybeUser.orElseThrow(
                        () -> new ResourceNotFoundError("A user with the id '" + externalId + "' does not exist")
                    ))
-                   .doOnSuccess(log.endSuccessfully("Got User", externalRequestId))
+                   .doOnSuccess(log.endSuccessfullyUsingConsumer("Got User", externalRequestId))
                    .doOnError(log.endFailed("To get User", externalRequestId));
+    }
+
+
+
+    public Completable deleteUser(String externalId, String requestId) {
+        final var externalRequestId = log.createExternalRequestId(requestId);
+
+        log.start("Deleting User", externalRequestId);
+
+        return this.dbHelper
+                   .execute(
+                       db -> db.deleteFrom(RIBAC_USER)
+                               .where(RIBAC_USER.EXTERNAL_ID.eq(externalId))
+                               .execute()
+                   )
+                   .ignoreElement()
+                   .doOnComplete(log.endSuccessfullyUsingAction("Deleted User", externalRequestId))
+                   .doOnError(log.endFailed("To delete User", externalRequestId));
     }
 
 

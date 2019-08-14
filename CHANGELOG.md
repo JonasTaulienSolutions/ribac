@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased] - YYYY-MM-DD
 ### Added
 * `POST /users`: Creates a new user
-* `GET /users/{userId}`: Fetches a single user
+* `GET /users/{userId}`: Fetches a user
+* `DELETE /users/{userId}`: Deletes a user
 
 ### Changed
 (changes in existing functionality)

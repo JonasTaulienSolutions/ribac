@@ -115,7 +115,7 @@ ribac.giveGroup("Administrators").right("Create Administrators");
 administrators.giveRight(createAdministrators);
 ```
 
-### 8. Create Right-Groups
+### 8. Create RightSets
 You probably not only want to give multiple Users a single Right but also to give a single User multiple Rights.  
 That's what RightSets are for:
 

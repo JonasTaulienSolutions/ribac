@@ -1,5 +1,6 @@
 package solutions.taulien.ribac.server;
 
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import org.slf4j.LoggerFactory;
 
@@ -65,8 +66,14 @@ public class Logger {
 
 
 
-    public <T> Consumer<T> endSuccessfully(String successfully, String requestId) {
-        return element -> log.info("[{}] {}END SUCCESS {}", requestId, this.logPrefix, successfully);
+    public <T> Consumer<T> endSuccessfullyUsingConsumer(String successfully, String requestId) {
+        return element -> this.endSuccessfullyUsingConsumer(successfully, requestId);
+    }
+
+
+
+    public <T> Action endSuccessfullyUsingAction(String successfully, String requestId) {
+        return () -> log.info("[{}] {}END SUCCESS {}", requestId, this.logPrefix, successfully);
     }
 
 

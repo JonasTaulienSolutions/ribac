@@ -1,15 +1,13 @@
 package solutions.taulien.ribac;
 
 import io.vertx.core.json.JsonObject;
-import org.apache.commons.httpclient.HttpStatus;
 import org.apache.http.HttpHeaders;
 import org.apache.http.entity.ContentType;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
+import static org.apache.commons.httpclient.HttpStatus.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserFunctionalTest {
@@ -57,7 +55,7 @@ class UserFunctionalTest {
                                              ))
                                              .blockingGet();
         assertEquals(
-            HttpStatus.SC_CREATED,
+            SC_CREATED,
             createUserResponse.statusCode(),
             () -> "Unexpected status code. Response body: '" + createUserResponse.bodyAsString() + "'"
         );
@@ -101,7 +99,7 @@ class UserFunctionalTest {
                                                    .blockingGet();
 
         assertEquals(
-            HttpStatus.SC_CONFLICT,
+            SC_CONFLICT,
             createUserSecondResponse.statusCode(),
             () -> "Unexpected status code. Response body: '" + createUserSecondResponse.bodyAsString() + "'"
         );
@@ -132,7 +130,7 @@ class UserFunctionalTest {
                                              ))
                                              .blockingGet();
         assertEquals(
-            HttpStatus.SC_BAD_REQUEST,
+            SC_BAD_REQUEST,
             createUserResponse.statusCode(),
             () -> "Unexpected status code. Response body: '" + createUserResponse.bodyAsString() + "'"
         );
@@ -157,10 +155,10 @@ class UserFunctionalTest {
         final var client = RibacTestHelper.createHttpClient();
 
         final var id = "" +
-            "user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345." +
-            "user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345." +
-            "user12345.user12345.user12345.user12345.user12345.12345" +
-            "6";
+                           "user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345." +
+                           "user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345." +
+                           "user12345.user12345.user12345.user12345.user12345.12345" +
+                           "6";
 
         final var createUserResponse = client.post("/users")
                                              .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
@@ -169,7 +167,7 @@ class UserFunctionalTest {
                                              ))
                                              .blockingGet();
         assertEquals(
-            HttpStatus.SC_BAD_REQUEST,
+            SC_BAD_REQUEST,
             createUserResponse.statusCode(),
             () -> "Unexpected status code. Response body: '" + createUserResponse.bodyAsString() + "'"
         );
@@ -200,7 +198,7 @@ class UserFunctionalTest {
                                              ))
                                              .blockingGet();
         assertEquals(
-            HttpStatus.SC_BAD_REQUEST,
+            SC_BAD_REQUEST,
             createUserResponse.statusCode(),
             () -> "Unexpected status code. Response body: '" + createUserResponse.bodyAsString() + "'"
         );
@@ -229,7 +227,7 @@ class UserFunctionalTest {
                                              .rxSendJsonObject(new JsonObject())
                                              .blockingGet();
         assertEquals(
-            HttpStatus.SC_BAD_REQUEST,
+            SC_BAD_REQUEST,
             createUserResponse.statusCode(),
             () -> "Unexpected status code. Response body: '" + createUserResponse.bodyAsString() + "'"
         );
@@ -259,7 +257,7 @@ class UserFunctionalTest {
                                              .rxSend()
                                              .blockingGet();
         assertEquals(
-            HttpStatus.SC_BAD_REQUEST,
+            SC_BAD_REQUEST,
             createUserResponse.statusCode(),
             () -> "Unexpected status code. Response body: '" + createUserResponse.bodyAsString() + "'"
         );
@@ -293,13 +291,13 @@ class UserFunctionalTest {
               ))
               .blockingGet();
 
-        final var fetchUserResponse = client.get("/users/" + URLEncoder.encode(id, StandardCharsets.UTF_8).replace("+", "%20"))
+        final var fetchUserResponse = client.get("/users/" + RibacTestHelper.urlEncode(id))
                                             .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
                                             .rxSend()
                                             .blockingGet();
 
         assertEquals(
-            HttpStatus.SC_OK,
+            SC_OK,
             fetchUserResponse.statusCode(),
             () -> "Unexpected status code. Response body: '" + fetchUserResponse.bodyAsString() + "'"
         );
@@ -324,13 +322,13 @@ class UserFunctionalTest {
         final var client = RibacTestHelper.createHttpClient();
 
         var id = "userB";
-        final var fetchUserResponse = client.get("/users/" + id)
+        final var fetchUserResponse = client.get("/users/" + RibacTestHelper.urlEncode(id))
                                             .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
                                             .rxSend()
                                             .blockingGet();
 
         assertEquals(
-            HttpStatus.SC_NOT_FOUND,
+            SC_NOT_FOUND,
             fetchUserResponse.statusCode(),
             () -> "Unexpected status code. Response body: '" + fetchUserResponse.bodyAsString() + "'"
         );
@@ -360,7 +358,7 @@ class UserFunctionalTest {
                                             .blockingGet();
 
         assertEquals(
-            HttpStatus.SC_BAD_REQUEST,
+            SC_BAD_REQUEST,
             fetchUserResponse.statusCode(),
             () -> "Unexpected status code. Response body: '" + fetchUserResponse.bodyAsString() + "'"
         );
@@ -389,13 +387,13 @@ class UserFunctionalTest {
                            "user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345." +
                            "user12345.user12345.user12345.user12345.user12345.12345" +
                            "6";
-        final var fetchUserResponse = client.get("/users/" + id)
+        final var fetchUserResponse = client.get("/users/" + RibacTestHelper.urlEncode(id))
                                             .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
                                             .rxSend()
                                             .blockingGet();
 
         assertEquals(
-            HttpStatus.SC_BAD_REQUEST,
+            SC_BAD_REQUEST,
             fetchUserResponse.statusCode(),
             () -> "Unexpected status code. Response body: '" + fetchUserResponse.bodyAsString() + "'"
         );
@@ -416,9 +414,32 @@ class UserFunctionalTest {
 
 
     @Test
-    @Disabled
     void deleteUser_userWasDeleted() {
+        final var client = RibacTestHelper.createHttpClient();
 
+        final var id = "user/ 123";
+
+        client.post("/users")
+              .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+              .rxSendJsonObject(new JsonObject().put(
+                  "id", id
+              ))
+              .blockingGet();
+
+        final var deleteUserResponse = client.delete("/users/" + RibacTestHelper.urlEncode(id))
+                                             .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                             .rxSend()
+                                             .blockingGet();
+
+        assertEquals(
+            SC_NO_CONTENT,
+            deleteUserResponse.statusCode(),
+            () -> "Unexpected status code. Response body: '" + deleteUserResponse.bodyAsString() + "'"
+        );
+        assertEquals(
+            null,
+            deleteUserResponse.bodyAsString()
+        );
     }
 
 

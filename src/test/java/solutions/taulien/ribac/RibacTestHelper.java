@@ -7,6 +7,8 @@ import io.vertx.reactivex.ext.web.client.WebClient;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 public class RibacTestHelper {
 
@@ -70,6 +72,14 @@ public class RibacTestHelper {
                                                   .setDefaultPort(8080);
 
         return WebClient.create(Vertx.vertx(), options);
+    }
+
+
+
+
+
+    public static String urlEncode(String str) {
+        return URLEncoder.encode(str, StandardCharsets.UTF_8).replace("+", "%20");
     }
 
 

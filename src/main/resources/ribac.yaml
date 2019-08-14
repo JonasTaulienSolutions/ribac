@@ -1,7 +1,7 @@
 openapi: 3.0.2
 
 info:
-  title: ribac - RightBasedAccessControl
+  title: ribac - Right Based Access Control
   version: 0.1.0-SNAPSHOT
 
 servers:
@@ -109,6 +109,28 @@ paths:
               example:
                 error:
                   message: "A user with the id 'user123' does not exist"
+
+    delete:
+      operationId: userDelete
+      summary: Deletes the requested user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 255
+        - name: Request-Id
+          in: header
+          required: false
+          schema:
+            type: string
+      responses:
+        204:
+          description: Successfully deleted the requested user
+
+
 
 components:
   schemas:

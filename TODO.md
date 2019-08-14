@@ -1,6 +1,7 @@
 # To Do
 * Finish all Tests and corresponding implementations in `UserFunctionalTest`
-* Add `DELETE /users/{userId}`
+* Create own directories and artifacts for server and client
+* Create one united Image from Database and ribac server
 
 * Add `POST /groups`
 * Add `DELETE /groups/{groupName}`

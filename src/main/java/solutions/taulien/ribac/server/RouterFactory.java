@@ -1,15 +1,16 @@
 package solutions.taulien.ribac.server;
 
-import solutions.taulien.ribac.server.error.HttpErrorHandler;
-import solutions.taulien.ribac.server.error.InternalServerErrorFailureHandler;
-import solutions.taulien.ribac.server.error.OpenApiValidationFailureHandler;
-import solutions.taulien.ribac.server.user.UserCreateHandler;
-import solutions.taulien.ribac.server.user.UserFetchHandler;
 import io.vertx.core.Handler;
 import io.vertx.reactivex.ext.web.Router;
 import io.vertx.reactivex.ext.web.RoutingContext;
 import io.vertx.reactivex.ext.web.api.contract.openapi3.OpenAPI3RouterFactory;
 import io.vertx.reactivex.ext.web.handler.CorsHandler;
+import solutions.taulien.ribac.server.error.HttpErrorHandler;
+import solutions.taulien.ribac.server.error.InternalServerErrorFailureHandler;
+import solutions.taulien.ribac.server.error.OpenApiValidationFailureHandler;
+import solutions.taulien.ribac.server.user.UserCreateHandler;
+import solutions.taulien.ribac.server.user.UserDeleteHandler;
+import solutions.taulien.ribac.server.user.UserFetchHandler;
 
 import javax.inject.Inject;
 
@@ -33,6 +34,8 @@ public class RouterFactory {
 
     private final LogRequestStartHandler logRequestStartHandler;
 
+    private final UserDeleteHandler userDeleteHandler;
+
 
 
     @Inject
@@ -45,7 +48,8 @@ public class RouterFactory {
         CorsHandler corsHandler,
         UserFetchHandler userFetchHandler,
         ReadOrCreateRequestIdHandler readOrCreateRequestIdHandler,
-        LogRequestStartHandler logRequestStartHandler
+        LogRequestStartHandler logRequestStartHandler,
+        UserDeleteHandler userDeleteHandler
     ) {
         this.openAPI3RouterFactory = openAPI3RouterFactory;
         this.userCreateHandler = userCreateHandler;
@@ -56,6 +60,7 @@ public class RouterFactory {
         this.userFetchHandler = userFetchHandler;
         this.readOrCreateRequestIdHandler = readOrCreateRequestIdHandler;
         this.logRequestStartHandler = logRequestStartHandler;
+        this.userDeleteHandler = userDeleteHandler;
     }
 
 
@@ -67,6 +72,7 @@ public class RouterFactory {
 
         this.addHandler("userCreate", this.userCreateHandler);
         this.addHandler("userFetch", this.userFetchHandler);
+        this.addHandler("userDelete", this.userDeleteHandler);
 
         return this.openAPI3RouterFactory.getRouter()
                                          .errorHandler(400, this.validationFailureHandler)
