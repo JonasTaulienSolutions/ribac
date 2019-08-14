@@ -1,16 +1,19 @@
 # To Do
-* Finish all Tests and corresponding implementations in `UserFunctionalTest`
 * Create own directories and artifacts for server and client
 * Create one united Image from Database and ribac server
+
+* Add `GET /users`
 
 * Add `POST /groups`
 * Add `DELETE /groups/{groupName}`
 * Add `POST /groups/{groupName}/members`
 * Add `GET /groups/{groupName}/members`
 * Add `DELETE /groups/{groupName}/members/{userId}`
+* Add `GET /groups`
 
 * Add `POST /rights`
 * Add `DELETE /rights/{rightName}`
+* Add `GET /rights`
 
 * Add `POST /users/{userId}/rights`
 * Add `GET /users/{userId}/rights`
@@ -25,6 +28,7 @@
 * Add `POST /right-sets/{rightSetName}/rights`
 * Add `GET /right-sets/{rightSetName}/rights`
 * Add `DELETE /right-sets/{rightSetName}/rights/{rightName}`
+* Add `GET /right-sets`
 
 * Add `POST /users/{userId}/right-sets`
 * Add `GET /users/{userId}/right-sets`
@@ -36,3 +40,8 @@
 
 * Add `GET /users/{userId}/has-right`
 * Add `GET /users/{userId}/all-rights`
+
+* Finish Tests in `UserFunctionalTest`
+    * deleteUser_alsoDeletesEveryGroupMembership
+    * deleteUser_alsoDeletesEveryUserRight
+    * deleteUser_alsoDeletesEveryUserRights
