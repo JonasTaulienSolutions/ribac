@@ -3,8 +3,10 @@ package solutions.taulien.ribac.server.user;
 import com.google.inject.Inject;
 import io.vertx.core.Handler;
 import io.vertx.reactivex.ext.web.RoutingContext;
+import org.apache.http.HttpStatus;
 import solutions.taulien.ribac.server.ReadOrCreateRequestIdHandler;
 import solutions.taulien.ribac.server.Responder;
+import solutions.taulien.ribac.server.error.ResourceNotFoundError;
 
 public class UserDeleteHandler implements Handler<RoutingContext> {
 
@@ -32,7 +34,11 @@ public class UserDeleteHandler implements Handler<RoutingContext> {
             .deleteUser(externalUserId, requestId)
             .subscribe(
                 () -> this.responder.noContent(ctx),
-                ctx::fail
+                failure -> ctx.fail(
+                    (failure instanceof ResourceNotFoundError)
+                        ? ((ResourceNotFoundError) failure).toHttpError(HttpStatus.SC_NOT_FOUND)
+                        : failure
+                )
             );
     }
 }

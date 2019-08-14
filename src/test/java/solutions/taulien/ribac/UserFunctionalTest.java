@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import static org.apache.commons.httpclient.HttpStatus.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class UserFunctionalTest {
 
@@ -43,13 +44,15 @@ class UserFunctionalTest {
 
 
     @Test
-    void createUser_returnsCreatedUser() {
+    @DisplayName("createUser_returnsCreatedUser")
+    void createUser_returnsCreatedUser(TestInfo testInfo) {
         final var client = RibacTestHelper.createHttpClient();
 
         final var id = "user123";
 
         final var createUserResponse = client.post("/users")
                                              .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                             .putHeader("Request-Id", testInfo.getDisplayName())
                                              .rxSendJsonObject(new JsonObject().put(
                                                  "id", id
                                              ))
@@ -76,7 +79,8 @@ class UserFunctionalTest {
 
 
     @Test
-    void createUser_canNotCreateUserTwice() {
+    @DisplayName("createUser_canNotCreateUserTwice")
+    void createUser_canNotCreateUserTwice(TestInfo testInfo) {
         final var client = RibacTestHelper.createHttpClient();
 
         final var id = "user123";
@@ -85,6 +89,7 @@ class UserFunctionalTest {
         // noinspection ResultOfMethodCallIgnored
         client.post("/users")
               .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+              .putHeader("Request-Id", testInfo.getDisplayName())
               .rxSendJsonObject(new JsonObject().put(
                   "id", id
               ))
@@ -93,6 +98,7 @@ class UserFunctionalTest {
         // 2. Try to create again
         final var createUserSecondResponse = client.post("/users")
                                                    .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                                   .putHeader("Request-Id", testInfo.getDisplayName())
                                                    .rxSendJsonObject(new JsonObject().put(
                                                        "id", id
                                                    ))
@@ -120,11 +126,13 @@ class UserFunctionalTest {
 
 
     @Test
-    void createUser_canNotCreateUserWithEmptyExternalId() {
+    @DisplayName("createUser_canNotCreateUserWithEmptyExternalId")
+    void createUser_canNotCreateUserWithEmptyExternalId(TestInfo testInfo) {
         final var client = RibacTestHelper.createHttpClient();
 
         final var createUserResponse = client.post("/users")
                                              .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                             .putHeader("Request-Id", testInfo.getDisplayName())
                                              .rxSendJsonObject(new JsonObject().put(
                                                  "id", ""
                                              ))
@@ -151,7 +159,8 @@ class UserFunctionalTest {
 
 
     @Test
-    void createUser_canNotCreateUserWithTooLongExternalId() {
+    @DisplayName("createUser_canNotCreateUserWithTooLongExternalId")
+    void createUser_canNotCreateUserWithTooLongExternalId(TestInfo testInfo) {
         final var client = RibacTestHelper.createHttpClient();
 
         final var id = "" +
@@ -162,6 +171,7 @@ class UserFunctionalTest {
 
         final var createUserResponse = client.post("/users")
                                              .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                             .putHeader("Request-Id", testInfo.getDisplayName())
                                              .rxSendJsonObject(new JsonObject().put(
                                                  "id", id
                                              ))
@@ -188,11 +198,13 @@ class UserFunctionalTest {
 
 
     @Test
-    void createUser_canNotCreateUserWithExternalIdAsNumber() {
+    @DisplayName("createUser_canNotCreateUserWithExternalIdAsNumber")
+    void createUser_canNotCreateUserWithExternalIdAsNumber(TestInfo testInfo) {
         final var client = RibacTestHelper.createHttpClient();
 
         final var createUserResponse = client.post("/users")
                                              .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                             .putHeader("Request-Id", testInfo.getDisplayName())
                                              .rxSendJsonObject(new JsonObject().put(
                                                  "id", 12345
                                              ))
@@ -219,11 +231,13 @@ class UserFunctionalTest {
 
 
     @Test
-    void createUser_canNotCreateUserWhenNotProvidingExternalIdField() {
+    @DisplayName("createUser_canNotCreateUserWhenNotProvidingExternalIdField")
+    void createUser_canNotCreateUserWhenNotProvidingExternalIdField(TestInfo testInfo) {
         final var client = RibacTestHelper.createHttpClient();
 
         final var createUserResponse = client.post("/users")
                                              .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                             .putHeader("Request-Id", testInfo.getDisplayName())
                                              .rxSendJsonObject(new JsonObject())
                                              .blockingGet();
         assertEquals(
@@ -248,12 +262,14 @@ class UserFunctionalTest {
 
 
     @Test
-    void createUser_canNotCreateUserWhenProvidingEmptyBody() {
+    @DisplayName("createUser_canNotCreateUserWhenProvidingEmptyBody")
+    void createUser_canNotCreateUserWhenProvidingEmptyBody(TestInfo testInfo) {
         final var client = RibacTestHelper.createHttpClient();
 
         final var createUserResponse = client.post("/users")
                                              .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
                                              .putHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType())
+                                             .putHeader("Request-Id", testInfo.getDisplayName())
                                              .rxSend()
                                              .blockingGet();
         assertEquals(
@@ -279,13 +295,15 @@ class UserFunctionalTest {
 
 
     @Test
-    void fetchUser_returnsRequestedUser() {
+    @DisplayName("fetchUser_returnsRequestedUser")
+    void fetchUser_returnsRequestedUser(TestInfo testInfo) {
         final var client = RibacTestHelper.createHttpClient();
 
         final var id = "user/ 123";
 
         client.post("/users")
               .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+              .putHeader("Request-Id", testInfo.getDisplayName())
               .rxSendJsonObject(new JsonObject().put(
                   "id", id
               ))
@@ -293,6 +311,7 @@ class UserFunctionalTest {
 
         final var fetchUserResponse = client.get("/users/" + RibacTestHelper.urlEncode(id))
                                             .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                            .putHeader("Request-Id", testInfo.getDisplayName())
                                             .rxSend()
                                             .blockingGet();
 
@@ -318,12 +337,14 @@ class UserFunctionalTest {
 
 
     @Test
-    void fetchUser_canNotReturnUnknownUser() {
+    @DisplayName("fetchUser_canNotReturnUnknownUser")
+    void fetchUser_canNotReturnUnknownUser(TestInfo testInfo) {
         final var client = RibacTestHelper.createHttpClient();
 
         var id = "userB";
         final var fetchUserResponse = client.get("/users/" + RibacTestHelper.urlEncode(id))
                                             .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                            .putHeader("Request-Id", testInfo.getDisplayName())
                                             .rxSend()
                                             .blockingGet();
 
@@ -349,11 +370,13 @@ class UserFunctionalTest {
 
 
     @Test
-    void fetchUser_canNotReturnUserWithEmptyExternalId() {
+    @DisplayName("fetchUser_canNotReturnUserWithEmptyExternalId")
+    void fetchUser_canNotReturnUserWithEmptyExternalId(TestInfo testInfo) {
         final var client = RibacTestHelper.createHttpClient();
 
         final var fetchUserResponse = client.get("/users/")
                                             .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                            .putHeader("Request-Id", testInfo.getDisplayName())
                                             .rxSend()
                                             .blockingGet();
 
@@ -379,7 +402,8 @@ class UserFunctionalTest {
 
 
     @Test
-    void fetchUser_canNotReturnUserWithTooLongExternalId() {
+    @DisplayName("fetchUser_canNotReturnUserWithTooLongExternalId")
+    void fetchUser_canNotReturnUserWithTooLongExternalId(TestInfo testInfo) {
         final var client = RibacTestHelper.createHttpClient();
 
         final var id = "" +
@@ -389,6 +413,7 @@ class UserFunctionalTest {
                            "6";
         final var fetchUserResponse = client.get("/users/" + RibacTestHelper.urlEncode(id))
                                             .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                            .putHeader("Request-Id", testInfo.getDisplayName())
                                             .rxSend()
                                             .blockingGet();
 
@@ -414,13 +439,15 @@ class UserFunctionalTest {
 
 
     @Test
-    void deleteUser_userWasDeleted() {
+    @DisplayName("deleteUser_userWasDeleted")
+    void deleteUser_userWasDeleted(TestInfo testInfo) {
         final var client = RibacTestHelper.createHttpClient();
 
         final var id = "user/ 123";
 
         client.post("/users")
               .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+              .putHeader("Request-Id", testInfo.getDisplayName())
               .rxSendJsonObject(new JsonObject().put(
                   "id", id
               ))
@@ -428,6 +455,7 @@ class UserFunctionalTest {
 
         final var deleteUserResponse = client.delete("/users/" + RibacTestHelper.urlEncode(id))
                                              .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                             .putHeader("Request-Id", testInfo.getDisplayName())
                                              .rxSend()
                                              .blockingGet();
 
@@ -436,57 +464,149 @@ class UserFunctionalTest {
             deleteUserResponse.statusCode(),
             () -> "Unexpected status code. Response body: '" + deleteUserResponse.bodyAsString() + "'"
         );
+        assertNull(deleteUserResponse.bodyAsString());
+
+        final var getUserResponse = client.get("/users/" + RibacTestHelper.urlEncode(id))
+                                          .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                          .putHeader("Request-Id", testInfo.getDisplayName())
+                                          .rxSend()
+                                          .blockingGet();
+
         assertEquals(
-            null,
-            deleteUserResponse.bodyAsString()
+            SC_NOT_FOUND,
+            getUserResponse.statusCode(),
+            () -> "Unexpected status code. Response body: '" + deleteUserResponse.bodyAsString() + "'"
         );
     }
 
 
 
     @Test
+    @DisplayName("deleteUser_canNotDeleteUnknownUser")
+    void deleteUser_canNotDeleteUnknownUser(TestInfo testInfo) {
+        final var client = RibacTestHelper.createHttpClient();
+
+        final var id = "user123";
+
+        final var deleteUserResponse = client.delete("/users/" + RibacTestHelper.urlEncode(id))
+                                             .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                             .putHeader("Request-Id", testInfo.getDisplayName())
+                                             .rxSend()
+                                             .blockingGet();
+
+        assertEquals(
+            SC_NOT_FOUND,
+            deleteUserResponse.statusCode(),
+            () -> "Unexpected status code. Response body: '" + deleteUserResponse.bodyAsString() + "'"
+        );
+        assertEquals(
+            ContentType.APPLICATION_JSON.getMimeType(),
+            deleteUserResponse.getHeader(HttpHeaders.CONTENT_TYPE)
+        );
+        assertEquals(
+            new JsonObject().put(
+                "error", new JsonObject().put(
+                    "message", "A user with the id '" + id + "' does not exist"
+                )
+            ),
+            deleteUserResponse.bodyAsJsonObject()
+        );
+    }
+
+
+
+    @Test
+    @DisplayName("deleteUser_canNotDeleteWithEmptyExternalId")
+    void deleteUser_canNotDeleteWithEmptyExternalId(TestInfo testInfo) {
+        final var client = RibacTestHelper.createHttpClient();
+
+        final var deleteUserResponse = client.delete("/users/")
+                                             .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                             .putHeader("Request-Id", testInfo.getDisplayName())
+                                             .rxSend()
+                                             .blockingGet();
+
+        assertEquals(
+            SC_BAD_REQUEST,
+            deleteUserResponse.statusCode(),
+            () -> "Unexpected status code. Response body: '" + deleteUserResponse.bodyAsString() + "'"
+        );
+        assertEquals(
+            ContentType.APPLICATION_JSON.getMimeType(),
+            deleteUserResponse.getHeader(HttpHeaders.CONTENT_TYPE)
+        );
+        assertEquals(
+            new JsonObject().put(
+                "error", new JsonObject().put(
+                    "message", "Value doesn't respect min length 1"
+                )
+            ),
+            deleteUserResponse.bodyAsJsonObject()
+        );
+    }
+
+
+
+    @Test
+    @DisplayName("deleteUser_canNotDeleteWithTooLongExternalId")
+    void deleteUser_canNotDeleteWithTooLongExternalId(TestInfo testInfo) {
+        final var client = RibacTestHelper.createHttpClient();
+
+
+        final var id = "" +
+                           "user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345." +
+                           "user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345." +
+                           "user12345.user12345.user12345.user12345.user12345.12345" +
+                           "6";
+        final var deleteUserResponse = client.delete("/users/" + RibacTestHelper.urlEncode(id))
+                                             .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                             .putHeader("Request-Id", testInfo.getDisplayName())
+                                             .rxSend()
+                                             .blockingGet();
+
+        assertEquals(
+            SC_BAD_REQUEST,
+            deleteUserResponse.statusCode(),
+            () -> "Unexpected status code. Response body: '" + deleteUserResponse.bodyAsString() + "'"
+        );
+        assertEquals(
+            ContentType.APPLICATION_JSON.getMimeType(),
+            deleteUserResponse.getHeader(HttpHeaders.CONTENT_TYPE)
+        );
+        assertEquals(
+            new JsonObject().put(
+                "error", new JsonObject().put(
+                    "message", "Value doesn't respect max length 255"
+                )
+            ),
+            deleteUserResponse.bodyAsJsonObject()
+        );
+    }
+
+
+
+    @Test
+    @DisplayName("deleteUser_alsoDeletesEveryGroupMembership")
     @Disabled
-    void deleteUser_canNotDeleteUnknownUser() {
+    void deleteUser_alsoDeletesEveryGroupMembership(TestInfo testInfo) {
 
     }
 
 
 
     @Test
+    @DisplayName("deleteUser_alsoDeletesEveryUserRight")
     @Disabled
-    void deleteUser_canNotDeleteWithEmptyExternalId() {
+    void deleteUser_alsoDeletesEveryUserRight(TestInfo testInfo) {
 
     }
 
 
 
     @Test
+    @DisplayName("deleteUser_alsoDeletesEveryUserRights")
     @Disabled
-    void deleteUser_canNotDeleteWithTooLongExternalId() {
-
-    }
-
-
-
-    @Test
-    @Disabled
-    void deleteUser_alsoDeletesEveryGroupMembership() {
-
-    }
-
-
-
-    @Test
-    @Disabled
-    void deleteUser_alsoDeletesEveryUserRight() {
-
-    }
-
-
-
-    @Test
-    @Disabled
-    void deleteUser_alsoDeletesEveryUserRights() {
+    void deleteUser_alsoDeletesEveryUserRights(TestInfo testInfo) {
 
     }
 }

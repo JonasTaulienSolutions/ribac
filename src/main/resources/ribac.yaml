@@ -129,6 +129,15 @@ paths:
       responses:
         204:
           description: Successfully deleted the requested user
+        404:
+          description: There is no user with the given `userId`
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error:
+                  message: "A user with the id 'user123' does not exist"
 
 
 

@@ -91,6 +91,14 @@ public class UserRepository {
                                .where(RIBAC_USER.EXTERNAL_ID.eq(externalId))
                                .execute()
                    )
+                   .map(numberOfDeletedRecords -> {
+                            if (numberOfDeletedRecords == 0) {
+                                throw new ResourceNotFoundError("A user with the id '" + externalId + "' does not exist");
+                            }
+
+                            return numberOfDeletedRecords;
+                        }
+                   )
                    .ignoreElement()
                    .doOnComplete(log.endSuccessfullyUsingAction("Deleted User", externalRequestId))
                    .doOnError(log.endFailed("To delete User", externalRequestId));
