@@ -4,16 +4,16 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import io.reactivex.Single;
 import org.jooq.exception.DataAccessException;
-import solutions.taulien.ribac.jooq.tables.records.RibacUserRecord;
 import solutions.taulien.ribac.server.DbHelper;
 import solutions.taulien.ribac.server.Logger;
 import solutions.taulien.ribac.server.error.DuplicateCreateError;
 import solutions.taulien.ribac.server.error.ResourceNotFoundError;
+import solutions.taulien.ribac.server.gen.jooq.tables.records.RibacUserRecord;
 
 import java.sql.SQLException;
 import java.util.Optional;
 
-import static solutions.taulien.ribac.jooq.tables.RibacUser.RIBAC_USER;
+import static solutions.taulien.ribac.server.gen.jooq.tables.RibacUser.RIBAC_USER;
 
 public class UserRepository {
 

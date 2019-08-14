@@ -19,7 +19,7 @@
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
-            <!-- Configure to compile to Java 10 -->
+            <!-- Configure to compile to Java 12 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -124,7 +124,7 @@
                             <includes>.*</includes>
                         </database>
                         <target>
-                            <packageName>solutions.taulien.ribac.jooq</packageName>
+                            <packageName>solutions.taulien.ribac.server.gen.jooq</packageName>
                             <directory>target/generated-sources/jooq</directory>
                         </target>
                         <generate>
@@ -132,6 +132,39 @@
                         </generate>
                     </generator>
                 </configuration>
+            </plugin>
+
+            <!-- Configure OpenAPI-Spec based class generation-->
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>4.1.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/ribac.yaml</inputSpec>
+                            <generatorName>java</generatorName>
+                            <generateAliasAsModel>false</generateAliasAsModel>
+                            <generateApiDocumentation>false</generateApiDocumentation>
+                            <generateApis>false</generateApis>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelDocumentation>false</generateModelDocumentation>
+                            <generateModelTests>false</generateModelTests>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                            <configOptions>
+                                <sourceFolder>openapi</sourceFolder>
+                                <dateLibrary>java8</dateLibrary>
+                                <java8>true</java8>
+                                <library>vertx</library>
+                                <useRxJava2>true</useRxJava2>
+                                <modelPackage>solutions.taulien.ribac.server.gen.openapi</modelPackage>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <!-- Copy Maven dependencies into target/lib/ (Needed by the Dockerfile)-->

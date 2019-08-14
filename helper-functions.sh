@@ -76,6 +76,14 @@ export -f db_start
 
 
 
+generate(){
+   echo "- Generating model classes and jooq DSL:" && mvn clean compile
+}
+export -f generate
+
+
+
+
 image_create(){
   echo "- Create docker image:" && mvn clean package -Dmaven.test.skip=true
 }

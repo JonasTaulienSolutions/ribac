@@ -5,7 +5,7 @@ info:
   version: 0.1.0-SNAPSHOT
 
 servers:
-- url: http://localhost:8080
+  - url: http://localhost:8080
 
 paths:
   /users:
@@ -30,7 +30,7 @@ paths:
                   minLength: 1
                   maxLength: 255
               required:
-              - id
+                - id
             example:
               id: user123
       responses:
@@ -39,12 +39,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  createdUser:
-                    $ref: '#/components/schemas/User'
-                required:
-                - createdUser
+                $ref: '#/components/schemas/UserCreateResponse'
               example:
                 createdUser:
                   id: user123
@@ -53,7 +48,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
               example:
                 error:
                   message: "$.id: must be at least 1 characters long"
@@ -62,7 +57,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
               example:
                 error:
                   message: "A user already exists with the id 'user123'"
@@ -74,36 +69,34 @@ paths:
       operationId: userFetch
       summary: Returns the requested user
       parameters:
-      - name: userId
-        in: path
-        required: true
-        schema:
-          type: string
-          minLength: 1
-          maxLength: 255
-      - name: Request-Id
-        in: header
-        required: false
-        schema:
-          type: string
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 255
+        - name: Request-Id
+          in: header
+          required: false
+          schema:
+            type: string
       responses:
         200:
           description: Successfully returned the requested user
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  requestedUser:
-                    $ref: '#/components/schemas/User'
-                required:
-                - requestedUser
+                $ref: '#/components/schemas/UserFetchResponse'
+              example:
+                requestedUser:
+                  id: user123
         400:
           description: The given `userId` is too short or to long
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
               example:
                 error:
                   message: "Value doesn't respect min length 1"
@@ -112,30 +105,46 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
               example:
                 error:
                   message: "A user with the id 'user123' does not exist"
 
 components:
   schemas:
+    UserCreateResponse:
+      type: object
+      properties:
+        createdUser:
+          $ref: '#/components/schemas/User'
+      required:
+        - createdUser
+
+    UserFetchResponse:
+      type: object
+      properties:
+        requestedUser:
+          $ref: '#/components/schemas/User'
+      required:
+        - requestedUser
+
     User:
       type: object
       required:
-      - id
+        - id
       properties:
         id:
           type: string
 
-    Error:
+    ErrorResponse:
       type: object
       required:
-      - error
+        - error
       properties:
         error:
           type: object
           required:
-          - message
+            - message
           properties:
             message:
               type: string

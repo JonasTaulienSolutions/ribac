@@ -2,13 +2,14 @@ package solutions.taulien.ribac.server.user;
 
 import com.google.inject.Inject;
 import io.vertx.core.Handler;
-import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.api.RequestParameters;
 import io.vertx.reactivex.ext.web.RoutingContext;
 import org.apache.commons.httpclient.HttpStatus;
 import solutions.taulien.ribac.server.ReadOrCreateRequestIdHandler;
 import solutions.taulien.ribac.server.Responder;
 import solutions.taulien.ribac.server.error.DuplicateCreateError;
+import solutions.taulien.ribac.server.gen.openapi.User;
+import solutions.taulien.ribac.server.gen.openapi.UserCreateResponse;
 
 public class UserCreateHandler implements Handler<RoutingContext> {
 
@@ -29,23 +30,20 @@ public class UserCreateHandler implements Handler<RoutingContext> {
     @Override
     public void handle(RoutingContext ctx) {
         final RequestParameters params = ctx.get("parsedParameters");
-        final var requestBody = params.body().getJsonObject();
-        final var externalId = requestBody.getString("id");
+        final var userToCreate = params.body().getJsonObject().mapTo(User.class);
 
         final String requestId = ctx.get(ReadOrCreateRequestIdHandler.REQUEST_ID_KEY);
         this.userRepository
-            .createUser(externalId, requestId)
+            .createUser(userToCreate.getId(), requestId)
             .subscribe(
-                createdUser -> this.responder
-                                   .created(
-                                       ctx,
-                                       new JsonObject()
-                                           .put(
-                                               "createdUser", new JsonObject().put(
-                                                   "id", createdUser.getExternalId()
-                                               )
-                                           )
-                                   ),
+                createdUserRecord -> this.responder
+                                         .created(
+                                             ctx,
+                                             new UserCreateResponse()
+                                                 .createdUser(new User()
+                                                                  .id(createdUserRecord.getExternalId())
+                                                 )
+                                         ),
                 failure -> ctx.fail(
                     (failure instanceof DuplicateCreateError)
                         ? ((DuplicateCreateError) failure).toHttpError(HttpStatus.SC_CONFLICT)
