@@ -39,6 +39,26 @@
 * Add `DELETE /groups/{groupName}/right-sets/{rightSetName}`
 
 * Add `GET /users/{userId}/has-right`
+* Add `GET /users/{userId}/has-rights`
+    * Request
+        ```json
+        [
+          "Right 1",
+          "Right 2",
+          "Right 3"
+        ]
+        ```
+    * Response
+        ```json
+        {
+            "has-all": false,
+            "results": {
+                "Right 1": false,
+                "Right 2": true,
+                "Right 3": false
+            }
+        }
+        ```
 * Add `GET /users/{userId}/all-rights`
 
 * Finish Tests in `UserFunctionalTest`
