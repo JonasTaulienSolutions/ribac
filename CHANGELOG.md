@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 * `POST /users`: Creates a new user
 * `GET /users/{userId}`: Fetches a user
 * `DELETE /users/{userId}`: Deletes a user
+* `GET /users`: Fetches all users
 
 ### Changed
 (changes in existing functionality)

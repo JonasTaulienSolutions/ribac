@@ -12,6 +12,7 @@ import solutions.taulien.ribac.server.error.ResourceNotFoundError;
 import solutions.taulien.ribac.server.gen.jooq.tables.records.RibacUserRecord;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 import static solutions.taulien.ribac.server.gen.jooq.Tables.RIBAC_USER;
@@ -74,6 +75,23 @@ public class UserRepository {
                    .map(maybeUser -> maybeUser.orElseThrow(
                        () -> new ResourceNotFoundError("A user with the id '" + externalId + "' does not exist")
                    ))
+                   .doOnSuccess(log.endSuccessfullyUsingConsumer("Got User", externalRequestId))
+                   .doOnError(log.endFailed("To get User", externalRequestId));
+    }
+
+
+
+    public Single<List<RibacUserRecord>> getAllUsers(String requestId) {
+        final var externalRequestId = log.createExternalRequestId(requestId);
+
+        log.start("Getting All Users", externalRequestId);
+        return this.dbHelper
+                   .execute(
+                       db -> db.select()
+                               .from(RIBAC_USER)
+                               .fetch()
+                               .into(RibacUserRecord.class)
+                   )
                    .doOnSuccess(log.endSuccessfullyUsingConsumer("Got User", externalRequestId))
                    .doOnError(log.endFailed("To get User", externalRequestId));
     }

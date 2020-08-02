@@ -1,7 +1,10 @@
 # To Do
-* Create own directories and artifacts for server and client
-
-* Add `GET /users`
+* Let Logger log on worker thread
+* Log request and response bodies on debug
+* Move db-logging into DbHelper
+* Rename RibacUser etc to DbUser
+* Rename User etc to ApiUser
+* Introduce RibacError.mapErrors
 
 * Add `POST /groups`
 * Add `DELETE /groups/{groupName}`
@@ -64,3 +67,4 @@
     * deleteUser_alsoDeletesEveryGroupMembership
     * deleteUser_alsoDeletesEveryUserRight
     * deleteUser_alsoDeletesEveryUserRights
+* Implement Java Client

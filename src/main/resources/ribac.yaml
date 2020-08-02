@@ -8,7 +8,109 @@ servers:
   - url: http://localhost:8080
 
 paths:
+  /users/{userId}:
+    get:
+      operationId: userFetch
+      summary: Returns the requested user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 255
+        - name: Request-Id
+          in: header
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully returned the requested user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserFetchResponse'
+              example:
+                requestedUser:
+                  id: user123
+        400:
+          description: The given `userId` is too short or to long
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error:
+                  message: "Value doesn't respect min length 1"
+        404:
+          description: There is no user with the given `userId`
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error:
+                  message: "A user with the id 'user123' does not exist"
+
+
+
+    delete:
+      operationId: userDelete
+      summary: Deletes the requested user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 255
+        - name: Request-Id
+          in: header
+          required: false
+          schema:
+            type: string
+      responses:
+        204:
+          description: Successfully deleted the requested user
+        404:
+          description: There is no user with the given `userId`
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error:
+                  message: "A user with the id 'user123' does not exist"
+
+
+
   /users:
+    get:
+      operationId: userFetchAll
+      summary: Returns all Users
+      parameters:
+        - name: Request-Id
+          in: header
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully returned all users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserFetchAllResponse'
+              example:
+                allUsers:
+                  - id: user123
+                  - id: abc456
+
+
+
     post:
       operationId: userCreate
       summary: Creates a new user
@@ -64,83 +166,6 @@ paths:
 
 
 
-  /users/{userId}:
-    get:
-      operationId: userFetch
-      summary: Returns the requested user
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: string
-            minLength: 1
-            maxLength: 255
-        - name: Request-Id
-          in: header
-          required: false
-          schema:
-            type: string
-      responses:
-        200:
-          description: Successfully returned the requested user
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserFetchResponse'
-              example:
-                requestedUser:
-                  id: user123
-        400:
-          description: The given `userId` is too short or to long
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                error:
-                  message: "Value doesn't respect min length 1"
-        404:
-          description: There is no user with the given `userId`
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                error:
-                  message: "A user with the id 'user123' does not exist"
-
-    delete:
-      operationId: userDelete
-      summary: Deletes the requested user
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: string
-            minLength: 1
-            maxLength: 255
-        - name: Request-Id
-          in: header
-          required: false
-          schema:
-            type: string
-      responses:
-        204:
-          description: Successfully deleted the requested user
-        404:
-          description: There is no user with the given `userId`
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                error:
-                  message: "A user with the id 'user123' does not exist"
-
-
-
 components:
   schemas:
     UserCreateResponse:
@@ -158,6 +183,16 @@ components:
           $ref: '#/components/schemas/User'
       required:
         - requestedUser
+
+    UserFetchAllResponse:
+      type: object
+      properties:
+        allUsers:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+      required:
+        - allUsers
 
     User:
       type: object

@@ -10,6 +10,7 @@ import solutions.taulien.ribac.server.error.InternalServerErrorFailureHandler;
 import solutions.taulien.ribac.server.error.OpenApiValidationFailureHandler;
 import solutions.taulien.ribac.server.user.UserCreateHandler;
 import solutions.taulien.ribac.server.user.UserDeleteHandler;
+import solutions.taulien.ribac.server.user.UserFetchAllHandler;
 import solutions.taulien.ribac.server.user.UserFetchHandler;
 
 import javax.inject.Inject;
@@ -36,6 +37,8 @@ public class RouterFactory {
 
     private final UserDeleteHandler userDeleteHandler;
 
+    private final UserFetchAllHandler userFetchAllHandler;
+
 
 
     @Inject
@@ -49,7 +52,8 @@ public class RouterFactory {
         UserFetchHandler userFetchHandler,
         ReadOrCreateRequestIdHandler readOrCreateRequestIdHandler,
         LogRequestStartHandler logRequestStartHandler,
-        UserDeleteHandler userDeleteHandler
+        UserDeleteHandler userDeleteHandler,
+        UserFetchAllHandler userFetchAllHandler
     ) {
         this.openAPI3RouterFactory = openAPI3RouterFactory;
         this.userCreateHandler = userCreateHandler;
@@ -61,6 +65,7 @@ public class RouterFactory {
         this.readOrCreateRequestIdHandler = readOrCreateRequestIdHandler;
         this.logRequestStartHandler = logRequestStartHandler;
         this.userDeleteHandler = userDeleteHandler;
+        this.userFetchAllHandler = userFetchAllHandler;
     }
 
 
@@ -73,6 +78,7 @@ public class RouterFactory {
         this.addHandler("userCreate", this.userCreateHandler);
         this.addHandler("userFetch", this.userFetchHandler);
         this.addHandler("userDelete", this.userDeleteHandler);
+        this.addHandler("userFetchAll", this.userFetchAllHandler);
 
         return this.openAPI3RouterFactory.getRouter()
                                          .errorHandler(400, this.validationFailureHandler)
