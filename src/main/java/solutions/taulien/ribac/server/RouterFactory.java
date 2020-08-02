@@ -8,6 +8,8 @@ import io.vertx.reactivex.ext.web.handler.CorsHandler;
 import solutions.taulien.ribac.server.error.HttpErrorHandler;
 import solutions.taulien.ribac.server.error.InternalServerErrorFailureHandler;
 import solutions.taulien.ribac.server.error.OpenApiValidationFailureHandler;
+import solutions.taulien.ribac.server.log.LogRequestStartHandler;
+import solutions.taulien.ribac.server.log.ReadOrCreateRequestIdHandler;
 import solutions.taulien.ribac.server.user.UserCreateHandler;
 import solutions.taulien.ribac.server.user.UserDeleteHandler;
 import solutions.taulien.ribac.server.user.UserFetchAllHandler;

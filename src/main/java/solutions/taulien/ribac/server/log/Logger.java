@@ -1,5 +1,7 @@
-package solutions.taulien.ribac.server;
+package solutions.taulien.ribac.server.log;
 
+import io.reactivex.Completable;
+import io.reactivex.Scheduler;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import org.slf4j.LoggerFactory;
@@ -15,11 +17,18 @@ public class Logger {
 
     private final String requestIdPrefix;
 
+    private final Scheduler scheduler;
 
 
-    public Logger(String logPrefix, String requestIdPrefix) {
+
+    public Logger(
+        String logPrefix,
+        String requestIdPrefix,
+        Scheduler scheduler
+    ) {
         this.logPrefix = logPrefix;
         this.requestIdPrefix = requestIdPrefix;
+        this.scheduler = scheduler;
     }
 
 
@@ -37,31 +46,41 @@ public class Logger {
 
 
     public void systemInfo(String message, Object... params) {
-        log.info(message, params);
+        doLog(
+            () -> log.info(message, params)
+        );
     }
 
 
 
     public void start(String message, String requestId, Object... params) {
-        log.info("[{}] {}START " + message, prependTo(params, requestId, this.logPrefix));
+        doLog(
+            () -> log.info("[{}] {}START " + message, prependTo(params, requestId, this.logPrefix))
+        );
     }
 
 
 
     public void requestBody(String requestId, String requestBody) {
-        log.info("[{}] {}REQUEST-BODY {}", requestId, this.logPrefix, prepareBodyString(requestBody));
+        doLog(
+            () -> log.debug("[{}] {}REQUEST-BODY {}", requestId, this.logPrefix, prepareBodyString(requestBody))
+        );
     }
 
 
 
     public void end(String message, String requestId, Object... params) {
-        log.info("[{}] {}END " + message, prependTo(params, requestId, this.logPrefix));
+        doLog(
+            () -> log.info("[{}] {}END " + message, prependTo(params, requestId, this.logPrefix))
+        );
     }
 
 
 
     public void responseBody(String requestId, String responseBody) {
-        log.info("[{}] {}RESPONSE-BODY {}", requestId, this.logPrefix, prepareBodyString(responseBody));
+        doLog(
+            () -> log.debug("[{}] {}RESPONSE-BODY {}", requestId, this.logPrefix, prepareBodyString(responseBody))
+        );
     }
 
 
@@ -72,14 +91,26 @@ public class Logger {
 
 
 
-    public <T> Action endSuccessfullyUsingAction(String successfully, String requestId) {
-        return () -> log.info("[{}] {}END SUCCESS {}", requestId, this.logPrefix, successfully);
+    public Action endSuccessfullyUsingAction(String successfully, String requestId) {
+        return () -> doLog(
+            () -> log.info("[{}] {}END SUCCESS {}", requestId, this.logPrefix, successfully)
+        );
     }
 
 
 
     public <T> Consumer<T> endFailed(String failed, String requestId) {
-        return throwable -> log.error("[" + requestId + "] " + this.logPrefix + "END FAILED " + failed + ":", throwable);
+        return throwable -> doLog(
+            () -> log.error("[" + requestId + "] " + this.logPrefix + "END FAILED " + failed + ":", throwable)
+        );
+    }
+
+
+
+    private void doLog(Runnable logAction) {
+        Completable.fromRunnable(logAction)
+                   .subscribeOn(this.scheduler)
+                   .subscribe();
     }
 
 

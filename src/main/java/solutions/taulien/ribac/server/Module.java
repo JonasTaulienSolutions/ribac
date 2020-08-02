@@ -12,6 +12,7 @@ import io.vertx.reactivex.ext.web.handler.CorsHandler;
 import org.jooq.Configuration;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DefaultConfiguration;
+import solutions.taulien.ribac.server.log.Logger;
 
 import static com.google.inject.name.Names.named;
 
@@ -30,7 +31,8 @@ public class Module extends AbstractModule {
         bind(HttpServer.class).toInstance(vertx.createHttpServer());
 
         bind(Scheduler.class).annotatedWith(named("eventLoopScheduler")).toInstance(RxHelper.scheduler(vertx));
-        bind(Scheduler.class).annotatedWith(named("workerPoolScheduler")).toInstance(RxHelper.blockingScheduler(vertx));
+        final var workerPoolScheduler = RxHelper.blockingScheduler(vertx, false);
+        bind(Scheduler.class).annotatedWith(named("workerPoolScheduler")).toInstance(workerPoolScheduler);
 
         bind(Integer.class).annotatedWith(named("serverPort")).toInstance(8080);
 
@@ -83,7 +85,7 @@ public class Module extends AbstractModule {
                        .allowedHeader("Request-Id")
         );
 
-        bind(Logger.class).annotatedWith(named("dbLogger")).toInstance(new Logger("DB communication: ", "DB"));
-        bind(Logger.class).annotatedWith(named("systemLogger")).toInstance(new Logger("", "selfgen"));
+        bind(Logger.class).annotatedWith(named("dbLogger")).toInstance(new Logger("DB communication: ", "DB", workerPoolScheduler));
+        bind(Logger.class).annotatedWith(named("systemLogger")).toInstance(new Logger("", "selfgen", workerPoolScheduler));
     }
 }

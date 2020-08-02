@@ -3,6 +3,8 @@ package solutions.taulien.ribac.server;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import io.vertx.reactivex.ext.web.RoutingContext;
+import solutions.taulien.ribac.server.log.Logger;
+import solutions.taulien.ribac.server.log.ReadOrCreateRequestIdHandler;
 
 import static org.apache.commons.httpclient.HttpStatus.*;
 

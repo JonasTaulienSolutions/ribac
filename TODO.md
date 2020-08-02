@@ -1,10 +1,8 @@
 # To Do
-* Let Logger log on worker thread
-* Log request and response bodies on debug
-* Move db-logging into DbHelper
 * Rename RibacUser etc to DbUser
 * Rename User etc to ApiUser
 * Introduce RibacError.mapErrors
+* Introduce Flyway
 
 * Add `POST /groups`
 * Add `DELETE /groups/{groupName}`

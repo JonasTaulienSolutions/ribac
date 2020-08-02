@@ -2,6 +2,7 @@ package solutions.taulien.ribac.server;
 
 import com.google.inject.name.Named;
 import io.vertx.reactivex.core.http.HttpServer;
+import solutions.taulien.ribac.server.log.Logger;
 
 import javax.inject.Inject;
 

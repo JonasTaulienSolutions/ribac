@@ -1,4 +1,4 @@
-package solutions.taulien.ribac.server;
+package solutions.taulien.ribac.server.log;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;

@@ -5,7 +5,7 @@ import io.vertx.core.Handler;
 import io.vertx.ext.web.api.RequestParameters;
 import io.vertx.reactivex.ext.web.RoutingContext;
 import org.apache.commons.httpclient.HttpStatus;
-import solutions.taulien.ribac.server.ReadOrCreateRequestIdHandler;
+import solutions.taulien.ribac.server.log.ReadOrCreateRequestIdHandler;
 import solutions.taulien.ribac.server.Responder;
 import solutions.taulien.ribac.server.error.DuplicateCreateError;
 import solutions.taulien.ribac.server.gen.openapi.User;

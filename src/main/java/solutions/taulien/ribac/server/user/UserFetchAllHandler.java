@@ -3,7 +3,7 @@ package solutions.taulien.ribac.server.user;
 import com.google.inject.Inject;
 import io.vertx.core.Handler;
 import io.vertx.reactivex.ext.web.RoutingContext;
-import solutions.taulien.ribac.server.ReadOrCreateRequestIdHandler;
+import solutions.taulien.ribac.server.log.ReadOrCreateRequestIdHandler;
 import solutions.taulien.ribac.server.Responder;
 import solutions.taulien.ribac.server.gen.openapi.User;
 import solutions.taulien.ribac.server.gen.openapi.UserFetchAllResponse;
