@@ -14,7 +14,7 @@ import solutions.taulien.ribac.server.gen.jooq.tables.records.RibacUserRecord;
 import java.sql.SQLException;
 import java.util.Optional;
 
-import static solutions.taulien.ribac.server.gen.jooq.tables.RibacUser.RIBAC_USER;
+import static solutions.taulien.ribac.server.gen.jooq.Tables.RIBAC_USER;
 
 public class UserRepository {
 

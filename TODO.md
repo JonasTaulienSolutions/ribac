@@ -1,6 +1,5 @@
 # To Do
 * Create own directories and artifacts for server and client
-* Create one united Image from Database and ribac server
 
 * Add `GET /users`
 

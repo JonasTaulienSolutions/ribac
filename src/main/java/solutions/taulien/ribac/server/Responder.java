@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import io.vertx.reactivex.ext.web.RoutingContext;
 
-import static org.apache.http.HttpStatus.*;
+import static org.apache.commons.httpclient.HttpStatus.*;
 
 public class Responder {
 

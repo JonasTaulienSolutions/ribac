@@ -1,8 +1,8 @@
 package solutions.taulien.ribac;
 
+import io.netty.handler.codec.http.HttpHeaderValues;
+import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.json.JsonObject;
-import org.apache.http.HttpHeaders;
-import org.apache.http.entity.ContentType;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;
@@ -51,7 +51,7 @@ class UserFunctionalTest {
         final var id = "user123";
 
         final var createUserResponse = client.post("/users")
-                                             .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                             .putHeader(HttpHeaders.ACCEPT.toString(), HttpHeaderValues.APPLICATION_JSON.toString())
                                              .putHeader("Request-Id", testInfo.getDisplayName())
                                              .rxSendJsonObject(new JsonObject().put(
                                                  "id", id
@@ -63,8 +63,8 @@ class UserFunctionalTest {
             () -> "Unexpected status code. Response body: '" + createUserResponse.bodyAsString() + "'"
         );
         assertEquals(
-            ContentType.APPLICATION_JSON.getMimeType(),
-            createUserResponse.getHeader(HttpHeaders.CONTENT_TYPE)
+                HttpHeaderValues.APPLICATION_JSON.toString(),
+            createUserResponse.getHeader(HttpHeaders.CONTENT_TYPE.toString())
         );
         assertEquals(
             new JsonObject().put(
@@ -88,7 +88,7 @@ class UserFunctionalTest {
         // 1. Create
         // noinspection ResultOfMethodCallIgnored
         client.post("/users")
-              .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+              .putHeader(HttpHeaders.ACCEPT.toString(), HttpHeaderValues.APPLICATION_JSON.toString())
               .putHeader("Request-Id", testInfo.getDisplayName())
               .rxSendJsonObject(new JsonObject().put(
                   "id", id
@@ -97,7 +97,7 @@ class UserFunctionalTest {
 
         // 2. Try to create again
         final var createUserSecondResponse = client.post("/users")
-                                                   .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                                   .putHeader(HttpHeaders.ACCEPT.toString(), HttpHeaderValues.APPLICATION_JSON.toString())
                                                    .putHeader("Request-Id", testInfo.getDisplayName())
                                                    .rxSendJsonObject(new JsonObject().put(
                                                        "id", id
@@ -110,8 +110,8 @@ class UserFunctionalTest {
             () -> "Unexpected status code. Response body: '" + createUserSecondResponse.bodyAsString() + "'"
         );
         assertEquals(
-            ContentType.APPLICATION_JSON.getMimeType(),
-            createUserSecondResponse.getHeader(HttpHeaders.CONTENT_TYPE)
+            HttpHeaderValues.APPLICATION_JSON.toString(),
+            createUserSecondResponse.getHeader(HttpHeaders.CONTENT_TYPE.toString())
         );
         assertEquals(
             new JsonObject().put(
@@ -131,7 +131,7 @@ class UserFunctionalTest {
         final var client = RibacTestHelper.createHttpClient();
 
         final var createUserResponse = client.post("/users")
-                                             .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                             .putHeader(HttpHeaders.ACCEPT.toString(), HttpHeaderValues.APPLICATION_JSON.toString())
                                              .putHeader("Request-Id", testInfo.getDisplayName())
                                              .rxSendJsonObject(new JsonObject().put(
                                                  "id", ""
@@ -143,8 +143,8 @@ class UserFunctionalTest {
             () -> "Unexpected status code. Response body: '" + createUserResponse.bodyAsString() + "'"
         );
         assertEquals(
-            ContentType.APPLICATION_JSON.getMimeType(),
-            createUserResponse.getHeader(HttpHeaders.CONTENT_TYPE)
+            HttpHeaderValues.APPLICATION_JSON.toString(),
+            createUserResponse.getHeader(HttpHeaders.CONTENT_TYPE.toString())
         );
         assertEquals(
             new JsonObject().put(
@@ -170,7 +170,7 @@ class UserFunctionalTest {
                            "6";
 
         final var createUserResponse = client.post("/users")
-                                             .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                             .putHeader(HttpHeaders.ACCEPT.toString(), HttpHeaderValues.APPLICATION_JSON.toString())
                                              .putHeader("Request-Id", testInfo.getDisplayName())
                                              .rxSendJsonObject(new JsonObject().put(
                                                  "id", id
@@ -182,8 +182,8 @@ class UserFunctionalTest {
             () -> "Unexpected status code. Response body: '" + createUserResponse.bodyAsString() + "'"
         );
         assertEquals(
-            ContentType.APPLICATION_JSON.getMimeType(),
-            createUserResponse.getHeader(HttpHeaders.CONTENT_TYPE)
+            HttpHeaderValues.APPLICATION_JSON.toString(),
+            createUserResponse.getHeader(HttpHeaders.CONTENT_TYPE.toString())
         );
         assertEquals(
             new JsonObject().put(
@@ -203,7 +203,7 @@ class UserFunctionalTest {
         final var client = RibacTestHelper.createHttpClient();
 
         final var createUserResponse = client.post("/users")
-                                             .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                             .putHeader(HttpHeaders.ACCEPT.toString(), HttpHeaderValues.APPLICATION_JSON.toString())
                                              .putHeader("Request-Id", testInfo.getDisplayName())
                                              .rxSendJsonObject(new JsonObject().put(
                                                  "id", 12345
@@ -215,8 +215,8 @@ class UserFunctionalTest {
             () -> "Unexpected status code. Response body: '" + createUserResponse.bodyAsString() + "'"
         );
         assertEquals(
-            ContentType.APPLICATION_JSON.getMimeType(),
-            createUserResponse.getHeader(HttpHeaders.CONTENT_TYPE)
+            HttpHeaderValues.APPLICATION_JSON.toString(),
+            createUserResponse.getHeader(HttpHeaders.CONTENT_TYPE.toString())
         );
         assertEquals(
             new JsonObject().put(
@@ -236,7 +236,7 @@ class UserFunctionalTest {
         final var client = RibacTestHelper.createHttpClient();
 
         final var createUserResponse = client.post("/users")
-                                             .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                             .putHeader(HttpHeaders.ACCEPT.toString(), HttpHeaderValues.APPLICATION_JSON.toString())
                                              .putHeader("Request-Id", testInfo.getDisplayName())
                                              .rxSendJsonObject(new JsonObject())
                                              .blockingGet();
@@ -246,8 +246,8 @@ class UserFunctionalTest {
             () -> "Unexpected status code. Response body: '" + createUserResponse.bodyAsString() + "'"
         );
         assertEquals(
-            ContentType.APPLICATION_JSON.getMimeType(),
-            createUserResponse.getHeader(HttpHeaders.CONTENT_TYPE)
+            HttpHeaderValues.APPLICATION_JSON.toString(),
+            createUserResponse.getHeader(HttpHeaders.CONTENT_TYPE.toString())
         );
         assertEquals(
             new JsonObject().put(
@@ -267,8 +267,8 @@ class UserFunctionalTest {
         final var client = RibacTestHelper.createHttpClient();
 
         final var createUserResponse = client.post("/users")
-                                             .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
-                                             .putHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType())
+                                             .putHeader(HttpHeaders.ACCEPT.toString(), HttpHeaderValues.APPLICATION_JSON.toString())
+                                             .putHeader(HttpHeaders.CONTENT_TYPE.toString(), HttpHeaderValues.APPLICATION_JSON.toString())
                                              .putHeader("Request-Id", testInfo.getDisplayName())
                                              .rxSend()
                                              .blockingGet();
@@ -278,8 +278,8 @@ class UserFunctionalTest {
             () -> "Unexpected status code. Response body: '" + createUserResponse.bodyAsString() + "'"
         );
         assertEquals(
-            ContentType.APPLICATION_JSON.getMimeType(),
-            createUserResponse.getHeader(HttpHeaders.CONTENT_TYPE)
+            HttpHeaderValues.APPLICATION_JSON.toString(),
+            createUserResponse.getHeader(HttpHeaders.CONTENT_TYPE.toString())
         );
 
         assertEquals(
@@ -301,8 +301,9 @@ class UserFunctionalTest {
 
         final var id = "user/ 123";
 
+        //noinspection ResultOfMethodCallIgnored
         client.post("/users")
-              .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+              .putHeader(HttpHeaders.ACCEPT.toString(), HttpHeaderValues.APPLICATION_JSON.toString())
               .putHeader("Request-Id", testInfo.getDisplayName())
               .rxSendJsonObject(new JsonObject().put(
                   "id", id
@@ -310,7 +311,7 @@ class UserFunctionalTest {
               .blockingGet();
 
         final var fetchUserResponse = client.get("/users/" + RibacTestHelper.urlEncode(id))
-                                            .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                            .putHeader(HttpHeaders.ACCEPT.toString(), HttpHeaderValues.APPLICATION_JSON.toString())
                                             .putHeader("Request-Id", testInfo.getDisplayName())
                                             .rxSend()
                                             .blockingGet();
@@ -321,8 +322,8 @@ class UserFunctionalTest {
             () -> "Unexpected status code. Response body: '" + fetchUserResponse.bodyAsString() + "'"
         );
         assertEquals(
-            ContentType.APPLICATION_JSON.getMimeType(),
-            fetchUserResponse.getHeader(HttpHeaders.CONTENT_TYPE)
+            HttpHeaderValues.APPLICATION_JSON.toString(),
+            fetchUserResponse.getHeader(HttpHeaders.CONTENT_TYPE.toString())
         );
         assertEquals(
             new JsonObject().put(
@@ -343,7 +344,7 @@ class UserFunctionalTest {
 
         var id = "userB";
         final var fetchUserResponse = client.get("/users/" + RibacTestHelper.urlEncode(id))
-                                            .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                            .putHeader(HttpHeaders.ACCEPT.toString(), HttpHeaderValues.APPLICATION_JSON.toString())
                                             .putHeader("Request-Id", testInfo.getDisplayName())
                                             .rxSend()
                                             .blockingGet();
@@ -354,8 +355,8 @@ class UserFunctionalTest {
             () -> "Unexpected status code. Response body: '" + fetchUserResponse.bodyAsString() + "'"
         );
         assertEquals(
-            ContentType.APPLICATION_JSON.getMimeType(),
-            fetchUserResponse.getHeader(HttpHeaders.CONTENT_TYPE)
+            HttpHeaderValues.APPLICATION_JSON.toString(),
+            fetchUserResponse.getHeader(HttpHeaders.CONTENT_TYPE.toString())
         );
         assertEquals(
             new JsonObject().put(
@@ -375,7 +376,7 @@ class UserFunctionalTest {
         final var client = RibacTestHelper.createHttpClient();
 
         final var fetchUserResponse = client.get("/users/")
-                                            .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                            .putHeader(HttpHeaders.ACCEPT.toString(), HttpHeaderValues.APPLICATION_JSON.toString())
                                             .putHeader("Request-Id", testInfo.getDisplayName())
                                             .rxSend()
                                             .blockingGet();
@@ -386,8 +387,8 @@ class UserFunctionalTest {
             () -> "Unexpected status code. Response body: '" + fetchUserResponse.bodyAsString() + "'"
         );
         assertEquals(
-            ContentType.APPLICATION_JSON.getMimeType(),
-            fetchUserResponse.getHeader(HttpHeaders.CONTENT_TYPE)
+            HttpHeaderValues.APPLICATION_JSON.toString(),
+            fetchUserResponse.getHeader(HttpHeaders.CONTENT_TYPE.toString())
         );
         assertEquals(
             new JsonObject().put(
@@ -412,7 +413,7 @@ class UserFunctionalTest {
                            "user12345.user12345.user12345.user12345.user12345.12345" +
                            "6";
         final var fetchUserResponse = client.get("/users/" + RibacTestHelper.urlEncode(id))
-                                            .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                            .putHeader(HttpHeaders.ACCEPT.toString(), HttpHeaderValues.APPLICATION_JSON.toString())
                                             .putHeader("Request-Id", testInfo.getDisplayName())
                                             .rxSend()
                                             .blockingGet();
@@ -423,8 +424,8 @@ class UserFunctionalTest {
             () -> "Unexpected status code. Response body: '" + fetchUserResponse.bodyAsString() + "'"
         );
         assertEquals(
-            ContentType.APPLICATION_JSON.getMimeType(),
-            fetchUserResponse.getHeader(HttpHeaders.CONTENT_TYPE)
+            HttpHeaderValues.APPLICATION_JSON.toString(),
+            fetchUserResponse.getHeader(HttpHeaders.CONTENT_TYPE.toString())
         );
         assertEquals(
             new JsonObject().put(
@@ -446,7 +447,7 @@ class UserFunctionalTest {
         final var id = "user/ 123";
 
         client.post("/users")
-              .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+              .putHeader(HttpHeaders.ACCEPT.toString(), HttpHeaderValues.APPLICATION_JSON.toString())
               .putHeader("Request-Id", testInfo.getDisplayName())
               .rxSendJsonObject(new JsonObject().put(
                   "id", id
@@ -454,7 +455,7 @@ class UserFunctionalTest {
               .blockingGet();
 
         final var deleteUserResponse = client.delete("/users/" + RibacTestHelper.urlEncode(id))
-                                             .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                             .putHeader(HttpHeaders.ACCEPT.toString(), HttpHeaderValues.APPLICATION_JSON.toString())
                                              .putHeader("Request-Id", testInfo.getDisplayName())
                                              .rxSend()
                                              .blockingGet();
@@ -467,7 +468,7 @@ class UserFunctionalTest {
         assertNull(deleteUserResponse.bodyAsString());
 
         final var getUserResponse = client.get("/users/" + RibacTestHelper.urlEncode(id))
-                                          .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                          .putHeader(HttpHeaders.ACCEPT.toString(), HttpHeaderValues.APPLICATION_JSON.toString())
                                           .putHeader("Request-Id", testInfo.getDisplayName())
                                           .rxSend()
                                           .blockingGet();
@@ -489,7 +490,7 @@ class UserFunctionalTest {
         final var id = "user123";
 
         final var deleteUserResponse = client.delete("/users/" + RibacTestHelper.urlEncode(id))
-                                             .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                             .putHeader(HttpHeaders.ACCEPT.toString(), HttpHeaderValues.APPLICATION_JSON.toString())
                                              .putHeader("Request-Id", testInfo.getDisplayName())
                                              .rxSend()
                                              .blockingGet();
@@ -500,8 +501,8 @@ class UserFunctionalTest {
             () -> "Unexpected status code. Response body: '" + deleteUserResponse.bodyAsString() + "'"
         );
         assertEquals(
-            ContentType.APPLICATION_JSON.getMimeType(),
-            deleteUserResponse.getHeader(HttpHeaders.CONTENT_TYPE)
+            HttpHeaderValues.APPLICATION_JSON.toString(),
+            deleteUserResponse.getHeader(HttpHeaders.CONTENT_TYPE.toString())
         );
         assertEquals(
             new JsonObject().put(
@@ -521,7 +522,7 @@ class UserFunctionalTest {
         final var client = RibacTestHelper.createHttpClient();
 
         final var deleteUserResponse = client.delete("/users/")
-                                             .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                             .putHeader(HttpHeaders.ACCEPT.toString(), HttpHeaderValues.APPLICATION_JSON.toString())
                                              .putHeader("Request-Id", testInfo.getDisplayName())
                                              .rxSend()
                                              .blockingGet();
@@ -532,8 +533,8 @@ class UserFunctionalTest {
             () -> "Unexpected status code. Response body: '" + deleteUserResponse.bodyAsString() + "'"
         );
         assertEquals(
-            ContentType.APPLICATION_JSON.getMimeType(),
-            deleteUserResponse.getHeader(HttpHeaders.CONTENT_TYPE)
+            HttpHeaderValues.APPLICATION_JSON.toString(),
+            deleteUserResponse.getHeader(HttpHeaders.CONTENT_TYPE.toString())
         );
         assertEquals(
             new JsonObject().put(
@@ -559,7 +560,7 @@ class UserFunctionalTest {
                            "user12345.user12345.user12345.user12345.user12345.12345" +
                            "6";
         final var deleteUserResponse = client.delete("/users/" + RibacTestHelper.urlEncode(id))
-                                             .putHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType())
+                                             .putHeader(HttpHeaders.ACCEPT.toString(), HttpHeaderValues.APPLICATION_JSON.toString())
                                              .putHeader("Request-Id", testInfo.getDisplayName())
                                              .rxSend()
                                              .blockingGet();
@@ -570,8 +571,8 @@ class UserFunctionalTest {
             () -> "Unexpected status code. Response body: '" + deleteUserResponse.bodyAsString() + "'"
         );
         assertEquals(
-            ContentType.APPLICATION_JSON.getMimeType(),
-            deleteUserResponse.getHeader(HttpHeaders.CONTENT_TYPE)
+            HttpHeaderValues.APPLICATION_JSON.toString(),
+            deleteUserResponse.getHeader(HttpHeaders.CONTENT_TYPE.toString())
         );
         assertEquals(
             new JsonObject().put(

@@ -3,7 +3,7 @@ package solutions.taulien.ribac.server.user;
 import com.google.inject.Inject;
 import io.vertx.core.Handler;
 import io.vertx.reactivex.ext.web.RoutingContext;
-import org.apache.http.HttpStatus;
+import org.apache.commons.httpclient.HttpStatus;
 import solutions.taulien.ribac.server.ReadOrCreateRequestIdHandler;
 import solutions.taulien.ribac.server.Responder;
 import solutions.taulien.ribac.server.error.ResourceNotFoundError;

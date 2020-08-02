@@ -5,7 +5,7 @@ networks:
 
 services:
   ribac-db:
-    image: mysql:8.0
+    image: mysql:8.0.21
     ports:
     - ${RIBAC_DB_EXTERNAL_PORT:?RIBAC_DB_EXTERNAL_PORT}:3306
     restart: always
@@ -38,7 +38,7 @@ services:
       RIBAC_DB_PASSWORD: ${RIBAC_DB_PASSWORD:?RIBAC_DB_PASSWORD}
 
   ribac-swagger:
-    image: swaggerapi/swagger-ui
+    image: swaggerapi/swagger-ui:v3.31.1
     ports:
     - ${RIBAC_SWAGGER_EXTERNAL_PORT:?RIBAC_SWAGGER_EXTERNAL_PORT}:8080
     volumes:
