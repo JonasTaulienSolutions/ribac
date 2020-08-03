@@ -1,40 +1,56 @@
 # To Do
-* Add `POST /groups`
+## Groups
 * Add `GET /groups`
 * Add `DELETE /groups/{groupName}`
+* Add `GET /groups/{groupName}`
+
+## Memberships
 * Add `POST /groups/{groupName}/members`
 * Add `GET /groups/{groupName}/members`
 * Add `DELETE /groups/{groupName}/members/{userId}`
 
+## Rights
 * Add `POST /rights`
 * Add `DELETE /rights/{rightName}`
+* Add `GET /rights/{rightName}`
 * Add `GET /rights`
 
+## User Rights
 * Add `POST /users/{userId}/rights`
-* Add `GET /users/{userId}/rights`
+* Add `GET /users/{userId}/rights` (Direct rights)
 * Add `DELETE /users/{userId}/rights/{rightName}`
+* Add `GET /users/{userId}/all-rights` (Direct and indirect rights)
 
+## Group Rights
 * Add `POST /groups/{groupName}/rights`
-* Add `GET /groups/{groupName}/rights`
+* Add `GET /groups/{groupName}/rights` (Direct rights)
 * Add `DELETE /groups/{groupName}/rights/{rightName}`
+* Add `GET /group/{groupId}/all-rights` (Direct and indirect rights)
 
+## Right Sets
 * Add `POST /right-sets`
 * Add `DELETE /right-sets/{rightSetName}`
+* Add `GET /right-sets/{rightSetName}`
+
+## Right Set Items
 * Add `POST /right-sets/{rightSetName}/rights`
 * Add `GET /right-sets/{rightSetName}/rights`
 * Add `DELETE /right-sets/{rightSetName}/rights/{rightName}`
 * Add `GET /right-sets`
 
+## User Right Sets
 * Add `POST /users/{userId}/right-sets`
 * Add `GET /users/{userId}/right-sets`
 * Add `DELETE /users/{userId}/right-sets/{rightSetName}`
 
+# Group Right Sets
 * Add `POST /groups/{groupName}/right-sets`
 * Add `GET /groups/{groupName}/right-sets`
 * Add `DELETE /groups/{groupName}/right-sets/{rightSetName}`
 
-* Add `GET /users/{userId}/has-right`
-* Add `GET /users/{userId}/has-multiple-rights`
+## Has User Right
+* Add `GET /users/{userId}/has-right/{rightName}` (Has direct or indirect right?)
+* Add `GET /users/{userId}/has-multiple-rights` (Has all/any direct or indirect rights?)
     * Request
         ```json
         [
@@ -55,8 +71,6 @@
             }
         }
         ```
-* Add `GET /users/{userId}/all-rights`
-* Add `GET /group/{groupId}/all-rights`
 
 * Finish tests in `UserFunctionalTest`
     * deleteUser_alsoDeletesEveryGroupMembership
