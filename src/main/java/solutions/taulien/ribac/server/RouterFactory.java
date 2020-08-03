@@ -8,6 +8,7 @@ import io.vertx.reactivex.ext.web.handler.CorsHandler;
 import solutions.taulien.ribac.server.error.HttpErrorHandler;
 import solutions.taulien.ribac.server.error.InternalServerErrorFailureHandler;
 import solutions.taulien.ribac.server.error.OpenApiValidationFailureHandler;
+import solutions.taulien.ribac.server.group.GroupCreateHandler;
 import solutions.taulien.ribac.server.log.LogRequestStartHandler;
 import solutions.taulien.ribac.server.log.ReadOrCreateRequestIdHandler;
 import solutions.taulien.ribac.server.user.UserCreateHandler;
@@ -41,6 +42,8 @@ public class RouterFactory {
 
     private final UserFetchAllHandler userFetchAllHandler;
 
+    private final GroupCreateHandler groupCreateHandler;
+
 
 
     @Inject
@@ -55,7 +58,8 @@ public class RouterFactory {
         ReadOrCreateRequestIdHandler readOrCreateRequestIdHandler,
         LogRequestStartHandler logRequestStartHandler,
         UserDeleteHandler userDeleteHandler,
-        UserFetchAllHandler userFetchAllHandler
+        UserFetchAllHandler userFetchAllHandler,
+        GroupCreateHandler groupCreateHandler
     ) {
         this.openAPI3RouterFactory = openAPI3RouterFactory;
         this.userCreateHandler = userCreateHandler;
@@ -68,6 +72,7 @@ public class RouterFactory {
         this.logRequestStartHandler = logRequestStartHandler;
         this.userDeleteHandler = userDeleteHandler;
         this.userFetchAllHandler = userFetchAllHandler;
+        this.groupCreateHandler = groupCreateHandler;
     }
 
 
@@ -81,6 +86,8 @@ public class RouterFactory {
         this.addHandler("userFetch", this.userFetchHandler);
         this.addHandler("userDelete", this.userDeleteHandler);
         this.addHandler("userFetchAll", this.userFetchAllHandler);
+
+        this.addHandler("groupCreate", this.groupCreateHandler);
 
         return this.openAPI3RouterFactory.getRouter()
                                          .errorHandler(400, this.validationFailureHandler)

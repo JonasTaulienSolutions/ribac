@@ -3,13 +3,12 @@ package solutions.taulien.ribac.server.user;
 import com.google.inject.Inject;
 import io.reactivex.Completable;
 import io.reactivex.Single;
-import org.jooq.exception.DataAccessException;
 import solutions.taulien.ribac.server.DbHelper;
 import solutions.taulien.ribac.server.error.DuplicateCreateError;
 import solutions.taulien.ribac.server.error.ResourceNotFoundError;
 import solutions.taulien.ribac.server.gen.jooq.tables.records.DbUser;
+import solutions.taulien.ribac.server.util.RepositoryHelper;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,7 +40,7 @@ public class UserRepository {
                    )
                    .onErrorResumeNext(
                        failure -> Single.error(
-                           UserRepository.mySqlRespondedWithDuplicateEntryError(failure)
+                           RepositoryHelper.mySqlRespondedWithDuplicateEntryError(failure)
                                ? new DuplicateCreateError("A user already exists with the id '" + externalId + "'")
                                : failure
                        )
@@ -97,18 +96,5 @@ public class UserRepository {
                         }
                    )
                    .ignoreElement();
-    }
-
-
-
-    private static boolean mySqlRespondedWithDuplicateEntryError(Throwable failure) {
-        /*
-         * @see https://dev.mysql.com/doc/refman/8.0/en/server-error-reference.html#error_er_dup_entry
-         */
-        final int MYSQL_DUPLICATE_ENTRY_CODE = 1062;
-
-        return (failure instanceof DataAccessException)
-                   && (failure.getCause() instanceof SQLException)
-                   && (((SQLException) failure.getCause()).getErrorCode() == MYSQL_DUPLICATE_ENTRY_CODE);
     }
 }

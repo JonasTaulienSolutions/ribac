@@ -1,8 +1,11 @@
 package solutions.taulien.ribac;
 
+import io.vertx.core.json.JsonObject;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;
+
+import static org.apache.commons.httpclient.HttpStatus.*;
 
 public class GroupFunctionalTest {
 
@@ -34,46 +37,172 @@ public class GroupFunctionalTest {
         RibacTestHelper.restoreRibacDbBackup();
     }
 
+
+
     @Test
     @DisplayName("createGroup_returnsCreatedGroup")
-    @Disabled
     void createGroup_returnsCreatedGroup(TestInfo testInfo) {
+        final var client = RibacTestHelper.createHttpClient();
 
+        final var name = "group123";
+
+        final var createGroupResponse = RibacTestHelper.post(
+            client,
+            testInfo,
+            "/groups",
+            new JsonObject().put("name", name)
+        );
+
+        RibacTestHelper.assertStatusCodeAndBodyEquals(
+            createGroupResponse,
+            SC_CREATED,
+            new JsonObject().put(
+                "createdGroup", new JsonObject().put(
+                    "name", name
+                )
+            )
+        );
     }
+
+
+
     @Test
     @DisplayName("createGroup_canNotCreateGroupTwice")
-    @Disabled
     void createGroup_canNotCreateGroupTwice(TestInfo testInfo) {
+        final var client = RibacTestHelper.createHttpClient();
 
+        final var name = "group123";
+
+        // 1. Create
+        RibacTestHelper.post(
+            client,
+            testInfo,
+            "/groups",
+            new JsonObject().put("name", name)
+        );
+
+        // 2. Try to create again
+        final var createGroupSecondResponse = RibacTestHelper.post(
+            client,
+            testInfo,
+            "/groups",
+            new JsonObject().put("name", name)
+        );
+
+        RibacTestHelper.assertStatusCodeAndBodyEquals(
+            createGroupSecondResponse,
+            SC_CONFLICT,
+            RibacTestHelper.createErrorResponseBody("A group already exists with the name '" + name + "'")
+        );
     }
+
+
+
     @Test
     @DisplayName("createGroup_canNotCreateGroupWithEmptyName")
-    @Disabled
     void createGroup_canNotCreateGroupWithEmptyName(TestInfo testInfo) {
+        final var client = RibacTestHelper.createHttpClient();
 
+        final var createGroupResponse = RibacTestHelper.post(
+            client,
+            testInfo,
+            "/groups",
+            new JsonObject().put("name", "")
+        );
+
+        RibacTestHelper.assertStatusCodeAndBodyEquals(
+            createGroupResponse,
+            SC_BAD_REQUEST,
+            RibacTestHelper.createErrorResponseBody("$.name: must be at least 1 characters long")
+        );
     }
+
+
+
     @Test
     @DisplayName("createGroup_canNotCreateGroupWithTooLongName")
-    @Disabled
     void createGroup_canNotCreateGroupWithTooLongName(TestInfo testInfo) {
+        final var client = RibacTestHelper.createHttpClient();
 
+        final var name = ""
+                             + "group1234.group1234.group1234.group1234.group1234.group1234.group1234.group1234.group1234.group1234."
+                             + "group1234.group1234.group1234.group1234.group1234.group1234.group1234.group1234.group1234.group1234."
+                             + "group1234.group1234.group1234.group1234.group1234.12345"
+                             + "6";
+
+        final var createGroupResponse = RibacTestHelper.post(
+            client,
+            testInfo,
+            "/groups",
+            new JsonObject().put("name", name)
+        );
+
+        RibacTestHelper.assertStatusCodeAndBodyEquals(
+            createGroupResponse,
+            SC_BAD_REQUEST,
+            RibacTestHelper.createErrorResponseBody("$.name: may only be 255 characters long")
+        );
     }
+
+
+
     @Test
     @DisplayName("createGroup_canNotCreateGroupWithNameAsNumber")
-    @Disabled
     void createGroup_canNotCreateGroupWithNameAsNumber(TestInfo testInfo) {
+        final var client = RibacTestHelper.createHttpClient();
 
+        final var createGroupResponse = RibacTestHelper.post(
+            client,
+            testInfo,
+            "/groups",
+            new JsonObject().put("name", 1234)
+        );
+
+        RibacTestHelper.assertStatusCodeAndBodyEquals(
+            createGroupResponse,
+            SC_BAD_REQUEST,
+            RibacTestHelper.createErrorResponseBody("$.name: integer found, string expected")
+        );
     }
+
+
+
     @Test
     @DisplayName("createGroup_canNotCreateGroupWhenNotProvidingNameField")
-    @Disabled
     void createGroup_canNotCreateGroupWhenNotProvidingNameField(TestInfo testInfo) {
+        final var client = RibacTestHelper.createHttpClient();
 
+        final var createGroupResponse = RibacTestHelper.post(
+            client,
+            testInfo,
+            "/groups",
+            new JsonObject()
+        );
+
+        RibacTestHelper.assertStatusCodeAndBodyEquals(
+            createGroupResponse,
+            SC_BAD_REQUEST,
+            RibacTestHelper.createErrorResponseBody("$.name: is missing but it is required")
+        );
     }
+
+
+
     @Test
     @DisplayName("createGroup_canNotCreateUserWhenProvidingEmptyBody")
-    @Disabled
     void createGroup_canNotCreateUserWhenProvidingEmptyBody(TestInfo testInfo) {
+        final var client = RibacTestHelper.createHttpClient();
 
+        final var createGroupResponse = RibacTestHelper.postWithoutBody(
+            client,
+            testInfo,
+            "/groups"
+        );
+
+        RibacTestHelper.assertStatusCodeAndBodyEquals(
+            createGroupResponse,
+            SC_BAD_REQUEST,
+            RibacTestHelper.createErrorResponseBody("Bad Request")
+        );
     }
 }

@@ -1,4 +1,4 @@
-package solutions.taulien.ribac.server.user;
+package solutions.taulien.ribac.server.group;
 
 import com.google.inject.Inject;
 import io.vertx.core.Handler;
@@ -8,22 +8,22 @@ import org.apache.commons.httpclient.HttpStatus;
 import solutions.taulien.ribac.server.Responder;
 import solutions.taulien.ribac.server.error.DuplicateCreateError;
 import solutions.taulien.ribac.server.error.RibacError;
-import solutions.taulien.ribac.server.gen.openapi.ApiUser;
-import solutions.taulien.ribac.server.gen.openapi.ApiUserCreateResponse;
+import solutions.taulien.ribac.server.gen.openapi.ApiGroup;
+import solutions.taulien.ribac.server.gen.openapi.ApiGroupCreateResponse;
 import solutions.taulien.ribac.server.log.ReadOrCreateRequestIdHandler;
 import solutions.taulien.ribac.server.util.Tuple;
 
-public class UserCreateHandler implements Handler<RoutingContext> {
+public class GroupCreateHandler implements Handler<RoutingContext> {
 
-    private final UserRepository userRepository;
+    private final GroupRepository groupRepository;
 
     private final Responder responder;
 
 
 
     @Inject
-    public UserCreateHandler(UserRepository userRepository, Responder responder) {
-        this.userRepository = userRepository;
+    public GroupCreateHandler(GroupRepository groupRepository, Responder responder) {
+        this.groupRepository = groupRepository;
         this.responder = responder;
     }
 
@@ -32,22 +32,21 @@ public class UserCreateHandler implements Handler<RoutingContext> {
     @Override
     public void handle(RoutingContext ctx) {
         final RequestParameters params = ctx.get("parsedParameters");
-        final var userToCreate = params.body().getJsonObject().mapTo(ApiUser.class);
+        final var groupToCreate = params.body().getJsonObject().mapTo(ApiGroup.class);
 
         final String requestId = ctx.get(ReadOrCreateRequestIdHandler.REQUEST_ID_KEY);
-        this.userRepository
-            .createUser(userToCreate.getId(), requestId)
+        this.groupRepository
+            .createGroup(groupToCreate.getName(), requestId)
             .subscribe(
-                createdUser -> this.responder
-                                   .created(
-                                       ctx,
-                                       new ApiUserCreateResponse().createdUser(new ApiUser().id(createdUser.getExternalId()))
-                                   ),
+                createdGroup -> this.responder
+                                    .created(
+                                        ctx,
+                                        new ApiGroupCreateResponse().createdGroup(new ApiGroup().name(createdGroup.getName()))
+                                    ),
                 RibacError.mapErrors(
                     ctx,
                     Tuple.of(DuplicateCreateError.class, HttpStatus.SC_CONFLICT)
                 )
             );
     }
-
 }

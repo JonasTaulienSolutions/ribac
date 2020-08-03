@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 * `GET /users/{userId}`: Fetches a user
 * `DELETE /users/{userId}`: Deletes a user
 * `GET /users`: Fetches all users
+* `POST /groups`: Creates a new group
 
 ### Changed
 (changes in existing functionality)
