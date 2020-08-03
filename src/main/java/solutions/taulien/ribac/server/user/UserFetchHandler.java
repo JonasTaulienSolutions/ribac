@@ -34,12 +34,12 @@ public class UserFetchHandler implements Handler<RoutingContext> {
         this.userRepository
             .getUser(externalUserId, requestId)
             .subscribe(
-                requestedUserRecord -> this.responder
+                requestedUser -> this.responder
                                            .ok(
                                                ctx,
                                                new UserFetchResponse()
                                                    .requestedUser(new User()
-                                                                      .id(requestedUserRecord.getExternalId())
+                                                                      .id(requestedUser.getExternalId())
                                                    )
                                            ),
                 failure -> ctx.fail(

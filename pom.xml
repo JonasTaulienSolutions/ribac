@@ -130,6 +130,47 @@
                         <generate>
                             <javaTimeTypes>true</javaTimeTypes>
                         </generate>
+
+                        <strategy>
+                            <matchers>
+                                <tables>
+                                    <table>
+                                        <!-- Match all tables starting with 'my_prefix' -->
+                                        <expression>^ribac_(.*)$</expression>
+
+                                        <tableClass>
+                                            <!-- Name all table classes 'Db$1Table' (e.g DbUserTable) -->
+                                            <expression>db_$1_table</expression>
+                                            <transform>PASCAL</transform>
+                                        </tableClass>
+
+                                        <tableIdentifier>
+                                            <!-- Name all table identifiers '$1' (uppercase) (e.g. USER) -->
+                                            <expression>$1</expression>
+                                            <transform>UPPER</transform>
+                                        </tableIdentifier>
+
+                                        <recordClass>
+                                            <!-- Name all record classes 'Db$1' (e.g. DbUser) -->
+                                            <expression>db_$1</expression>
+                                            <transform>PASCAL</transform>
+                                        </recordClass>
+                                    </table>
+                                </tables>
+
+                                <enums>
+                                    <enum>
+                                        <!-- Match all enums starting with 'my_prefix' -->
+                                        <expression>^ribac_(.*)$</expression>
+                                        <enumClass>
+                                            <!-- Name all enums 'Db$1' (e.g. DbUserType) -->
+                                            <expression>db_$1</expression>
+                                            <transform>PASCAL</transform>
+                                        </enumClass>
+                                    </enum>
+                                </enums>
+                            </matchers>
+                        </strategy>
                     </generator>
                 </configuration>
             </plugin>

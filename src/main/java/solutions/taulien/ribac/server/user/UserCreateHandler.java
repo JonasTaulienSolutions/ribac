@@ -36,12 +36,12 @@ public class UserCreateHandler implements Handler<RoutingContext> {
         this.userRepository
             .createUser(userToCreate.getId(), requestId)
             .subscribe(
-                createdUserRecord -> this.responder
+                createdUser -> this.responder
                                          .created(
                                              ctx,
                                              new UserCreateResponse()
                                                  .createdUser(new User()
-                                                                  .id(createdUserRecord.getExternalId())
+                                                                  .id(createdUser.getExternalId())
                                                  )
                                          ),
                 failure -> ctx.fail(

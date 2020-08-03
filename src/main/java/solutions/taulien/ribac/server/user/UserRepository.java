@@ -7,13 +7,13 @@ import org.jooq.exception.DataAccessException;
 import solutions.taulien.ribac.server.DbHelper;
 import solutions.taulien.ribac.server.error.DuplicateCreateError;
 import solutions.taulien.ribac.server.error.ResourceNotFoundError;
-import solutions.taulien.ribac.server.gen.jooq.tables.records.RibacUserRecord;
+import solutions.taulien.ribac.server.gen.jooq.tables.records.DbUser;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-import static solutions.taulien.ribac.server.gen.jooq.Tables.RIBAC_USER;
+import static solutions.taulien.ribac.server.gen.jooq.Tables.USER;
 
 public class UserRepository {
     private final DbHelper dbHelper;
@@ -29,12 +29,12 @@ public class UserRepository {
 
 
 
-    public Single<RibacUserRecord> createUser(String externalId, String requestId) {
+    public Single<DbUser> createUser(String externalId, String requestId) {
         return this.dbHelper
                    .execute(
                        requestId,
-                       db -> db.insertInto(RIBAC_USER)
-                               .set(RIBAC_USER.EXTERNAL_ID, externalId)
+                       db -> db.insertInto(USER)
+                               .set(USER.EXTERNAL_ID, externalId)
                                .returning()
                                .fetchOne()
                    )
@@ -49,13 +49,13 @@ public class UserRepository {
 
 
 
-    public Single<RibacUserRecord> getUser(String externalId, String requestId) {
+    public Single<DbUser> getUser(String externalId, String requestId) {
         return this.dbHelper
                    .execute(
                        requestId,
                        db -> Optional.ofNullable(
-                           db.selectFrom(RIBAC_USER)
-                             .where(RIBAC_USER.EXTERNAL_ID.eq(externalId))
+                           db.selectFrom(USER)
+                             .where(USER.EXTERNAL_ID.eq(externalId))
                              .fetchOne()
                        )
                    )
@@ -66,14 +66,14 @@ public class UserRepository {
 
 
 
-    public Single<List<RibacUserRecord>> getAllUsers(String requestId) {
+    public Single<List<DbUser>> getAllUsers(String requestId) {
         return this.dbHelper
                    .execute(
                        requestId,
                        db -> db.select()
-                               .from(RIBAC_USER)
+                               .from(USER)
                                .fetch()
-                               .into(RibacUserRecord.class)
+                               .into(DbUser.class)
                    );
     }
 
@@ -83,8 +83,8 @@ public class UserRepository {
         return this.dbHelper
                    .execute(
                        requestId,
-                       db -> db.deleteFrom(RIBAC_USER)
-                               .where(RIBAC_USER.EXTERNAL_ID.eq(externalId))
+                       db -> db.deleteFrom(USER)
+                               .where(USER.EXTERNAL_ID.eq(externalId))
                                .execute()
                    )
                    .map(numberOfDeletedRecords -> {

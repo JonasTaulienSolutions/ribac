@@ -1,5 +1,4 @@
 # To Do
-* Rename RibacUser etc to DbUser
 * Rename User etc to ApiUser
 * Introduce RibacError.mapErrors
 * Introduce Flyway
