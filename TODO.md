@@ -1,7 +1,4 @@
 # To Do
-* Introduce RibacError.mapErrors
-* Introduce Flyway
-
 * Add `POST /groups`
 * Add `GET /groups`
 * Add `DELETE /groups/{groupName}`
@@ -65,5 +62,8 @@
     * deleteUser_alsoDeletesEveryGroupMembership
     * deleteUser_alsoDeletesEveryUserRight
     * deleteUser_alsoDeletesEveryUserRights
+* Test sending non-json as body
+* Introduce 'createdAt' fields
+* Introduce Flyway
 * Implement java client
 * Implement transactions

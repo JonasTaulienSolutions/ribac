@@ -2,6 +2,7 @@ package solutions.taulien.ribac.server;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import io.netty.handler.codec.http.HttpHeaderValues;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.reactivex.ext.web.RoutingContext;
 import solutions.taulien.ribac.server.log.Logger;
@@ -57,7 +58,8 @@ public class Responder {
 
         ctx.response()
            .setStatusCode(statusCode)
-           .putHeader(HttpHeaders.CACHE_CONTROL, "no-store")
+           .putHeader(HttpHeaders.CONTENT_TYPE, HttpHeaderValues.APPLICATION_JSON.toString())
+           .putHeader(HttpHeaders.CACHE_CONTROL, HttpHeaderValues.NO_STORE.toString())
            .end(bodyAsString);
     }
 
