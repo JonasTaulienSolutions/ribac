@@ -89,8 +89,6 @@ RibacGroup administrators = ribac.createGroup("Administrators");
 You can add Users to zero or as many Groups as you want:
 ```java
 ribac.addUser("user123").toGroup("Administrators");
-// Or
-administrators.addUser(user123);
 ```
 
 ### 6. Add Rights to ribac
@@ -104,15 +102,11 @@ RibacRight createAdministrators = ribac.createRight("Create Administrators");
 You can assign a Right to a single User
 ```java
 ribac.giveUser("user123").right("Create Administrators");
-// Or
-user123.giveRight(createAdministrators);
 ```
 
 Or you can assign a Right to a Group of Users
 ```java
 ribac.giveGroup("Administrators").right("Create Administrators");
-// Or
-administrators.giveRight(createAdministrators);
 ```
 
 ### 8. Create RightSets
@@ -127,22 +121,16 @@ That's what RightSets are for:
 0. Add Rights to RightSet (you have to create them before doing this)
     ```java
     ribac.addRight("View Product With Id 456").toRightSet("View Published Products");
-    // Or
-    viewPublishedProducts.addRight("View Product With Id 457")
     ```
 
 0. Assign RightSets
     * To Users
         ```java
-        ribac.giveUser("user123").rights("View Published Products");
-        // Or
-        user123.giveRights(viewPublishedProducts);
+        ribac.giveUser("user123").rightSet("View Published Products");
         ```
     * Or to Groups
         ```java
-        ribac.giveGroup("Administrators").rights("View Published Products");
-        // Or
-        administrators.giveRights(viewPublishedProducts);
+        ribac.giveGroup("Administrators").rightSet("View Published Products");
         ```
 
 

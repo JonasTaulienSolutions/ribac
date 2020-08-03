@@ -5,11 +5,11 @@
 * Introduce Flyway
 
 * Add `POST /groups`
+* Add `GET /groups`
 * Add `DELETE /groups/{groupName}`
 * Add `POST /groups/{groupName}/members`
 * Add `GET /groups/{groupName}/members`
 * Add `DELETE /groups/{groupName}/members/{userId}`
-* Add `GET /groups`
 
 * Add `POST /rights`
 * Add `DELETE /rights/{rightName}`
@@ -39,7 +39,7 @@
 * Add `DELETE /groups/{groupName}/right-sets/{rightSetName}`
 
 * Add `GET /users/{userId}/has-right`
-* Add `GET /users/{userId}/has-rights`
+* Add `GET /users/{userId}/has-multiple-rights`
     * Request
         ```json
         [
@@ -52,6 +52,7 @@
         ```json
         {
             "has-all": false,
+            "has-any": true,
             "results": {
                 "Right 1": false,
                 "Right 2": true,
@@ -60,9 +61,11 @@
         }
         ```
 * Add `GET /users/{userId}/all-rights`
+* Add `GET /group/{groupId}/all-rights`
 
-* Finish Tests in `UserFunctionalTest`
+* Finish tests in `UserFunctionalTest`
     * deleteUser_alsoDeletesEveryGroupMembership
     * deleteUser_alsoDeletesEveryUserRight
     * deleteUser_alsoDeletesEveryUserRights
-* Implement Java Client
+* Implement java client
+* Implement transactions
