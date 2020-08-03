@@ -4,11 +4,11 @@ import com.google.inject.Inject;
 import io.vertx.core.Handler;
 import io.vertx.reactivex.ext.web.RoutingContext;
 import org.apache.commons.httpclient.HttpStatus;
-import solutions.taulien.ribac.server.log.ReadOrCreateRequestIdHandler;
 import solutions.taulien.ribac.server.Responder;
 import solutions.taulien.ribac.server.error.ResourceNotFoundError;
-import solutions.taulien.ribac.server.gen.openapi.User;
-import solutions.taulien.ribac.server.gen.openapi.UserFetchResponse;
+import solutions.taulien.ribac.server.gen.openapi.ApiUser;
+import solutions.taulien.ribac.server.gen.openapi.ApiUserFetchResponse;
+import solutions.taulien.ribac.server.log.ReadOrCreateRequestIdHandler;
 
 public class UserFetchHandler implements Handler<RoutingContext> {
 
@@ -37,8 +37,8 @@ public class UserFetchHandler implements Handler<RoutingContext> {
                 requestedUser -> this.responder
                                            .ok(
                                                ctx,
-                                               new UserFetchResponse()
-                                                   .requestedUser(new User()
+                                               new ApiUserFetchResponse()
+                                                   .requestedUser(new ApiUser()
                                                                       .id(requestedUser.getExternalId())
                                                    )
                                            ),

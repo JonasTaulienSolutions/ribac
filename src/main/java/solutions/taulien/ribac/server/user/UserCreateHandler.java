@@ -5,11 +5,11 @@ import io.vertx.core.Handler;
 import io.vertx.ext.web.api.RequestParameters;
 import io.vertx.reactivex.ext.web.RoutingContext;
 import org.apache.commons.httpclient.HttpStatus;
-import solutions.taulien.ribac.server.log.ReadOrCreateRequestIdHandler;
 import solutions.taulien.ribac.server.Responder;
 import solutions.taulien.ribac.server.error.DuplicateCreateError;
-import solutions.taulien.ribac.server.gen.openapi.User;
-import solutions.taulien.ribac.server.gen.openapi.UserCreateResponse;
+import solutions.taulien.ribac.server.gen.openapi.ApiUser;
+import solutions.taulien.ribac.server.gen.openapi.ApiUserCreateResponse;
+import solutions.taulien.ribac.server.log.ReadOrCreateRequestIdHandler;
 
 public class UserCreateHandler implements Handler<RoutingContext> {
 
@@ -30,7 +30,7 @@ public class UserCreateHandler implements Handler<RoutingContext> {
     @Override
     public void handle(RoutingContext ctx) {
         final RequestParameters params = ctx.get("parsedParameters");
-        final var userToCreate = params.body().getJsonObject().mapTo(User.class);
+        final var userToCreate = params.body().getJsonObject().mapTo(ApiUser.class);
 
         final String requestId = ctx.get(ReadOrCreateRequestIdHandler.REQUEST_ID_KEY);
         this.userRepository
@@ -39,8 +39,8 @@ public class UserCreateHandler implements Handler<RoutingContext> {
                 createdUser -> this.responder
                                          .created(
                                              ctx,
-                                             new UserCreateResponse()
-                                                 .createdUser(new User()
+                                             new ApiUserCreateResponse()
+                                                 .createdUser(new ApiUser()
                                                                   .id(createdUser.getExternalId())
                                                  )
                                          ),

@@ -195,8 +195,9 @@
                             <generateModelDocumentation>false</generateModelDocumentation>
                             <generateModelTests>false</generateModelTests>
                             <generateSupportingFiles>false</generateSupportingFiles>
+                            <modelNamePrefix>Api</modelNamePrefix>
                             <configOptions>
-                                <sourceFolder>openapi</sourceFolder>
+                                <sourceFolder>.</sourceFolder>
                                 <dateLibrary>java8</dateLibrary>
                                 <java8>true</java8>
                                 <library>vertx</library>

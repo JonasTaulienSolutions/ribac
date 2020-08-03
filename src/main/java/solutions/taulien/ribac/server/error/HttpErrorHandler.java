@@ -3,9 +3,9 @@ package solutions.taulien.ribac.server.error;
 import com.google.inject.Inject;
 import io.vertx.core.Handler;
 import io.vertx.reactivex.ext.web.RoutingContext;
-import solutions.taulien.ribac.server.gen.openapi.ErrorResponse;
-import solutions.taulien.ribac.server.gen.openapi.ErrorResponseError;
 import solutions.taulien.ribac.server.Responder;
+import solutions.taulien.ribac.server.gen.openapi.ApiErrorResponse;
+import solutions.taulien.ribac.server.gen.openapi.ApiErrorResponseError;
 
 public class HttpErrorHandler implements Handler<RoutingContext> {
 
@@ -28,8 +28,8 @@ public class HttpErrorHandler implements Handler<RoutingContext> {
                 .respond(
                     ctx,
                     error.getHttpStatusCode(),
-                    new ErrorResponse()
-                        .error(new ErrorResponseError()
+                    new ApiErrorResponse()
+                        .error(new ApiErrorResponseError()
                                    .message(error.getMessage())
                         )
                 );
