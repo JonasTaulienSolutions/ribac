@@ -33,6 +33,22 @@ public class Logger {
 
 
 
+    private static Object[] prependTo(Object[] tail, Object... head) {
+        return Stream.of(head, tail)
+                     .flatMap(Stream::of)
+                     .toArray(Object[]::new);
+    }
+
+
+
+    private static String prepareBodyString(String body) {
+        return body.isEmpty()
+                   ? "<empty>"
+                   : body;
+    }
+
+
+
     public String createRequestId() {
         return this.requestIdPrefix + "-" + UUID.randomUUID().toString();
     }
@@ -111,21 +127,5 @@ public class Logger {
         Completable.fromRunnable(logAction)
                    .subscribeOn(this.scheduler)
                    .subscribe();
-    }
-
-
-
-    private static Object[] prependTo(Object[] tail, Object... head) {
-        return Stream.of(head, tail)
-                     .flatMap(Stream::of)
-                     .toArray(Object[]::new);
-    }
-
-
-
-    private static String prepareBodyString(String body) {
-        return body.isEmpty()
-                   ? "<empty>"
-                   : body;
     }
 }

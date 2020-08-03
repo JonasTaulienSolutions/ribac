@@ -7,9 +7,11 @@ import io.vertx.reactivex.ext.web.RoutingContext;
 import org.apache.commons.httpclient.HttpStatus;
 import solutions.taulien.ribac.server.Responder;
 import solutions.taulien.ribac.server.error.DuplicateCreateError;
+import solutions.taulien.ribac.server.error.RibacError;
 import solutions.taulien.ribac.server.gen.openapi.ApiUser;
 import solutions.taulien.ribac.server.gen.openapi.ApiUserCreateResponse;
 import solutions.taulien.ribac.server.log.ReadOrCreateRequestIdHandler;
+import solutions.taulien.ribac.server.util.Tuple;
 
 public class UserCreateHandler implements Handler<RoutingContext> {
 
@@ -37,17 +39,16 @@ public class UserCreateHandler implements Handler<RoutingContext> {
             .createUser(userToCreate.getId(), requestId)
             .subscribe(
                 createdUser -> this.responder
-                                         .created(
-                                             ctx,
-                                             new ApiUserCreateResponse()
-                                                 .createdUser(new ApiUser()
-                                                                  .id(createdUser.getExternalId())
-                                                 )
-                                         ),
-                failure -> ctx.fail(
-                    (failure instanceof DuplicateCreateError)
-                        ? ((DuplicateCreateError) failure).toHttpError(HttpStatus.SC_CONFLICT)
-                        : failure
+                                   .created(
+                                       ctx,
+                                       new ApiUserCreateResponse()
+                                           .createdUser(new ApiUser()
+                                                            .id(createdUser.getExternalId())
+                                           )
+                                   ),
+                RibacError.mapErrors(
+                    ctx,
+                    Tuple.of(DuplicateCreateError.class, HttpStatus.SC_CONFLICT)
                 )
             );
     }
