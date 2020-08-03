@@ -148,6 +148,26 @@ public class RibacTestHelper {
 
 
 
+    public static HttpResponse<Buffer> get(WebClient client, TestInfo testInfo, String path) {
+        return client.get(path)
+                     .putHeader(HEADER_ACCEPT, MIME_APPLICATION_JSON)
+                     .putHeader("Request-Id", testInfo.getDisplayName())
+                     .rxSend()
+                     .blockingGet();
+    }
+
+
+
+    public static HttpResponse<Buffer> delete(WebClient client, TestInfo testInfo, String path) {
+        return client.delete(path)
+                     .putHeader(HEADER_ACCEPT, MIME_APPLICATION_JSON)
+                     .putHeader("Request-Id", testInfo.getDisplayName())
+                     .rxSend()
+                     .blockingGet();
+    }
+
+
+
     public static JsonObject createErrorResponseBody(String expectedMessage) {
         return new JsonObject().put(
             "error", new JsonObject().put(
@@ -165,6 +185,7 @@ public class RibacTestHelper {
             .forEach(line -> System.out.println("| STDOUT: " + line));
         new BufferedReader(new InputStreamReader(process.getErrorStream()))
             .lines()
+            .filter(line -> !line.endsWith("[Warning] Using a password on the command line interface can be insecure."))
             .forEach(line -> System.err.println("| STDERR: " + line));
         process.waitFor();
     }

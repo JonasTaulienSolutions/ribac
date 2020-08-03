@@ -10,8 +10,6 @@ import java.util.Arrays;
 
 import static org.apache.commons.httpclient.HttpStatus.*;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static solutions.taulien.ribac.RibacTestHelper.HEADER_ACCEPT;
-import static solutions.taulien.ribac.RibacTestHelper.MIME_APPLICATION_JSON;
 
 class UserFunctionalTest {
 
@@ -228,11 +226,11 @@ class UserFunctionalTest {
             new JsonObject().put("id", id)
         );
 
-        final var fetchUserResponse = client.get("/users/" + RibacTestHelper.urlEncode(id))
-                                            .putHeader(HEADER_ACCEPT, MIME_APPLICATION_JSON)
-                                            .putHeader("Request-Id", testInfo.getDisplayName())
-                                            .rxSend()
-                                            .blockingGet();
+        final var fetchUserResponse = RibacTestHelper.get(
+            client,
+            testInfo,
+            "/users/" + RibacTestHelper.urlEncode(id)
+        );
 
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             fetchUserResponse,
@@ -253,11 +251,11 @@ class UserFunctionalTest {
         final var client = RibacTestHelper.createHttpClient();
 
         var id = "userB";
-        final var fetchUserResponse = client.get("/users/" + RibacTestHelper.urlEncode(id))
-                                            .putHeader(HEADER_ACCEPT, MIME_APPLICATION_JSON)
-                                            .putHeader("Request-Id", testInfo.getDisplayName())
-                                            .rxSend()
-                                            .blockingGet();
+        final var fetchUserResponse = RibacTestHelper.get(
+            client,
+            testInfo,
+            "/users/" + RibacTestHelper.urlEncode(id)
+        );
 
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             fetchUserResponse,
@@ -273,11 +271,11 @@ class UserFunctionalTest {
     void fetchUser_canNotReturnUserWithEmptyExternalId(TestInfo testInfo) {
         final var client = RibacTestHelper.createHttpClient();
 
-        final var fetchUserResponse = client.get("/users/")
-                                            .putHeader(HEADER_ACCEPT, MIME_APPLICATION_JSON)
-                                            .putHeader("Request-Id", testInfo.getDisplayName())
-                                            .rxSend()
-                                            .blockingGet();
+        final var fetchUserResponse = RibacTestHelper.get(
+            client,
+            testInfo,
+            "/users/"
+        );
 
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             fetchUserResponse,
@@ -298,11 +296,11 @@ class UserFunctionalTest {
                            "user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345." +
                            "user12345.user12345.user12345.user12345.user12345.12345" +
                            "6";
-        final var fetchUserResponse = client.get("/users/" + RibacTestHelper.urlEncode(id))
-                                            .putHeader(HEADER_ACCEPT, MIME_APPLICATION_JSON)
-                                            .putHeader("Request-Id", testInfo.getDisplayName())
-                                            .rxSend()
-                                            .blockingGet();
+        final var fetchUserResponse = RibacTestHelper.get(
+            client,
+            testInfo,
+            "/users/" + RibacTestHelper.urlEncode(id)
+        );
 
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             fetchUserResponse,
@@ -327,20 +325,20 @@ class UserFunctionalTest {
             new JsonObject().put("id", id)
         );
 
-        final var deleteUserResponse = client.delete("/users/" + RibacTestHelper.urlEncode(id))
-                                             .putHeader(HEADER_ACCEPT, MIME_APPLICATION_JSON)
-                                             .putHeader("Request-Id", testInfo.getDisplayName())
-                                             .rxSend()
-                                             .blockingGet();
+        final var deleteUserResponse = RibacTestHelper.delete(
+            client,
+            testInfo,
+            "/users/" + RibacTestHelper.urlEncode(id)
+        );
 
         RibacTestHelper.assetStatusCodeEquals(deleteUserResponse, SC_NO_CONTENT);
         assertNull(deleteUserResponse.bodyAsString());
 
-        final var getUserResponse = client.get("/users/" + RibacTestHelper.urlEncode(id))
-                                          .putHeader(HEADER_ACCEPT, MIME_APPLICATION_JSON)
-                                          .putHeader("Request-Id", testInfo.getDisplayName())
-                                          .rxSend()
-                                          .blockingGet();
+        final var getUserResponse = RibacTestHelper.get(
+            client,
+            testInfo,
+            "/users/" + RibacTestHelper.urlEncode(id)
+        );
 
         RibacTestHelper.assetStatusCodeEquals(getUserResponse, SC_NOT_FOUND);
     }
@@ -354,11 +352,11 @@ class UserFunctionalTest {
 
         final var id = "user123";
 
-        final var deleteUserResponse = client.delete("/users/" + RibacTestHelper.urlEncode(id))
-                                             .putHeader(HEADER_ACCEPT, MIME_APPLICATION_JSON)
-                                             .putHeader("Request-Id", testInfo.getDisplayName())
-                                             .rxSend()
-                                             .blockingGet();
+        final var deleteUserResponse = RibacTestHelper.delete(
+            client,
+            testInfo,
+            "/users/" + RibacTestHelper.urlEncode(id)
+        );
 
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             deleteUserResponse,
@@ -374,11 +372,11 @@ class UserFunctionalTest {
     void deleteUser_canNotDeleteWithEmptyExternalId(TestInfo testInfo) {
         final var client = RibacTestHelper.createHttpClient();
 
-        final var deleteUserResponse = client.delete("/users/")
-                                             .putHeader(HEADER_ACCEPT, MIME_APPLICATION_JSON)
-                                             .putHeader("Request-Id", testInfo.getDisplayName())
-                                             .rxSend()
-                                             .blockingGet();
+        final var deleteUserResponse = RibacTestHelper.delete(
+            client,
+            testInfo,
+            "/users/"
+        );
 
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             deleteUserResponse,
@@ -400,11 +398,11 @@ class UserFunctionalTest {
                            "user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345.user12345." +
                            "user12345.user12345.user12345.user12345.user12345.12345" +
                            "6";
-        final var deleteUserResponse = client.delete("/users/" + RibacTestHelper.urlEncode(id))
-                                             .putHeader(HEADER_ACCEPT, MIME_APPLICATION_JSON)
-                                             .putHeader("Request-Id", testInfo.getDisplayName())
-                                             .rxSend()
-                                             .blockingGet();
+        final var deleteUserResponse = RibacTestHelper.delete(
+            client,
+            testInfo,
+            "/users/" + RibacTestHelper.urlEncode(id)
+        );
 
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             deleteUserResponse,
@@ -447,11 +445,11 @@ class UserFunctionalTest {
     void fetchUsers_returnsEmptyArrayWhenNoUsersPresent(TestInfo testInfo) {
         final var client = RibacTestHelper.createHttpClient();
 
-        final var fetchUsersResponse = client.get("/users")
-                                             .putHeader(HEADER_ACCEPT, MIME_APPLICATION_JSON)
-                                             .putHeader("Request-Id", testInfo.getDisplayName())
-                                             .rxSend()
-                                             .blockingGet();
+        final var fetchUsersResponse = RibacTestHelper.get(
+            client,
+            testInfo,
+            "/users"
+        );
 
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             fetchUsersResponse,
@@ -479,11 +477,11 @@ class UserFunctionalTest {
             )
         );
 
-        final var fetchUsersResponse = client.get("/users")
-                                             .putHeader(HEADER_ACCEPT, MIME_APPLICATION_JSON)
-                                             .putHeader("Request-Id", testInfo.getDisplayName())
-                                             .rxSend()
-                                             .blockingGet();
+        final var fetchUsersResponse = RibacTestHelper.get(
+            client,
+            testInfo,
+            "/users"
+        );
 
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             fetchUsersResponse,
