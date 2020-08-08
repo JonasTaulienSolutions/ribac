@@ -7,6 +7,8 @@ import solutions.taulien.ribac.server.error.DuplicateCreateError;
 import solutions.taulien.ribac.server.gen.jooq.tables.records.DbGroup;
 import solutions.taulien.ribac.server.util.RepositoryHelper;
 
+import java.util.List;
+
 import static solutions.taulien.ribac.server.gen.jooq.Tables.GROUP;
 
 public class GroupRepository {
@@ -37,6 +39,19 @@ public class GroupRepository {
                                ? new DuplicateCreateError("A group already exists with the name '" + name + "'")
                                : failure
                        )
+                   );
+    }
+
+
+
+    public Single<List<DbGroup>> getAllGroups(String requestId) {
+        return this.dbHelper
+                   .execute(
+                       requestId,
+                       db -> db.select()
+                               .from(GROUP)
+                               .fetch()
+                               .into(DbGroup.class)
                    );
     }
 }

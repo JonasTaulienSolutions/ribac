@@ -1,6 +1,5 @@
 # To Do
 ## Groups
-* Add `GET /groups`
 * Add `DELETE /groups/{groupName}`
 * Add `GET /groups/{groupName}`
 
@@ -8,6 +7,7 @@
 * Add `POST /groups/{groupName}/members`
 * Add `GET /groups/{groupName}/members`
 * Add `DELETE /groups/{groupName}/members/{userId}`
+* Finish test `UserFunctionalTest::deleteUser_alsoDeletesEveryGroupMembership`
 
 ## Rights
 * Add `POST /rights`
@@ -20,6 +20,7 @@
 * Add `GET /users/{userId}/rights` (Direct rights)
 * Add `DELETE /users/{userId}/rights/{rightName}`
 * Add `GET /users/{userId}/all-rights` (Direct and indirect rights)
+* Finish test `UserFunctionalTest::deleteUser_alsoDeletesEveryUserRight`
 
 ## Group Rights
 * Add `POST /groups/{groupName}/rights`
@@ -42,8 +43,9 @@
 * Add `POST /users/{userId}/right-sets`
 * Add `GET /users/{userId}/right-sets`
 * Add `DELETE /users/{userId}/right-sets/{rightSetName}`
+* Finish test `UserFunctionalTest::deleteUser_alsoDeletesEveryUserRightSet`
 
-# Group Right Sets
+## Group Right Sets
 * Add `POST /groups/{groupName}/right-sets`
 * Add `GET /groups/{groupName}/right-sets`
 * Add `DELETE /groups/{groupName}/right-sets/{rightSetName}`
@@ -72,12 +74,9 @@
         }
         ```
 
-* Finish tests in `UserFunctionalTest`
-    * deleteUser_alsoDeletesEveryGroupMembership
-    * deleteUser_alsoDeletesEveryUserRight
-    * deleteUser_alsoDeletesEveryUserRights
 * Test sending non-json as body
 * Introduce 'createdAt' fields
 * Introduce Flyway
 * Implement java client
 * Implement transactions
+* Rename things

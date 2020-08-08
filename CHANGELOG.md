@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 * `DELETE /users/{userId}`: Deletes a user
 * `GET /users`: Fetches all users
 * `POST /groups`: Creates a new group
+* `GET /groups`: Fetches all groups
 
 ### Changed
 (changes in existing functionality)

@@ -160,6 +160,29 @@ paths:
 
 
   /groups:
+    get:
+      operationId: groupFetchAll
+      summary: Returns all Groups
+      parameters:
+        - name: Request-Id
+          in: header
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully returned all Groups
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupFetchAllResponse'
+              example:
+                allgroups:
+                  - name: group123
+                  - name: abc456
+
+
+
     post:
       operationId: groupCreate
       summary: Creates a new group
@@ -244,6 +267,16 @@ components:
           type: string
           minLength: 1
           maxLength: 255
+
+    GroupFetchAllResponse:
+      type: object
+      properties:
+        allGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
+      required:
+        - allGroups
 
     Group:
       type: object

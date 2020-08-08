@@ -1,9 +1,12 @@
 package solutions.taulien.ribac;
 
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import org.junit.jupiter.api.*;
+import solutions.taulien.ribac.server.util.FunctionalHelper;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import static org.apache.commons.httpclient.HttpStatus.*;
 
@@ -203,6 +206,60 @@ public class GroupFunctionalTest {
             createGroupResponse,
             SC_BAD_REQUEST,
             RibacTestHelper.createErrorResponseBody("Bad Request")
+        );
+    }
+
+    @Test
+    @DisplayName("fetchGroups_returnsEmptyArrayWhenNoGroupIsPresent")
+    void fetchGroups_returnsEmptyArrayWhenNoGroupIsPresent(TestInfo testInfo) {
+        final var client = RibacTestHelper.createHttpClient();
+
+        final var fetchGroupsResponse = RibacTestHelper.get(
+            client,
+            testInfo,
+            "/groups"
+        );
+
+        RibacTestHelper.assertStatusCodeAndBodyEquals(
+            fetchGroupsResponse,
+            SC_OK,
+            new JsonObject().put(
+                "allGroups", new JsonArray()
+            )
+        );
+    }
+
+
+
+    @Test
+    @DisplayName("fetchGroups_returnsAllCreatedGroups")
+    void fetchGroups_returnsAllCreatedGroups(TestInfo testInfo) {
+        final var client = RibacTestHelper.createHttpClient();
+
+        final var groupNames = Arrays.asList("group1", "group2", "group3", "group4");
+        groupNames.forEach(
+            groupName -> RibacTestHelper.post(
+                client,
+                testInfo,
+                "/groups",
+                new JsonObject().put("name", groupName)
+            )
+        );
+
+        final var fetchGroupsResponse = RibacTestHelper.get(
+            client,
+            testInfo,
+            "/groups"
+        );
+
+        RibacTestHelper.assertStatusCodeAndBodyEquals(
+            fetchGroupsResponse,
+            SC_OK,
+            new JsonObject().put(
+                "allGroups", new JsonArray(
+                    FunctionalHelper.mapAll(groupNames, userId -> new JsonObject().put("name", userId))
+                )
+            )
         );
     }
 }
