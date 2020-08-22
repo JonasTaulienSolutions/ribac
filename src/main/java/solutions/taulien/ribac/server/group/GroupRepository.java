@@ -35,7 +35,7 @@ public class GroupRepository {
                    )
                    .onErrorResumeNext(
                        failure -> Single.error(
-                           RepositoryHelper.mySqlRespondedWithDuplicateEntryError(failure)
+                           RepositoryHelper.didMySqlRespondWithDuplicateEntryError(failure)
                                ? new DuplicateCreateError("A Group already exists with the name '" + name + "'")
                                : failure
                        )

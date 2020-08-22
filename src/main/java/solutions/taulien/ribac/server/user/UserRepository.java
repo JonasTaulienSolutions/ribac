@@ -40,7 +40,7 @@ public class UserRepository {
                    )
                    .onErrorResumeNext(
                        failure -> Single.error(
-                           RepositoryHelper.mySqlRespondedWithDuplicateEntryError(failure)
+                           RepositoryHelper.didMySqlRespondWithDuplicateEntryError(failure)
                                ? new DuplicateCreateError("A User already exists with the id '" + externalId + "'")
                                : failure
                        )

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 export RIBAC_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/openjdk-14.0.2/Contents/Home
 
 db_exec(){
   command="${1}"

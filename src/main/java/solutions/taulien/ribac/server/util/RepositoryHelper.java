@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class RepositoryHelper {
 
-    public static boolean mySqlRespondedWithDuplicateEntryError(Throwable failure) {
+    public static boolean didMySqlRespondWithDuplicateEntryError(Throwable failure) {
         /*
          * @see https://dev.mysql.com/doc/refman/8.0/en/server-error-reference.html#error_er_dup_entry
          */
