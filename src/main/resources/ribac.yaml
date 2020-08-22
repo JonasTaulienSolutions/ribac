@@ -11,7 +11,7 @@ paths:
   /users/{userId}:
     get:
       operationId: userFetch
-      summary: Returns the requested user
+      summary: Returns the requested User
       parameters:
         - name: userId
           in: path
@@ -27,7 +27,7 @@ paths:
             type: string
       responses:
         200:
-          description: Successfully returned the requested user
+          description: Successfully returned the requested User
           content:
             application/json:
               schema:
@@ -36,7 +36,7 @@ paths:
                 requestedUser:
                   id: user123
         400:
-          description: The given `userId` is too short or to long
+          description: The request body could not be validated successfully
           content:
             application/json:
               schema:
@@ -45,20 +45,20 @@ paths:
                 error:
                   message: "Value doesn't respect min length 1"
         404:
-          description: There is no user with the given `userId`
+          description: There is no User with the given `userId`
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 error:
-                  message: "A user with the id 'user123' does not exist"
+                  message: "A User with the id 'user123' does not exist"
 
 
 
     delete:
       operationId: userDelete
-      summary: Deletes the requested user
+      summary: Deletes the requested User
       parameters:
         - name: userId
           in: path
@@ -74,16 +74,16 @@ paths:
             type: string
       responses:
         204:
-          description: Successfully deleted the requested user
+          description: Successfully deleted the requested User
         404:
-          description: There is no user with the given `userId`
+          description: There is no User with the given `userId`
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 error:
-                  message: "A user with the id 'user123' does not exist"
+                  message: "A User with the id 'user123' does not exist"
 
 
 
@@ -99,7 +99,7 @@ paths:
             type: string
       responses:
         200:
-          description: Successfully returned all users
+          description: Successfully returned all Users
           content:
             application/json:
               schema:
@@ -113,7 +113,7 @@ paths:
 
     post:
       operationId: userCreate
-      summary: Creates a new user
+      summary: Creates a new User
       parameters:
         - name: Request-Id
           in: header
@@ -130,7 +130,7 @@ paths:
               id: user123
       responses:
         201:
-          description: Successfully created the new user
+          description: Successfully created the new User
           content:
             application/json:
               schema:
@@ -148,15 +148,46 @@ paths:
                 error:
                   message: "$.id: must be at least 1 characters long"
         409:
-          description: A user already exists with the given id
+          description: A User already exists with the given id
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 error:
-                  message: "A user already exists with the id 'user123'"
+                  message: "A User already exists with the id 'user123'"
 
+
+
+  /groups/{groupName}:
+    delete:
+      operationId: groupDelete
+      summary: Deletes the requested Group
+      parameters:
+        - name: groupName
+          in: path
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 255
+        - name: Request-Id
+          in: header
+          required: false
+          schema:
+            type: string
+      responses:
+        204:
+          description: Successfully deleted the requested Group
+        404:
+          description: There is no Group with the given `groupName`
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error:
+                  message: "A Group with the name 'group123' does not exist"
 
 
   /groups:
@@ -185,7 +216,7 @@ paths:
 
     post:
       operationId: groupCreate
-      summary: Creates a new group
+      summary: Creates a new Group
       parameters:
         - name: Request-Id
           in: header
@@ -202,7 +233,7 @@ paths:
               name: group123
       responses:
         201:
-          description: Successfully created the new group
+          description: Successfully created the new Group
           content:
             application/json:
               schema:
@@ -220,14 +251,15 @@ paths:
                 error:
                   message: "$.name: must be at least 1 characters long"
         409:
-          description: A group already exists with the given name
+          description: A Group already exists with the given name
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 error:
-                  message: "A group already exists with the name 'group123'"
+                  message: "A Group already exists with the name 'group123'"
+
 
 
 components:

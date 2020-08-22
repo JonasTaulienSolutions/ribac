@@ -8,6 +8,7 @@
 * Add `GET /groups/{groupName}/members`
 * Add `DELETE /groups/{groupName}/members/{userId}`
 * Finish test `UserFunctionalTest::deleteUser_alsoDeletesEveryGroupMembership`
+* Finish test `GroupFunctionalTest::deleteGroup_alsoDeletesEveryGroupMembership`
 
 ## Rights
 * Add `POST /rights`
@@ -27,6 +28,7 @@
 * Add `GET /groups/{groupName}/rights` (Direct rights)
 * Add `DELETE /groups/{groupName}/rights/{rightName}`
 * Add `GET /group/{groupId}/all-rights` (Direct and indirect rights)
+* Finish test `GroupFunctionalTest::deleteGroup_alsoDeletesEveryGroupRight`
 
 ## Right Sets
 * Add `POST /right-sets`
@@ -49,6 +51,7 @@
 * Add `POST /groups/{groupName}/right-sets`
 * Add `GET /groups/{groupName}/right-sets`
 * Add `DELETE /groups/{groupName}/right-sets/{rightSetName}`
+* Finish test `GroupFunctionalTest::deleteGroup_alsoDeletesEveryGroupRightSet`
 
 ## Has User Right
 * Add `GET /users/{userId}/has-right/{rightName}` (Has direct or indirect right?)

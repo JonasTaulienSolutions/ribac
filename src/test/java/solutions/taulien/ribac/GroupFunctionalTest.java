@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import static org.apache.commons.httpclient.HttpStatus.*;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class GroupFunctionalTest {
 
@@ -95,7 +96,7 @@ public class GroupFunctionalTest {
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             createGroupSecondResponse,
             SC_CONFLICT,
-            RibacTestHelper.createErrorResponseBody("A group already exists with the name '" + name + "'")
+            RibacTestHelper.createErrorResponseBody("A Group already exists with the name '" + name + "'")
         );
     }
 
@@ -209,6 +210,8 @@ public class GroupFunctionalTest {
         );
     }
 
+
+
     @Test
     @DisplayName("fetchGroups_returnsEmptyArrayWhenNoGroupIsPresent")
     void fetchGroups_returnsEmptyArrayWhenNoGroupIsPresent(TestInfo testInfo) {
@@ -257,9 +260,139 @@ public class GroupFunctionalTest {
             SC_OK,
             new JsonObject().put(
                 "allGroups", new JsonArray(
-                    FunctionalHelper.mapAll(groupNames, userId -> new JsonObject().put("name", userId))
+                    FunctionalHelper.mapAll(groupNames, groupName -> new JsonObject().put("name", groupName))
                 )
             )
         );
     }
+
+
+
+    @Test
+    @DisplayName("deleteGroup_groupWasDeleted")
+    void deleteGroup_groupWasDeleted(TestInfo testInfo) {
+        final var client = RibacTestHelper.createHttpClient();
+
+        final var name = "group/ 123";
+
+        RibacTestHelper.post(
+            client,
+            testInfo,
+            "/groups",
+            new JsonObject().put("name", name)
+        );
+
+        final var deleteGroupResponse = RibacTestHelper.delete(
+            client,
+            testInfo,
+            "/groups/" + RibacTestHelper.urlEncode(name)
+        );
+
+        RibacTestHelper.assetStatusCodeEquals(deleteGroupResponse, SC_NO_CONTENT);
+        assertNull(deleteGroupResponse.bodyAsString());
+
+        final var getGroupResponse = RibacTestHelper.get(
+            client,
+            testInfo,
+            "/group/" + RibacTestHelper.urlEncode(name)
+        );
+
+        RibacTestHelper.assetStatusCodeEquals(getGroupResponse, SC_NOT_FOUND);
+    }
+
+
+
+    @Test
+    @DisplayName("deleteGroup_canNotDeleteUnknownGroup")
+    void deleteGroup_canNotDeleteUnknownGroup(TestInfo testInfo) {
+        final var client = RibacTestHelper.createHttpClient();
+
+        final var name = "group123";
+
+        final var deleteGroupResponse = RibacTestHelper.delete(
+            client,
+            testInfo,
+            "/groups/" + RibacTestHelper.urlEncode(name)
+        );
+
+        RibacTestHelper.assertStatusCodeAndBodyEquals(
+            deleteGroupResponse,
+            SC_NOT_FOUND,
+            RibacTestHelper.createErrorResponseBody("A Group with the name '" + name + "' does not exist")
+        );
+    }
+
+
+
+    @Test
+    @DisplayName("deleteGroup_canNotDeleteWithEmptyName")
+    void deleteGroup_canNotDeleteWithEmptyName(TestInfo testInfo) {
+        final var client = RibacTestHelper.createHttpClient();
+
+        final var deleteGroupResponse = RibacTestHelper.delete(
+            client,
+            testInfo,
+            "/groups/"
+        );
+
+        RibacTestHelper.assertStatusCodeAndBodyEquals(
+            deleteGroupResponse,
+            SC_BAD_REQUEST,
+            RibacTestHelper.createErrorResponseBody("Value doesn't respect min length 1")
+        );
+    }
+
+
+
+    @Test
+    @DisplayName("deleteGroup_canNotDeleteWithTooLongName")
+    void deleteGroup_canNotDeleteWithTooLongName(TestInfo testInfo) {
+        final var client = RibacTestHelper.createHttpClient();
+
+        final var name = ""
+                             + "group1234.group1234.group1234.group1234.group1234.group1234.group1234.group1234.group1234.group1234."
+                             + "group1234.group1234.group1234.group1234.group1234.group1234.group1234.group1234.group1234.group1234."
+                             + "group1234.group1234.group1234.group1234.group1234.12345"
+                             + "6";
+
+        final var deleteGroupResponse = RibacTestHelper.delete(
+            client,
+            testInfo,
+            "/groups/" + RibacTestHelper.urlEncode(name)
+        );
+
+        RibacTestHelper.assertStatusCodeAndBodyEquals(
+            deleteGroupResponse,
+            SC_BAD_REQUEST,
+            RibacTestHelper.createErrorResponseBody("Value doesn't respect max length 255")
+        );
+    }
+
+
+
+    @Test
+    @DisplayName("deleteGroup_alsoDeletesEveryGroupMembership")
+    @Disabled
+    void deleteGroup_alsoDeletesEveryGroupMembership(TestInfo testInfo) {
+        // TODO: Implement
+    }
+
+
+
+    @Test
+    @DisplayName("deleteGroup_alsoDeletesEveryGroupRight")
+    @Disabled
+    void deleteGroup_alsoDeletesEveryGroupRight(TestInfo testInfo) {
+        // TODO: Implement
+    }
+
+
+
+    @Test
+    @DisplayName("deleteGroup_alsoDeletesEveryGroupRightSet")
+    @Disabled
+    void deleteGroup_alsoDeletesEveryGroupRightSet(TestInfo testInfo) {
+        // TODO: Implement
+    }
+
 }

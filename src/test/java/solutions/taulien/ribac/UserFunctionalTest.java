@@ -96,7 +96,7 @@ class UserFunctionalTest {
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             createUserSecondResponse,
             SC_CONFLICT,
-            RibacTestHelper.createErrorResponseBody("A user already exists with the id '" + id + "'")
+            RibacTestHelper.createErrorResponseBody("A User already exists with the id '" + id + "'")
         );
     }
 
@@ -260,7 +260,7 @@ class UserFunctionalTest {
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             fetchUserResponse,
             SC_NOT_FOUND,
-            RibacTestHelper.createErrorResponseBody("A user with the id '" + id + "' does not exist")
+            RibacTestHelper.createErrorResponseBody("A User with the id '" + id + "' does not exist")
         );
     }
 
@@ -361,7 +361,7 @@ class UserFunctionalTest {
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             deleteUserResponse,
             SC_NOT_FOUND,
-            RibacTestHelper.createErrorResponseBody("A user with the id '" + id + "' does not exist")
+            RibacTestHelper.createErrorResponseBody("A User with the id '" + id + "' does not exist")
         );
     }
 
@@ -417,7 +417,7 @@ class UserFunctionalTest {
     @DisplayName("deleteUser_alsoDeletesEveryGroupMembership")
     @Disabled
     void deleteUser_alsoDeletesEveryGroupMembership(TestInfo testInfo) {
-
+        // TODO: Implement
     }
 
 
@@ -426,16 +426,16 @@ class UserFunctionalTest {
     @DisplayName("deleteUser_alsoDeletesEveryUserRight")
     @Disabled
     void deleteUser_alsoDeletesEveryUserRight(TestInfo testInfo) {
-
+        // TODO: Implement
     }
 
 
 
     @Test
-    @DisplayName("deleteUser_alsoDeletesEveryUserRights")
+    @DisplayName("deleteUser_alsoDeletesEveryUserRightSet")
     @Disabled
-    void deleteUser_alsoDeletesEveryUserRights(TestInfo testInfo) {
-
+    void deleteUser_alsoDeletesEveryUserRightSet(TestInfo testInfo) {
+        // TODO: Implement
     }
 
 

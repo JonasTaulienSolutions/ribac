@@ -41,7 +41,7 @@ public class UserRepository {
                    .onErrorResumeNext(
                        failure -> Single.error(
                            RepositoryHelper.mySqlRespondedWithDuplicateEntryError(failure)
-                               ? new DuplicateCreateError("A user already exists with the id '" + externalId + "'")
+                               ? new DuplicateCreateError("A User already exists with the id '" + externalId + "'")
                                : failure
                        )
                    );
@@ -60,7 +60,7 @@ public class UserRepository {
                        )
                    )
                    .map(maybeUser -> maybeUser.orElseThrow(
-                       () -> new ResourceNotFoundError("A user with the id '" + externalId + "' does not exist")
+                       () -> new ResourceNotFoundError("A User with the id '" + externalId + "' does not exist")
                    ));
     }
 
@@ -89,7 +89,7 @@ public class UserRepository {
                    )
                    .map(numberOfDeletedRecords -> {
                             if (numberOfDeletedRecords == 0) {
-                                throw new ResourceNotFoundError("A user with the id '" + externalId + "' does not exist");
+                                throw new ResourceNotFoundError("A User with the id '" + externalId + "' does not exist");
                             }
 
                             return numberOfDeletedRecords;
