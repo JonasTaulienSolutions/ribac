@@ -6,31 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased] - YYYY-MM-DD
 ### Added
-* `POST /users`: Creates a new user
-* `GET /users/{userId}`: Fetches a user
-* `DELETE /users/{userId}`: Deletes a user
-* `GET /users`: Fetches all users
-* `POST /groups`: Creates a new group
-* `GET /groups`: Fetches all groups
-* `DELETE /groups/{groupName}`: Deletes a group
-
-### Changed
-(changes in existing functionality)
-
-### Deprecated
-(changes that will be removed in an upcoming release)
-
-### Removed
-(removed features)
-
-### Fixed
-(fixed bugs)
-
-### Security
-(security fixes)
-
-### Maintenance
-(other changes, that are only interesting for developers of this project)
+* `POST /users`: Creates a new User
+* `GET /users/{userId}`: Fetches a User
+* `DELETE /users/{userId}`: Deletes a User
+* `GET /users`: Fetches all Users
+* `POST /groups`: Creates a new Group
+* `GET /groups`: Fetches all Groups
+* `DELETE /groups/{groupName}`: Deletes a Group
+* `GET /groups/{groupName}`: Fetches a Group
 
 
 

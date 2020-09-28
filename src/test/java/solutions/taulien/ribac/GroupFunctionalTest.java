@@ -395,4 +395,102 @@ public class GroupFunctionalTest {
         // TODO: Implement
     }
 
+
+
+    @Test
+    @DisplayName("fetchGroup_returnsRequestedGroup")
+    void fetchGroup_returnsRequestedGroup(TestInfo testInfo) {
+        final var client = RibacTestHelper.createHttpClient();
+
+        final var name = "group/ 123";
+
+        RibacTestHelper.post(
+            client,
+            testInfo,
+            "/groups",
+            new JsonObject().put("name", name)
+        );
+
+        final var fetchGroupResponse = RibacTestHelper.get(
+            client,
+            testInfo,
+            "/groups/" + RibacTestHelper.urlEncode(name)
+        );
+
+        RibacTestHelper.assertStatusCodeAndBodyEquals(
+            fetchGroupResponse,
+            SC_OK,
+            new JsonObject().put(
+                "requestedGroup", new JsonObject().put(
+                    "name", name
+                )
+            )
+        );
+    }
+
+
+
+    @Test
+    @DisplayName("fetchGroup_canNotReturnUnknownGroup")
+    void fetchGroup_canNotReturnUnknownGroup(TestInfo testInfo) {
+        final var client = RibacTestHelper.createHttpClient();
+
+        var name = "groupB";
+        final var fetchGroupResponse = RibacTestHelper.get(
+            client,
+            testInfo,
+            "/groups/" + RibacTestHelper.urlEncode(name)
+        );
+
+        RibacTestHelper.assertStatusCodeAndBodyEquals(
+            fetchGroupResponse,
+            SC_NOT_FOUND,
+            RibacTestHelper.createErrorResponseBody(testInfo, "A Group with the name '" + name + "' does not exist")
+        );
+    }
+
+
+
+    @Test
+    @DisplayName("fetchGroup_canNotReturnGroupWithEmptyName")
+    void fetchGroup_canNotReturnGroupWithEmptyName(TestInfo testInfo) {
+        final var client = RibacTestHelper.createHttpClient();
+
+        final var fetchGroupResponse = RibacTestHelper.get(
+            client,
+            testInfo,
+            "/groups/"
+        );
+
+        RibacTestHelper.assertStatusCodeAndBodyEquals(
+            fetchGroupResponse,
+            SC_BAD_REQUEST,
+            RibacTestHelper.createErrorResponseBody(testInfo, "Value doesn't respect min length 1")
+        );
+    }
+
+
+
+    @Test
+    @DisplayName("fetchUGroup_canNotReturnGroupWithTooLongName")
+    void fetchUGroup_canNotReturnGroupWithTooLongName(TestInfo testInfo) {
+        final var client = RibacTestHelper.createHttpClient();
+
+        final var name = ""
+                             + "group1234.group1234.group1234.group1234.group1234.group1234.group1234.group1234.group1234.group1234."
+                             + "group1234.group1234.group1234.group1234.group1234.group1234.group1234.group1234.group1234.group1234."
+                             + "group1234.group1234.group1234.group1234.group1234.12345"
+                             + "6";
+        final var fetchGroupResponse = RibacTestHelper.get(
+            client,
+            testInfo,
+            "/groups/" + RibacTestHelper.urlEncode(name)
+        );
+
+        RibacTestHelper.assertStatusCodeAndBodyEquals(
+            fetchGroupResponse,
+            SC_BAD_REQUEST,
+            RibacTestHelper.createErrorResponseBody(testInfo, "Value doesn't respect max length 255")
+        );
+    }
 }

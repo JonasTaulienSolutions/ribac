@@ -165,6 +165,55 @@ paths:
 
 
   /groups/{groupName}:
+    get:
+      operationId: groupFetch
+      summary: Returns the requested Group
+      parameters:
+        - name: groupName
+          in: path
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 255
+        - name: Request-Id
+          in: header
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully returned the requested Group
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupFetchResponse'
+              example:
+                requestedGroup:
+                  name: group123
+        400:
+          description: The request body could not be validated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error:
+                  message: "Value doesn't respect min length 1"
+                  requestId: "selfgen-c06b2f60-dc13-4324-9d06-3f92950c920b"
+        404:
+          description: There is no Group with the given `groupName`
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error:
+                  message: "A Group with the name 'group123' does not exist"
+                  requestId: "selfgen-c06b2f60-dc13-4324-9d06-3f92950c920b"
+
+
+
     delete:
       operationId: groupDelete
       summary: Deletes the requested Group
@@ -245,8 +294,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/GroupCreateResponse'
               example:
-                createdUser:
-                  id: user123
+                createdGroup:
+                  id: group123
         400:
           description: The request body could not be validated successfully
           content:
@@ -256,7 +305,7 @@ paths:
               example:
                 error:
                   message: "$.name: must be at least 1 characters long"
-                    requestId: "selfgen-c06b2f60-dc13-4324-9d06-3f92950c920b"
+                  requestId: "selfgen-c06b2f60-dc13-4324-9d06-3f92950c920b"
         409:
           description: A Group already exists with the given name
           content:
@@ -335,6 +384,14 @@ components:
           $ref: '#/components/schemas/Group'
       required:
         - createdGroup
+
+    GroupFetchResponse:
+      type: object
+      properties:
+        requestedGroup:
+          $ref: '#/components/schemas/Group'
+      required:
+        - requestedGroup
 
     ErrorResponse:
       type: object

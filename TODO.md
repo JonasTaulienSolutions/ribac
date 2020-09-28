@@ -1,8 +1,4 @@
 # To Do
-## Groups
-* Add `DELETE /groups/{groupName}`
-* Add `GET /groups/{groupName}`
-
 ## Memberships
 * Add `POST /groups/{groupName}/members`
 * Add `GET /groups/{groupName}/members`

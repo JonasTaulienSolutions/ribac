@@ -60,6 +60,7 @@ public class Module extends AbstractModule {
         dataSource.addDataSourceProperty("cacheServerConfiguration", true);
         dataSource.addDataSourceProperty("elideSetAutoCommits", true);
         dataSource.addDataSourceProperty("maintainTimeStats", false);
+
         dataSource.setConnectionTimeout(5000);
 
         final var jooqConfig = new DefaultConfiguration();

@@ -10,6 +10,7 @@ import solutions.taulien.ribac.server.gen.jooq.tables.records.DbGroup;
 import solutions.taulien.ribac.server.util.RepositoryHelper;
 
 import java.util.List;
+import java.util.Optional;
 
 import static solutions.taulien.ribac.server.gen.jooq.Tables.GROUP;
 
@@ -76,5 +77,22 @@ public class GroupRepository {
                         }
                    )
                    .ignoreElement();
+    }
+
+
+
+    public Single<DbGroup> getGroup(String name, String requestId) {
+        return this.dbHelper
+                   .execute(
+                       requestId,
+                       db -> Optional.ofNullable(
+                           db.selectFrom(GROUP)
+                             .where(GROUP.NAME.eq(name))
+                             .fetchOne()
+                       )
+                   )
+                   .map(maybeGroup -> maybeGroup.orElseThrow(
+                       () -> new ResourceNotFoundError("A Group with the name '" + name + "' does not exist")
+                   ));
     }
 }
