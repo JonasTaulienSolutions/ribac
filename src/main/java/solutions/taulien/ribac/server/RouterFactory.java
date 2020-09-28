@@ -7,6 +7,7 @@ import io.vertx.reactivex.ext.web.api.contract.openapi3.OpenAPI3RouterFactory;
 import io.vertx.reactivex.ext.web.handler.CorsHandler;
 import solutions.taulien.ribac.server.error.HttpErrorHandler;
 import solutions.taulien.ribac.server.error.InternalServerErrorFailureHandler;
+import solutions.taulien.ribac.server.error.RequestedUnknownPathFailureHandler;
 import solutions.taulien.ribac.server.error.OpenApiValidationFailureHandler;
 import solutions.taulien.ribac.server.group.GroupCreateHandler;
 import solutions.taulien.ribac.server.group.GroupDeleteHandler;
@@ -53,6 +54,8 @@ public class RouterFactory {
 
     private final GroupFetchHandler groupFetchHandler;
 
+    private final RequestedUnknownPathFailureHandler requestedUnknownPathFailureHandler;
+
 
 
     @Inject
@@ -71,7 +74,8 @@ public class RouterFactory {
         GroupCreateHandler groupCreateHandler,
         GroupFetchAllHandler groupFetchAllHandler,
         GroupDeleteHandler groupDeleteHandler,
-        GroupFetchHandler groupFetchHandler
+        GroupFetchHandler groupFetchHandler,
+        RequestedUnknownPathFailureHandler requestedUnknownPathFailureHandler
     ) {
         this.openAPI3RouterFactory = openAPI3RouterFactory;
         this.userCreateHandler = userCreateHandler;
@@ -88,6 +92,7 @@ public class RouterFactory {
         this.groupFetchAllHandler = groupFetchAllHandler;
         this.groupDeleteHandler = groupDeleteHandler;
         this.groupFetchHandler = groupFetchHandler;
+        this.requestedUnknownPathFailureHandler = requestedUnknownPathFailureHandler;
     }
 
 
@@ -109,6 +114,7 @@ public class RouterFactory {
 
         return this.openAPI3RouterFactory.getRouter()
                                          .errorHandler(400, this.validationFailureHandler)
+                                         .errorHandler(404, this.requestedUnknownPathFailureHandler)
                                          .errorHandler(500, this.internalServerErrorFailureHandler);
     }
 

@@ -129,3 +129,8 @@ swagger_start(){
   echo "Done: ribac swagger-ui at localhost:${RIBAC_SWAGGER_EXTERNAL_PORT}"
 }
 export -f swagger_start
+
+swagger_stop(){
+  echo "- Stopping ribac:" && docker-compose rm --stop --force ribac-swagger
+}
+export -f swagger_stop

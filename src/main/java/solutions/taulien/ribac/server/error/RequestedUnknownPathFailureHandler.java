@@ -5,16 +5,16 @@ import io.vertx.core.Handler;
 import io.vertx.reactivex.ext.web.RoutingContext;
 import solutions.taulien.ribac.server.Responder;
 
-import static org.apache.commons.httpclient.HttpStatus.SC_INTERNAL_SERVER_ERROR;
+import static org.apache.commons.httpclient.HttpStatus.SC_NOT_FOUND;
 
-public class InternalServerErrorFailureHandler implements Handler<RoutingContext> {
+public class RequestedUnknownPathFailureHandler implements Handler<RoutingContext> {
 
     private final Responder responder;
 
 
 
     @Inject
-    public InternalServerErrorFailureHandler(Responder responder) {
+    public RequestedUnknownPathFailureHandler(Responder responder) {
         this.responder = responder;
     }
 
@@ -22,14 +22,11 @@ public class InternalServerErrorFailureHandler implements Handler<RoutingContext
 
     @Override
     public void handle(RoutingContext ctx) {
-        final Throwable failure = ctx.failure();
-
         this.responder
             .respondError(
                 ctx,
-                SC_INTERNAL_SERVER_ERROR,
-                failure.toString()
+                SC_NOT_FOUND,
+                "Unknown path requested"
             );
     }
-
 }
