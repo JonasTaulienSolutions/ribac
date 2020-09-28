@@ -5,6 +5,8 @@ import com.google.inject.name.Named;
 import io.netty.handler.codec.http.HttpHeaderValues;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.reactivex.ext.web.RoutingContext;
+import solutions.taulien.ribac.server.gen.openapi.ApiErrorResponse;
+import solutions.taulien.ribac.server.gen.openapi.ApiErrorResponseError;
 import solutions.taulien.ribac.server.log.Logger;
 import solutions.taulien.ribac.server.log.ReadOrCreateRequestIdHandler;
 
@@ -43,8 +45,18 @@ public class Responder {
 
 
 
-    public void internalServerError(RoutingContext ctx, Object body) {
-        this.respond(ctx, SC_INTERNAL_SERVER_ERROR, body);
+    public void respondError(RoutingContext ctx, int statusCode, String message) {
+        final String requestId = ctx.get(ReadOrCreateRequestIdHandler.REQUEST_ID_KEY);
+
+        this.respond(
+            ctx,
+            statusCode,
+            new ApiErrorResponse()
+                .error(new ApiErrorResponseError()
+                           .message(message)
+                           .requestId(requestId)
+                )
+        );
     }
 
 

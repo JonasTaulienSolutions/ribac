@@ -4,8 +4,6 @@ import com.google.inject.Inject;
 import io.vertx.core.Handler;
 import io.vertx.reactivex.ext.web.RoutingContext;
 import solutions.taulien.ribac.server.Responder;
-import solutions.taulien.ribac.server.gen.openapi.ApiErrorResponse;
-import solutions.taulien.ribac.server.gen.openapi.ApiErrorResponseError;
 
 public class HttpErrorHandler implements Handler<RoutingContext> {
 
@@ -24,14 +22,12 @@ public class HttpErrorHandler implements Handler<RoutingContext> {
     public void handle(RoutingContext ctx) {
         if (ctx.failure() instanceof HttpError) {
             final HttpError error = (HttpError) ctx.failure();
+
             this.responder
-                .respond(
+                .respondError(
                     ctx,
                     error.getHttpStatusCode(),
-                    new ApiErrorResponse()
-                        .error(new ApiErrorResponseError()
-                                   .message(error.getMessage())
-                        )
+                    error.getMessage()
                 );
 
         } else {

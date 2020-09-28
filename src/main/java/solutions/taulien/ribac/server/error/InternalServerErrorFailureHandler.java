@@ -4,8 +4,8 @@ import com.google.inject.Inject;
 import io.vertx.core.Handler;
 import io.vertx.reactivex.ext.web.RoutingContext;
 import solutions.taulien.ribac.server.Responder;
-import solutions.taulien.ribac.server.gen.openapi.ApiErrorResponse;
-import solutions.taulien.ribac.server.gen.openapi.ApiErrorResponseError;
+
+import static org.apache.commons.httpclient.HttpStatus.SC_INTERNAL_SERVER_ERROR;
 
 public class InternalServerErrorFailureHandler implements Handler<RoutingContext> {
 
@@ -25,12 +25,10 @@ public class InternalServerErrorFailureHandler implements Handler<RoutingContext
         final Throwable failure = ctx.failure();
 
         this.responder
-            .internalServerError(
+            .respondError(
                 ctx,
-                new ApiErrorResponse()
-                    .error(new ApiErrorResponseError()
-                               .message(failure.toString())
-                    )
+                SC_INTERNAL_SERVER_ERROR,
+                failure.toString()
             );
 
     }

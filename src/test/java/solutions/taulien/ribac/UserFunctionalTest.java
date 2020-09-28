@@ -96,7 +96,7 @@ class UserFunctionalTest {
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             createUserSecondResponse,
             SC_CONFLICT,
-            RibacTestHelper.createErrorResponseBody("A User already exists with the id '" + id + "'")
+            RibacTestHelper.createErrorResponseBody(testInfo, "A User already exists with the id '" + id + "'")
         );
     }
 
@@ -117,7 +117,7 @@ class UserFunctionalTest {
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             createUserResponse,
             SC_BAD_REQUEST,
-            RibacTestHelper.createErrorResponseBody("$.id: must be at least 1 characters long")
+            RibacTestHelper.createErrorResponseBody(testInfo, "$.id: must be at least 1 characters long")
         );
     }
 
@@ -144,7 +144,7 @@ class UserFunctionalTest {
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             createUserResponse,
             SC_BAD_REQUEST,
-            RibacTestHelper.createErrorResponseBody("$.id: may only be 255 characters long")
+            RibacTestHelper.createErrorResponseBody(testInfo, "$.id: may only be 255 characters long")
         );
     }
 
@@ -165,7 +165,7 @@ class UserFunctionalTest {
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             createUserResponse,
             SC_BAD_REQUEST,
-            RibacTestHelper.createErrorResponseBody("$.id: integer found, string expected")
+            RibacTestHelper.createErrorResponseBody(testInfo, "$.id: integer found, string expected")
         );
     }
 
@@ -186,7 +186,7 @@ class UserFunctionalTest {
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             createUserResponse,
             SC_BAD_REQUEST,
-            RibacTestHelper.createErrorResponseBody("$.id: is missing but it is required")
+            RibacTestHelper.createErrorResponseBody(testInfo, "$.id: is missing but it is required")
         );
     }
 
@@ -206,7 +206,7 @@ class UserFunctionalTest {
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             createUserResponse,
             SC_BAD_REQUEST,
-            RibacTestHelper.createErrorResponseBody("Bad Request")
+            RibacTestHelper.createErrorResponseBody(testInfo, "Bad Request")
         );
     }
 
@@ -260,7 +260,7 @@ class UserFunctionalTest {
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             fetchUserResponse,
             SC_NOT_FOUND,
-            RibacTestHelper.createErrorResponseBody("A User with the id '" + id + "' does not exist")
+            RibacTestHelper.createErrorResponseBody(testInfo, "A User with the id '" + id + "' does not exist")
         );
     }
 
@@ -280,7 +280,7 @@ class UserFunctionalTest {
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             fetchUserResponse,
             SC_BAD_REQUEST,
-            RibacTestHelper.createErrorResponseBody("Value doesn't respect min length 1")
+            RibacTestHelper.createErrorResponseBody(testInfo, "Value doesn't respect min length 1")
         );
     }
 
@@ -305,7 +305,7 @@ class UserFunctionalTest {
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             fetchUserResponse,
             SC_BAD_REQUEST,
-            RibacTestHelper.createErrorResponseBody("Value doesn't respect max length 255")
+            RibacTestHelper.createErrorResponseBody(testInfo, "Value doesn't respect max length 255")
         );
     }
 
@@ -361,7 +361,7 @@ class UserFunctionalTest {
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             deleteUserResponse,
             SC_NOT_FOUND,
-            RibacTestHelper.createErrorResponseBody("A User with the id '" + id + "' does not exist")
+            RibacTestHelper.createErrorResponseBody(testInfo, "A User with the id '" + id + "' does not exist")
         );
     }
 
@@ -381,7 +381,7 @@ class UserFunctionalTest {
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             deleteUserResponse,
             SC_BAD_REQUEST,
-            RibacTestHelper.createErrorResponseBody("Value doesn't respect min length 1")
+            RibacTestHelper.createErrorResponseBody(testInfo, "Value doesn't respect min length 1")
         );
     }
 
@@ -407,7 +407,7 @@ class UserFunctionalTest {
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             deleteUserResponse,
             SC_BAD_REQUEST,
-            RibacTestHelper.createErrorResponseBody("Value doesn't respect max length 255")
+            RibacTestHelper.createErrorResponseBody(testInfo, "Value doesn't respect max length 255")
         );
     }
 

@@ -96,7 +96,7 @@ public class GroupFunctionalTest {
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             createGroupSecondResponse,
             SC_CONFLICT,
-            RibacTestHelper.createErrorResponseBody("A Group already exists with the name '" + name + "'")
+            RibacTestHelper.createErrorResponseBody(testInfo, "A Group already exists with the name '" + name + "'")
         );
     }
 
@@ -117,7 +117,7 @@ public class GroupFunctionalTest {
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             createGroupResponse,
             SC_BAD_REQUEST,
-            RibacTestHelper.createErrorResponseBody("$.name: must be at least 1 characters long")
+            RibacTestHelper.createErrorResponseBody(testInfo, "$.name: must be at least 1 characters long")
         );
     }
 
@@ -144,7 +144,7 @@ public class GroupFunctionalTest {
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             createGroupResponse,
             SC_BAD_REQUEST,
-            RibacTestHelper.createErrorResponseBody("$.name: may only be 255 characters long")
+            RibacTestHelper.createErrorResponseBody(testInfo, "$.name: may only be 255 characters long")
         );
     }
 
@@ -165,7 +165,7 @@ public class GroupFunctionalTest {
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             createGroupResponse,
             SC_BAD_REQUEST,
-            RibacTestHelper.createErrorResponseBody("$.name: integer found, string expected")
+            RibacTestHelper.createErrorResponseBody(testInfo, "$.name: integer found, string expected")
         );
     }
 
@@ -186,7 +186,7 @@ public class GroupFunctionalTest {
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             createGroupResponse,
             SC_BAD_REQUEST,
-            RibacTestHelper.createErrorResponseBody("$.name: is missing but it is required")
+            RibacTestHelper.createErrorResponseBody(testInfo, "$.name: is missing but it is required")
         );
     }
 
@@ -206,7 +206,7 @@ public class GroupFunctionalTest {
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             createGroupResponse,
             SC_BAD_REQUEST,
-            RibacTestHelper.createErrorResponseBody("Bad Request")
+            RibacTestHelper.createErrorResponseBody(testInfo, "Bad Request")
         );
     }
 
@@ -318,7 +318,7 @@ public class GroupFunctionalTest {
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             deleteGroupResponse,
             SC_NOT_FOUND,
-            RibacTestHelper.createErrorResponseBody("A Group with the name '" + name + "' does not exist")
+            RibacTestHelper.createErrorResponseBody(testInfo, "A Group with the name '" + name + "' does not exist")
         );
     }
 
@@ -338,7 +338,7 @@ public class GroupFunctionalTest {
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             deleteGroupResponse,
             SC_BAD_REQUEST,
-            RibacTestHelper.createErrorResponseBody("Value doesn't respect min length 1")
+            RibacTestHelper.createErrorResponseBody(testInfo, "Value doesn't respect min length 1")
         );
     }
 
@@ -364,7 +364,7 @@ public class GroupFunctionalTest {
         RibacTestHelper.assertStatusCodeAndBodyEquals(
             deleteGroupResponse,
             SC_BAD_REQUEST,
-            RibacTestHelper.createErrorResponseBody("Value doesn't respect max length 255")
+            RibacTestHelper.createErrorResponseBody(testInfo, "Value doesn't respect max length 255")
         );
     }
 

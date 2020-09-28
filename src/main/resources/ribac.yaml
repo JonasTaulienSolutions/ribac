@@ -44,6 +44,7 @@ paths:
               example:
                 error:
                   message: "Value doesn't respect min length 1"
+                  requestId: "selfgen-c06b2f60-dc13-4324-9d06-3f92950c920b"
         404:
           description: There is no User with the given `userId`
           content:
@@ -53,6 +54,7 @@ paths:
               example:
                 error:
                   message: "A User with the id 'user123' does not exist"
+                  requestId: "selfgen-c06b2f60-dc13-4324-9d06-3f92950c920b"
 
 
 
@@ -84,6 +86,7 @@ paths:
               example:
                 error:
                   message: "A User with the id 'user123' does not exist"
+                  requestId: "selfgen-c06b2f60-dc13-4324-9d06-3f92950c920b"
 
 
 
@@ -147,6 +150,7 @@ paths:
               example:
                 error:
                   message: "$.id: must be at least 1 characters long"
+                  requestId: "selfgen-c06b2f60-dc13-4324-9d06-3f92950c920b"
         409:
           description: A User already exists with the given id
           content:
@@ -156,6 +160,7 @@ paths:
               example:
                 error:
                   message: "A User already exists with the id 'user123'"
+                  requestId: "selfgen-c06b2f60-dc13-4324-9d06-3f92950c920b"
 
 
 
@@ -188,6 +193,7 @@ paths:
               example:
                 error:
                   message: "A Group with the name 'group123' does not exist"
+                  requestId: "selfgen-c06b2f60-dc13-4324-9d06-3f92950c920b"
 
 
   /groups:
@@ -250,6 +256,7 @@ paths:
               example:
                 error:
                   message: "$.name: must be at least 1 characters long"
+                    requestId: "selfgen-c06b2f60-dc13-4324-9d06-3f92950c920b"
         409:
           description: A Group already exists with the given name
           content:
@@ -259,6 +266,7 @@ paths:
               example:
                 error:
                   message: "A Group already exists with the name 'group123'"
+                  requestId: "selfgen-c06b2f60-dc13-4324-9d06-3f92950c920b"
 
 
 
@@ -337,6 +345,9 @@ components:
           type: object
           required:
             - message
+            - requestId
           properties:
             message:
+              type: string
+            requestId:
               type: string

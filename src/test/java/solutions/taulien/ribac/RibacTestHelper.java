@@ -168,11 +168,11 @@ public class RibacTestHelper {
 
 
 
-    public static JsonObject createErrorResponseBody(String expectedMessage) {
+    public static JsonObject createErrorResponseBody(TestInfo testInfo, String expectedMessage) {
         return new JsonObject().put(
-            "error", new JsonObject().put(
-                "message", expectedMessage
-            )
+            "error", new JsonObject()
+                         .put("message", expectedMessage)
+                         .put("requestId", testInfo.getDisplayName())
         );
     }
 
