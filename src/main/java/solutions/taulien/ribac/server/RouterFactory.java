@@ -9,6 +9,7 @@ import solutions.taulien.ribac.server.error.HttpErrorHandler;
 import solutions.taulien.ribac.server.error.InternalServerErrorFailureHandler;
 import solutions.taulien.ribac.server.error.OpenApiValidationFailureHandler;
 import solutions.taulien.ribac.server.group.GroupCreateHandler;
+import solutions.taulien.ribac.server.group.GroupDeleteHandler;
 import solutions.taulien.ribac.server.group.GroupFetchAllHandler;
 import solutions.taulien.ribac.server.log.LogRequestStartHandler;
 import solutions.taulien.ribac.server.log.ReadOrCreateRequestIdHandler;
@@ -47,6 +48,8 @@ public class RouterFactory {
 
     private final GroupFetchAllHandler groupFetchAllHandler;
 
+    private final GroupDeleteHandler groupDeleteHandler;
+
 
 
     @Inject
@@ -63,7 +66,8 @@ public class RouterFactory {
         UserDeleteHandler userDeleteHandler,
         UserFetchAllHandler userFetchAllHandler,
         GroupCreateHandler groupCreateHandler,
-        GroupFetchAllHandler groupFetchAllHandler
+        GroupFetchAllHandler groupFetchAllHandler,
+        GroupDeleteHandler groupDeleteHandler
     ) {
         this.openAPI3RouterFactory = openAPI3RouterFactory;
         this.userCreateHandler = userCreateHandler;
@@ -78,6 +82,7 @@ public class RouterFactory {
         this.userFetchAllHandler = userFetchAllHandler;
         this.groupCreateHandler = groupCreateHandler;
         this.groupFetchAllHandler = groupFetchAllHandler;
+        this.groupDeleteHandler = groupDeleteHandler;
     }
 
 
@@ -94,6 +99,7 @@ public class RouterFactory {
 
         this.addHandler("groupCreate", this.groupCreateHandler);
         this.addHandler("groupFetchAll", this.groupFetchAllHandler);
+        this.addHandler("groupDelete", this.groupDeleteHandler);
 
         return this.openAPI3RouterFactory.getRouter()
                                          .errorHandler(400, this.validationFailureHandler)
